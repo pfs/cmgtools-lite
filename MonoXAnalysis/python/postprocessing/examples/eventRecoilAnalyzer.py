@@ -52,9 +52,12 @@ class EventRecoilAnalyzer(Module):
         self.out.branch("leadneut_phi", "F")
     
         #recoil types
-        for rtype in ["truth","gen","met", "puppimet", 'ntmet','ntcentralmet', 'tkmet', 'chsmet', 'npvmet', 'ntnpv', 'centralntnpv', 'centralmetdbeta']:
+        #for rtype in ["truth","gen","met", "puppimet", 'ntmet','ntcentralmet', 'tkmet', 'chsmet', 'npvmet', 'ntnpv', 'centralntnpv', 'centralmetdbeta']:
+        #    for var in ['recoil_pt','recoil_phi', 'recoil_sphericity', 'm','n','recoil_e1','recoil_e2', 'mt',
+        #                'dphi2met','dphi2puppimet','dphi2ntnpv','dphi2centralntnpv','dphi2centralmetdbeta','dphi2leadch','dphi2leadneut']:
+        for rtype in ["truth","gen","met", "puppimet", 'ntmet', 'tkmet', 'chsmet', 'npvmet', 'ntnpv']:
             for var in ['recoil_pt','recoil_phi', 'recoil_sphericity', 'm','n','recoil_e1','recoil_e2', 'mt',
-                        'dphi2met','dphi2puppimet','dphi2ntnpv','dphi2centralntnpv','dphi2centralmetdbeta','dphi2leadch','dphi2leadneut']:
+                        'dphi2met','dphi2puppimet','dphi2ntnpv','dphi2leadch','dphi2leadneut']:
                 self.out.branch("{0}_{1}".format(rtype,var), "F")
 
     def endFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
@@ -105,6 +108,7 @@ class EventRecoilAnalyzer(Module):
                 visibleV=VisibleVectorBoson(selLeptons=[dressedLeps[-1]])
                 V=visibleV.p4+nuSum
             for j in xrange(0,i):
+                if self.out._branches["GenLepDressed_pdgId"].buff[i] != -self.out._branches["GenLepDressed_pdgId"].buff[j] : continue
                 ll=dressedLeps[j]+dressedLeps[i]
                 if abs(ll.M()-91)>15 : continue
                 visibleV=VisibleVectorBoson(selLeptons=[dressedLeps[j],dressedLeps[i]])
@@ -113,10 +117,14 @@ class EventRecoilAnalyzer(Module):
 
         #hadronic recoil
         met=ROOT.TLorentzVector(0,0,0,0)
-        met.SetPtEtaPhiM(event.tkGenMet_pt,0,event.tkGenMet_phi,0.)
+        ht=0
+        try:
+            met.SetPtEtaPhiM(event.tkGenMet_pt,0,event.tkGenMet_phi,0.)
+            ht=event.tkGenMetInc_sumEt
+        except:
+            pass
         if visibleV : met+=visibleV.p4
         h=ROOT.TVector3(-met.Px(),-met.Py(),0.)
-        ht=event.tkGenMetInc_sumEt
         if visibleV : ht -= visibleV.sumEt
 
         return visibleV,V,h,ht
@@ -137,16 +145,18 @@ class EventRecoilAnalyzer(Module):
 
             #check if a Z candidate can be formed
             for j in xrange(0,i):
-                if lepColl[i].pdgId != lepColl[j].pdgId : continue
+                if abs(lepColl[i].pdgId) != abs(lepColl[j].pdgId) : continue
                 ll=leps[i]+leps[j]
                 if abs(ll.M()-91)>15 : continue
                 zCand=(i,j)
                 break
 
         #build the visible V from what has been found
-        visibleV=VisibleVectorBoson(selLeptons=[leps[0]]) if len(leps)>0  else None
+        visibleV=VisibleVectorBoson(selLeptons=[])
         if zCand:
             visibleV=VisibleVectorBoson(selLeptons=[leps[zCand[0]],leps[zCand[1]]])
+        elif len(leps)>0:
+            visibleV=VisibleVectorBoson(selLeptons=[leps[0]]) 
 
         return visibleV
 
@@ -189,14 +199,14 @@ class EventRecoilAnalyzer(Module):
 
         #selected leptons at reco level
         visibleV=self.getVisibleV(event)
-        if not visibleV : return False
+        #if not visibleV : return False
         
         #leading PF candidates
         self.out.fillBranch('leadch_pt',    event.leadCharged_pt)
         self.out.fillBranch('leadch_phi',   event.leadCharged_phi)
         self.out.fillBranch('leadneut_pt',  event.leadNeutral_pt)
         self.out.fillBranch('leadneut_phi', event.leadNeutral_phi)
-
+  
         #met estimators
         metEstimators={
             'met'               : self.summarizeMetEstimator(event,
@@ -208,9 +218,9 @@ class EventRecoilAnalyzer(Module):
             'ntmet'             : self.summarizeMetEstimator(event,
                                                              ['ntMet'],       
                                                              [1]),
-            'ntcentralmet'      : self.summarizeMetEstimator(event,
-                                                             ['ntCentralMet'], 
-                                                             [1]),             
+            #'ntcentralmet'      : self.summarizeMetEstimator(event,
+            #                                                 ['ntCentralMet'], 
+            #                                                 [1]),             
             'tkmet'             : self.summarizeMetEstimator(event,
                                                              ['tkMetPVLoose'], 
                                                              [1]),  
@@ -223,12 +233,12 @@ class EventRecoilAnalyzer(Module):
             'ntnpv'             : self.summarizeMetEstimator(event,
                                                              ['ntMet','tkMetPUPVLoose'],                       
                                                              [1,1]),  
-            'centralntnpv'      : self.summarizeMetEstimator(event,
-                                                             ['ntCentralMet','tkMetPUPVLoose'],                
-                                                             [1,1]),  
-            'centralmetdbeta'   : self.summarizeMetEstimator(event,
-                                                             ['tkMetPVLoose','ntCentralMet','tkMetPUPVLoose'], 
-                                                             [1,1,0.5]),  
+#            'centralntnpv'      : self.summarizeMetEstimator(event,
+#                                                             ['ntCentralMet','tkMetPUPVLoose'],                
+#                                                             [1,1]),  
+#            'centralmetdbeta'   : self.summarizeMetEstimator(event,
+#                                                             ['tkMetPVLoose','ntCentralMet','tkMetPUPVLoose'], 
+#                                                             [1,1,0.5]),  
             }
        
         #recoil estimators
@@ -245,7 +255,10 @@ class EventRecoilAnalyzer(Module):
             elif metType=='gen':
                 vis   = gen_visibleV.VectorT()
                 metP4=ROOT.TLorentzVector(0,0,0,0)
-                metP4.SetPtEtaPhiM(event.tkGenMet_pt,0,event.tkGenMet_phi,0.)
+                try:
+                    metP4.SetPtEtaPhiM(event.tkGenMet_pt,0,event.tkGenMet_phi,0.)
+                except:
+                    pass
                 h     = gen_h
                 ht    = gen_ht
                 m     = 0
@@ -276,11 +289,11 @@ class EventRecoilAnalyzer(Module):
             self.out.fillBranch('%s_dphi2met'%metType,             deltaPhi(metEstimators['met'][0].Phi(),             metphi) )
             self.out.fillBranch('%s_dphi2puppimet'%metType,        deltaPhi(metEstimators['puppimet'][0].Phi(),        metphi) )
             self.out.fillBranch('%s_dphi2ntnpv'%metType,           deltaPhi(metEstimators['ntnpv'][0].Phi(),           metphi) )
-            self.out.fillBranch('%s_dphi2centralntnpv'%metType,    deltaPhi(metEstimators['centralntnpv'][0].Phi(),    metphi) )
-            self.out.fillBranch('%s_dphi2centralmetdbeta'%metType, deltaPhi(metEstimators['centralmetdbeta'][0].Phi(), metphi) )
+            #self.out.fillBranch('%s_dphi2centralntnpv'%metType,    deltaPhi(metEstimators['centralntnpv'][0].Phi(),    metphi) )
+            #self.out.fillBranch('%s_dphi2centralmetdbeta'%metType, deltaPhi(metEstimators['centralmetdbeta'][0].Phi(), metphi) )
             self.out.fillBranch('%s_dphi2leadch'%metType,          deltaPhi(event.leadCharged_phi,                     metphi) )
             self.out.fillBranch('%s_dphi2leadneut'%metType,        deltaPhi(event.leadNeutral_phi,                     metphi) )
-
+             
         return True
 
 # define modules using the syntax 'name = lambda : constructor' to avoid having them loaded when not needed

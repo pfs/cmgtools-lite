@@ -34,7 +34,7 @@ class GenQEDJetHelper {
 
     // fill the prmpt hard particles and leptons / neutrinos
     genparticles promptgp;
-    std::vector<int> pdgIds;
+    std::vector<int> pdgIds;    
     for(int iP = 0, nP = **nGp_; iP < nP; ++iP) {
       int pdgId = (*Gp_pdgId_)[iP];
       bool isChLep = abs(pdgId)==11 || abs(pdgId)==13 || abs(pdgId)==15;

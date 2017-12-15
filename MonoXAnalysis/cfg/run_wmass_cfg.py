@@ -35,7 +35,7 @@ keepLHEweights = False
 ttHLepSkim.minLeptons = 1
 ttHLepSkim.maxLeptons = 999
 #ttHLepSkim.idCut  = ""
-ttHLepSkim.ptCuts = [15]
+ttHLepSkim.ptCuts = [20]
 
 # Run miniIso
 lepAna.doMiniIsolation = True
@@ -234,14 +234,14 @@ dibosons = [WW,WW_ext,WZ,WZ_ext,ZZ,ZZ_ext] # di-boson
 samples_signal = w_jets
 samples_1prompt = single_t + tt_1l + z_jets + dibosons
 
-for comp in selectedComponents: comp.splitFactor = len(comp.files) #200
+for comp in selectedComponents: comp.splitFactor = 200
 configureSplittingFromTime(samples_1fake,30,6)
 configureSplittingFromTime(samples_1prompt,50,6)
-configureSplittingFromTime(samples_signal,100,6)
+configureSplittingFromTime(samples_signal,100,2)
 
 if runOnSignal:
     selectedComponents = samples_signal
-    selectedComponents = [DYJetsToLL_M50, WJetsToLNu ]
+    selectedComponents = [DYJetsToLL_M50, WJetsToLNu, T_tch_powheg, TBar_tch_powheg]
 else:
     #selectedComponents = samples_1prompt + samples_1fake 
     selectedComponents = QCDPtbcToE
@@ -536,8 +536,8 @@ if not keepLHEweights:
     histoCounter.doLHE = False
 
 if runOnSignal:
-    if ttHLepSkim in sequence: sequence.remove(ttHLepSkim)
-    if triggerFlagsAna in sequence: sequence.remove(triggerFlagsAna)
+    #if ttHLepSkim in sequence: sequence.remove(ttHLepSkim)
+    #if triggerFlagsAna in sequence: sequence.remove(triggerFlagsAna)
     if genAna in sequence: genAna.saveAllInterestingGenParticles = True
 
 ## Auto-AAA

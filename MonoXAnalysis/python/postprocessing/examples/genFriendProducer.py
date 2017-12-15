@@ -116,7 +116,7 @@ class GenQEDJetProducer(Module):
             self.initReaders(event._tree)
 
         #nothing to do if this is data
-        if event.isData: return
+        if event.isData: return True
 
         # do NOT access other branches in python between the check/call to initReaders and the call to C++ worker code
         ## Algo

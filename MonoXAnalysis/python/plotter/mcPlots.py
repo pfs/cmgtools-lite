@@ -634,13 +634,16 @@ def doLegend(pmap,mca,corner="TR",textSize=0.035,cutoff=1e-2,cutoffSignals=True,
         elif corner == "BL":
             (x1,y1,x2,y2) = (.2, .33 + textSize*max(nentries-3,0), .2+legWidth, .15)
 
-        leg = ROOT.TLegend(x1,y1,x2,y2)
+        leg = ROOT.TLegend(x1,y1,x2,y2)        
+        leg.SetFillStyle(0)
         if header: leg.SetHeader(header.replace("\#", "#"))
         leg.SetFillColor(0)
         leg.SetShadowColor(0)
+        leg.SetFillColor(0)
         if header: leg.SetHeader(header.replace("\#", "#"))       
         if not legBorder:
             leg.SetLineColor(0)
+            leg.SetBorderSize(0)
         leg.SetTextFont(42)
         leg.SetTextSize(textSize)
         if 'data' in pmap: 

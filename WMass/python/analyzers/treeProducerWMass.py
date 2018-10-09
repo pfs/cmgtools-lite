@@ -22,25 +22,6 @@ wmass_globalVariables = [
 
             ##--------------------------------------------------            
             NTupleVariable("mZ1", lambda ev : ev.bestZ1[0], help="Best m(ll) SF/OS"),
-
-            ##--------------------------------------------------
-            NTupleVariable("puppimet_sumEt",       lambda ev : getattr(ev,'met_sumetpuppi'),       help="Puppi Sum E_{T}"),
-            NTupleVariable("met_sumEt",            lambda ev : getattr(ev,'met_sumet'),            help="Puppi Sum E_{T}"),
-            NTupleVariable("tkGenMet_sumEt",       lambda ev : getattr(ev,'tkGenMet').sumEt,  mcOnly=True,       help="Gen charged Sum E_{T} eta<2.4"),   
-            NTupleVariable("tkGenMetInc_sumEt",    lambda ev : getattr(ev,'tkGenMetInc').sumEt,  mcOnly=True, help="Gen charged Sum E_{T} eta<5"),   
-            NTupleVariable("tkMetPVchs_sumEt",     lambda ev : getattr(ev,'tkMetPVchs').sumEt,     help="Sum E_{T} from charged candidates with chs"),
-            NTupleVariable("tkMetPVLoose_sumEt",   lambda ev : getattr(ev,'tkMetPVLoose').sumEt,   help="Sum E_{T} from charged candidates with Loose chs"),
-            NTupleVariable("tkMetPUPVLoose_sumEt", lambda ev : getattr(ev,'tkMetPUPVLoose').sumEt, help="Sum E_{T} from PU charged candidates with Loose chs"),
-            NTupleVariable("tkMetPVTight_sumEt",   lambda ev : getattr(ev,'tkMetPVTight').sumEt,   help="Sum E_{T} from charged candidates with Tight chs"),            
-            NTupleVariable("ntMet_sumEt",          lambda ev : getattr(ev,'ntMet').sumEt,          help="Sum E_{T} from neutral PF candidates"),
-            NTupleVariable("ntCentralMet_sumEt",   lambda ev : getattr(ev,'ntCentralMet').sumEt,   help="Sum E_{T} from neutral PF candidates with eta<2.4"),            
-
-            NTupleVariable("tkMetPVchs_Count",     lambda ev : getattr(ev,'tkMetPVchs_Count'),     help="Count of charged candidates with chs"),
-            NTupleVariable("tkMetPVLoose_Count",   lambda ev : getattr(ev,'tkMetPVLoose_Count'),   help="Count of from charged candidates with Loose chs"),
-            NTupleVariable("tkMetPUPVLoose_Count", lambda ev : getattr(ev,'tkMetPUPVLoose_Count'), help="Count of from PU charged candidates with Loose chs"),
-            NTupleVariable("tkMetPVTight_Count",   lambda ev : getattr(ev,'tkMetPVTight_Count'),   help="Count of from charged candidates with Tight chs"),            
-            NTupleVariable("ntMet_Count",          lambda ev : getattr(ev,'ntMet_Count'),          help="Count of from neutral PF candidates"),
-            NTupleVariable("ntCentralMet_Count",   lambda ev : getattr(ev,'ntCentralMet_Count'),   help="Count of from neutral PF candidates with eta<2.4"),            
 ]
 
 wmass_globalObjects = {
@@ -49,14 +30,6 @@ wmass_globalObjects = {
     "tkGenMetInc"  :   NTupleObject("tkGenMetInc",    fourVectorType,  mcOnly=True, help="Gen charged E_{T}^{miss} eta<5"),
     "met"          :   NTupleObject("met",            fourVectorType, help="PF E_{T}^{miss}, after type 1 corrections"),
     "metpuppi"     :   NTupleObject("puppimet",       fourVectorType, help="Puppi E_{T}^{miss}"),
-    "tkMetPVchs"   :   NTupleObject("tkMetPVchs",     fourVectorType, help="PF E_{T}^{miss} from charged candidates with chs"),
-    "tkMetPVLoose" :   NTupleObject("tkMetPVLoose",   fourVectorType, help="PF E_{T}^{miss} from charged candidates with Loose chs"),
-    "tkMetPUPVLoose" : NTupleObject("tkMetPUPVLoose", fourVectorType, help="PF E_{T}^{miss} from PU charged candidates with Loose chs"),
-    "tkMetPVTight" :   NTupleObject("tkMetPVTight",   fourVectorType, help="PF E_{T}^{miss} from charged candidates with Tight chs"),
-    "ntMet"        :   NTupleObject("ntMet",          fourVectorType, help="PF E_{T}^{miss} from neutral candidates"),
-    "ntCentralMet" :   NTupleObject("ntCentralMet",   fourVectorType, help="PF E_{T}^{miss} from neutral eta<2.4 candidates"),
-    "leadCharged"  :   NTupleObject("leadCharged",    fourVectorType, help="leading pT charged PF candidate"),
-    "leadNeutral"  :   NTupleObject("leadNeutral",    fourVectorType, help="leading pT neutral PF candidate"),
 }
 
 ##------------------------------------------  
@@ -88,12 +61,15 @@ wmass_collections = {
             "generatorSummary" : NTupleCollection("GenPart", genParticleWithLinksType, 50 , mcOnly=True, help="Hard scattering particles, with ancestry and links"),
 }
 
-wmass_vertexVariables=[
-    NTupleVariable("vx",    lambda ev: ev.goodVertices[0].x() if len(ev.goodVertices)>0 else 0, mcOnly=False, help="PV position x"),
-    NTupleVariable("vy",    lambda ev: ev.goodVertices[0].y() if len(ev.goodVertices)>0 else 0, mcOnly=False, help="PV position y"),
-    NTupleVariable("vz",    lambda ev: ev.goodVertices[0].z() if len(ev.goodVertices)>0 else 0, mcOnly=False, help="PV position z"),
-    NTupleVariable("mindz", 
-                   lambda ev: min([abs(ev.goodVertices[0].z()-ev.goodVertices[i].z()) for i in xrange(1,len(ev.goodVertices))]) if len(ev.goodVertices)>1 else 0, 
-                   mcOnly=False, 
-                   help="closest to PV in z")
-]
+wmass_recoilVariables=[ NTupleVariable(x, lambda ev : getattr(ev,x), float, mcOnly=False,  help=x) for x in ['vz','vy','vz','mindz']]
+for m in ['tkmet','npv_tkmet','closest_tkmet','puppimet','invpuppimet']:
+    for v in ['n','recoil_pt','recoil_phi','scalar_sphericity','scalar_ht','dphi2tkmet',
+              'thrustMinor','thrustMajor','thrust','oblateness','thrustTransverse','thrustTransverseMinor',
+              'sphericity','aplanarity','C','D','detST']:
+        wmass_recoilVariables.append(
+            NTupleVariable('{0}_{1}'.format(m,v), 
+                           lambda ev : getattr(ev,'{0}_{1}'.format(m,v)),  
+                           float,
+                           mcOnly=True if m=='gen' else False,
+                           help='{0} {1}'.format(m,v))
+            )

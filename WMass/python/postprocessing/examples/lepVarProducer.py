@@ -103,7 +103,8 @@ class lepCalibratedEnergyProducer(Module):
         self.corrFile = correctionFile
         self.seed = seed
         self.synchronization = synchronization
-        if "/EnergyScaleCorrection_class_cc.so" not in ROOT.gSystem.GetLibraries():
+        if "/EnergyScaleCorrection_class_cc.so" not in ROOT.gSystem.GetLibraries():            
+            ROOT.gSystem.Load("$CMSSW_RELEASE_BASE/lib/$SCRAM_ARCH/libFWCoreParameterSet.so")
             ROOT.gROOT.ProcessLine(".L %s/src/EgammaAnalysis/ElectronTools/src/EnergyScaleCorrection_class.cc+" % os.environ['CMSSW_BASE'])
     def beginJob(self):
         self._worker = ROOT.EnergyScaleCorrection_class(self.corrFile,self.seed)

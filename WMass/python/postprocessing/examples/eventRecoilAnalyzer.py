@@ -30,6 +30,11 @@ class EventRecoilAnalyzer(Module):
     def __init__(self, tag ):
         self.tag=tag
         self.llMassWindow=(91.,15.)
+        if '/EventShapes_cc.so' not in ROOT.gSystem.GetLibraries():
+            print 'Compiling EventShapes.cc'
+            ROOT.gSystem.AddIncludePath("-I/cvmfs/cms.cern.ch/slc6_amd64_gcc530/external/fastjet-contrib/1.020/include")
+            ROOT.gSystem.AddIncludePath("-I/cvmfs/cms.cern.ch/slc6_amd64_gcc530/external/fastjet/3.1.0/include")
+            ROOT.gROOT.ProcessLine('.L %s/src/CMGTools/WMass/python/postprocessing/helpers/EventShapes.cc+'%os.environ['CMSSW_BASE'])
 
     def beginJob(self):
         """actions taken start of the job"""

@@ -120,9 +120,9 @@ if __name__ == "__main__":
             runner = options.runner
             super  = "bsub -q {queue}".format(queue = options.queue)
 
-        basecmd = "{dir}/{runner} {dir} {cmssw} python {self} -N {chunkSize} -t {tree} --moduleList {moduleList} {data} {output}".format(
+        basecmd = "{dir}/{runner} {dir} {cmssw} python {self} -N {chunkSize} -t {tree} --moduleList {moduleList} --signals {signals} {data} {output}".format(
                     dir = os.getcwd(), runner=runner, cmssw = os.environ['CMSSW_BASE'], 
-                    self=sys.argv[0], chunkSize=options.chunkSize, tree=options.tree, moduleList=options.moduleList, data=treedir, output=outdir)
+                    self=sys.argv[0], chunkSize=options.chunkSize, tree=options.tree, moduleList=options.moduleList, signals=options.signals, data=treedir, output=outdir)
 
         writelog = ""
         logdir   = ""

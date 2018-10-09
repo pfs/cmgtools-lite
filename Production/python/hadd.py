@@ -43,6 +43,12 @@ def hadd(file, odir, idirs, appx=''):
             haddPck( file, odir, idirs)
         except ImportError:
             pass
+        except EOFError:
+            print 'EOF caught..., corrupted file maybe'
+            pass
+        except IOError:
+            print 'IOError caught..., EOS instability maybe?'
+            pass
         return
     elif not file.endswith('.root'):
         return

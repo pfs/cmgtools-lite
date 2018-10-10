@@ -37,6 +37,9 @@ public:
   }
 
   void run(float rapmax=2.5){
+
+    if(pList_.size()==0) return;
+
     //n-jettiness
     fastjet::contrib::NormalizedMeasure normalizedMeasure(1.0,0.4);
     fastjet::contrib::Njettiness routine(fastjet::contrib::Njettiness::onepass_kt_axes,normalizedMeasure);

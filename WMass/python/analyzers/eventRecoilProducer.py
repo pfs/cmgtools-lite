@@ -17,18 +17,18 @@ class EventRecoilProducer(Analyzer):
         self.metFlavours=['tkmet','npv_tkmet','closest_tkmet','puppimet','invpuppimet','gen']
 
         #added by me
-        if "EventShapes_cc.so" not in ROOT.gSystem.GetLibraries():
+        if "FastJetAnalysis_cc.so" not in ROOT.gSystem.GetLibraries():
             print "Compile Event shape script"
             ROOT.gSystem.Load("/cvmfs/cms.cern.ch/slc6_amd64_gcc530/external/fastjet/3.1.0/lib/libfastjet.so")
             ROOT.gSystem.AddIncludePath("-I/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/fastjet/3.1.0/include")
             ROOT.gSystem.Load("/cvmfs/cms.cern.ch/slc6_amd64_gcc530/external/fastjet-contrib/1.020/lib/libfastjetcontribfragile.so")
             ROOT.gSystem.AddIncludePath("-I/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/fastjet-contrib/1.020/include")
-            ROOT.gROOT.ProcessLine(".L %s/src/CMGTools/WMass/python/postprocessing/helpers/EventShapes.cc+" % os.environ['CMSSW_BASE'])
+            ROOT.gROOT.ProcessLine(".L %s/src/CMGTools/WMass/python/postprocessing/helpers/FastJetAnalysis.cc+" % os.environ['CMSSW_BASE'])
         else:
-            print "EventShapes_cc.so found in ROOT libraries"
+            print "FastJetAnalysis_cc.so found in ROOT libraries"
         #
 
-        self._worker = ROOT.EventShapes()
+        self._worker = ROOT.FastJetAnalysis()
 
     def declareHandles(self):
         super(EventRecoilProducer, self).declareHandles()
@@ -110,12 +110,38 @@ class EventRecoilProducer(Analyzer):
 
         return toReturn
 
+    def processGen(self,event):
+
+        """makes a charged-based gen recoil estimator"""
+
+        #loop over final state particles
+        pMom=[]
+        try:
+            nlep=0
+            for p in self.mchandles['packedGen'].product():
+                if p.charge() == 0: continue
+                if p.status() != 1: continue
+                if p.pt()<0.5 or abs(p.eta())>2.4 : continue
+
+                #veto up to two high pT central, leptons
+                if abs(p.pdgId()) in [11,13] and p.pt()>20 and abs(p.eta())<2.4:
+                    nlep+=1
+                    if nlep<=2 : continue
+
+                pMom.append( [p.px(),p.py(),p.pz(),p.pt(),p.energy()] )
+        except:
+            pass
+
+        return np.array(pMom)
 
     def process(self, event):
 
         """process event, return True (go to next module) or False (fail, go to next event)"""
 
-        self.readCollections( event.input)
+        self.readCollections(event.input)
+
+        #gen level
+        genMom=self.processGen(event)
 
         #vertex analysis
         mindz=9999.
@@ -169,7 +195,7 @@ class EventRecoilProducer(Analyzer):
 
             #add to list
             pfTags.append( [use_tkmet,use_npv_tkmet,use_closest_tkmet,use_puppimet,use_invpuppimet] )
-            pfMom.append( [pfcand.px(),pfcand.py(),pfcand.pz(),pfcand.pt()] )
+            pfMom.append( [pfcand.px(),pfcand.py(),pfcand.pz(),pfcand.pt(),pfcand.energy()] )
             pfWeights.append( [pfcand.puppiWeightNoLep()] )
             
         #convert to numpy arrays for filtering and other operations
@@ -182,19 +208,22 @@ class EventRecoilProducer(Analyzer):
         for im in xrange(0,len(self.metFlavours)):            
 
             m=self.metFlavours[im]
-            if m=='gen' : continue
-
-            mfilter=(pfTags[:,im]==True)
-            selPF=pfMom[mfilter] 
-            wgtSum=1.0
-            if 'puppi' in m:
-                selPF_w=pfWeights[mfilter]  
-                if 'invpuppi' in m: selPF_w=1.0-selPF_w
-                selPF=selPF*selPF_w
-                
+            
+            selPF=[]
+            if m=='gen':
+                selPF=genMom
+            else:
+                mfilter=(pfTags[:,im]==True)
+                selPF=pfMom[mfilter] 
+                wgtSum=1.0
+                if 'puppi' in m:
+                    selPF_w=pfWeights[mfilter]  
+                    if 'invpuppi' in m: selPF_w=1.0-selPF_w
+                    selPF=selPF*selPF_w
+                            
             #basic kinematics
             if len(selPF)>0:
-                recx,recy,recz,ht=np.sum(selPF,axis=0,dtype=np.float32)
+                recx,recy,recz,ht,_=np.sum(selPF,axis=0,dtype=np.float32)
                 recpt=np.hypot(recx,recy)
                 recphi=np.arctan2(recy,recx)
                 leadmom=selPF[np.argmax(selPF[:,3])]
@@ -239,20 +268,19 @@ class EventRecoilProducer(Analyzer):
             setattr(event,"%s_D"%m, float(D))
             setattr(event,"%s_detST"%m, float(detST))
 
-            #N-jetttiness
-            #self._workertool.analyseNewEvent(chgparticlesForEvShape)
+            #N-jetttiness and rho
+            self._worker.reset()
+            for i in xrange(0,len(selPF)):
+                px,py,pz,pt,en=selPF[i]
+                self._worker.add(px,py,pz,en)
+            self._worker.run()
+            setattr(event,"%s_rho"%m, self._worker.rho())
+            for i in xrange(1,5):
+                setattr(event,"%s_tau%d"%(m,i), self._worker.tau(i))
+
 
         return True
 
-"""
-        for i in range(0,chgparticlesForEvShape.size()):
-        Vect3chg.append(chgparticlesForEvShape[i].Vect())
-        self._workertool.analyseNewEvent(chgparticlesForEvShape)
-        tau1 = self._worker.tau1()
-        tau2 = self._worker.tau2()
-        tau3 = self._worker.tau3()
-        tau4 = self._worker.tau4()        
-"""
 
 setattr(EventRecoilProducer,
         "defaultConfig", 

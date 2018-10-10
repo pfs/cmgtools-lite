@@ -62,10 +62,11 @@ wmass_collections = {
 }
 
 wmass_recoilVariables=[ NTupleVariable(x, lambda ev : getattr(ev,x), float, mcOnly=False,  help=x) for x in ['vz','vy','vz','mindz']]
-for m in ['tkmet','npv_tkmet','closest_tkmet','puppimet','invpuppimet']:
-    for v in ['n','recoil_pt','recoil_phi','scalar_sphericity','scalar_ht','dphi2tkmet',
+for m in ['tkmet','npv_tkmet','closest_tkmet','puppimet','invpuppimet','gen']:
+    for v in ['n','recoil_pt','recoil_phi','scalar_sphericity','scalar_ht','dphi2tkmet','leadpt','leadphi'
               'thrustMinor','thrustMajor','thrust','oblateness','thrustTransverse','thrustTransverseMinor',
-              'sphericity','aplanarity','C','D','detST']:
+              'sphericity','aplanarity','C','D','detST',
+              'rho','tau1','tau2','tau3','tau4']:
         wmass_recoilVariables.append(
             NTupleVariable('{0}_{1}'.format(m,v), 
                            lambda ev : getattr(ev,'{0}_{1}'.format(m,v)),  

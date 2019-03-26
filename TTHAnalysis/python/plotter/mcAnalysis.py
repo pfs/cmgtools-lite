@@ -215,18 +215,25 @@ class MCAnalysis:
                 if pname in self._allData: self._allData[pname].append(tty)
                 else                     : self._allData[pname] =     [tty]
                 if "data" not in pname:
-                    pckobj  = pickle.load(open(pckfile,'r'))
-                    counters = dict(pckobj)
-                    if ('Sum Weights' in counters) and options.weight:
+                    ## not appliccable pckobj  = pickle.load(open(pckfile,'r'))
+                    ## not appliccable counters = dict(pckobj)
+                    ## not appliccable if ('Sum Weights' in counters) and options.weight:
+                    if True:
                         if (is_w==0): raise RuntimeError, "Can't put together a weighted and an unweighted component (%s)" % cnames
+                        tmp_rootfile = ROOT.TFile(rootfile)
+                        histo_sumgenweight = tmp_rootfile.Get('wgtsum')
+                        n_sumgenweight = histo_sumgenweight.GetBinContent(1)
+                        tmp_rootfile.Close()
+
                         is_w = 1; 
-                        total_w += counters['Sum Weights']
-                        scale = "genWeight*(%s)" % field[2]
-                    else:
-                        if (is_w==1): raise RuntimeError, "Can't put together a weighted and an unweighted component (%s)" % cnames
-                        is_w = 0;
-                        total_w += counters['All Events']
-                        scale = "(%s)" % field[2]
+                        total_w += n_sumgenweight
+                        scale = "weight*(%s)" % field[2]
+
+                    ### not appliccable else:
+                    ### not appliccable     if (is_w==1): raise RuntimeError, "Can't put together a weighted and an unweighted component (%s)" % cnames
+                    ### not appliccable     is_w = 0;
+                    ### not appliccable     total_w += counters['All Events']
+                    ### not appliccable     scale = "(%s)" % field[2]
                     if len(field) == 4: scale += "*("+field[3]+")"
                     for p0,s in options.processesToScale:
                         for p in p0.split(","):

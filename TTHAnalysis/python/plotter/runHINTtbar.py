@@ -145,7 +145,7 @@ def simplePlot():
     fsysts        = 'hin-ttbar/analysisSetup/systs.txt'
 
     for flav in ['em']:#'ee', 'mm', 'em']:
-        targetdir = '/afs/cern.ch/user/m/mdunser/www/private/heavyIons/plots/simple_plots/{date}{pf}-{flav}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav )
+        targetdir = basedir+'/simple_plots/{date}{pf}-{flav}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav )
 
         enable    = [flav]
         disable   = []
@@ -178,11 +178,19 @@ if __name__ == '__main__':
 ##         'blind':446.931*(1e-6)}
 
 
-    global date, postfix, lumi, date
+    global date, postfix, lumi, date, basedir
     postfix = opts.postfix
     #lumi = 1618.466*1e-9 if not opts.lumi else opts.lumi
     lumi = 446.931*1e-9 if not opts.lumi else opts.lumi
     date = datetime.date.today().isoformat()
+
+    user = os.environ('USER')
+    if user == 'mdunser':
+        basedir = '/afs/cern.ch/user/m/mdunser/www/private/heavyIons/plots/'
+    elif user == 'psilva':
+        basedir = 'foobar'
+    
+
     if opts.date:
         date = opts.date
 

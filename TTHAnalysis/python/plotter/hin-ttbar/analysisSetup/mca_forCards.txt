@@ -1,0 +1,17 @@
+# vim: syntax=sh
+* ; TreeName="treeProducerHIN"
+
+ttbar+    : TT_TuneCP5_5p02TeV-powheg-pythia8                                               : 69*(208**2)    : lep_charge[0]*lep_charge[1]<0 ; FillColor=633            ,  Label="ttbar"
+zglo      : DYJetsToLL_M-10to50_TuneCP5_5020GeV-amcatnloFXFX-pythia8                        : 1506*(208**2)  : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kOrange+5 ,  Label="Zgamma 10to50"
+zghi      : DYJetsToLL_MLL-50_TuneCP5_5020GeV-amcatnloFXFX-pythia8                          : 2010*(208**2)  : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kOrange+7 ,  Label="Zgamma 50"
+tW        : ST_tW_antitop_5f_NoFullyHadronicDecays_hdampDOWN_TuneCP5_5p02TeV-powheg-pythia8 : 3.04*(208**2)  : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kTeal+9   ,  Label="tW"
+tW        : ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5down_5p02TeV-powheg-pythia8           : 3.04*(208**2)  : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kTeal+9   ,  Label="tW"
+VV        : WWTo2L2Nu_NNPDF31_TuneCP5_5p02TeV-powheg-pythia8                                : 1.21*(208**2)  : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kAzure-5  ,  Label="VV"
+VV        : WZTo3LNU_NNPDF30_TuneCP5_5p20TeV-powheg                                         : 1.77*(208**2)  : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kAzure-5  ,  Label="VV"
+VV        : ZZTo4L_5p02TeV_powheg_pythia8                                                   : 0.441*(208**2) : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kAzure-5  ,  Label="VV"
+data_comb : SkimMuons_PromptRecov1+SkimMuons_PromptRecov2+SkimElectrons_PromptRecov1+SkimElectrons            : lep_charge[0]*lep_charge[1]>0 ; FillColor=17             ,  Label="comb. (data)", AddWeight="446./1618."
+
+#W          : WJetsToLNu_TuneCP5_5020GeV-amcatnloFXFX-pythia8               : 21159*(208**2) : lep_charge[0]*lep_charge[1]<0 ; FillColor=17           , NormSystematic=0.50, Label="W"
+
+data      : SkimMuons_PromptRecov1+SkimMuons_PromptRecov2+SkimElectrons_PromptRecov1+SkimElectrons : lep_charge[0]*lep_charge[1]<0
+

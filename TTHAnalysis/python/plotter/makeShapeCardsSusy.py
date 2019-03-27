@@ -400,9 +400,11 @@ for signal in mca.listSignals():
 myout = outdir+"/common/";
 if not os.path.exists(myout): os.system("mkdir -p "+myout)
 workspace = ROOT.TFile.Open(myout+filename+".input.root", "RECREATE")
+print 'this is workspace', workspace
 for n,h in report.iteritems():
     if options.verbose > 0: print "\t%s (%8.3f events)" % (h.GetName(),h.Integral())
-    workspace.WriteTObject(h,h.GetName())
+    #workspace.WriteTObject(h,h.GetName())
+    h.Write()
 workspace.Close()
 
 if options.verbose > -1:

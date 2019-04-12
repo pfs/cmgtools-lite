@@ -190,7 +190,7 @@ def plotJetVariables(replot):
 
     for flav,mass in itertools.product(['flavem', 'flavee', 'flavmm'],['onZ','offZ']):
         targetdir = basedir+'/jetPlots/{date}{pf}/{flav}_{mass}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav, mass=mass )
-        enable    = [flav]
+        enable    = [flav, mass]
     
         extraopts = ' --maxRatioRange 0. 2. --fixRatioRange --legendColumns 2 --showIndivSigs ' #--plotmode=norm '#--preFitData bdt '
         makeplots = jetvars
@@ -207,22 +207,32 @@ def plotJetVariables(replot):
 
         f_nominal = ROOT.TFile(targetdir+'/flav{flav}_offZ/{fname}.root'.format(flav=flav,fname=fname_base),'read')
     
-        backgrounds = []
         tmp_data  = f_nominal.Get(var+'_data'     )
-        tmp_sig   = f_nominal.Get(var+'_ttbar'    )
-        tmp_tw    = f_nominal.Get(var+'_tW'       ); backgrounds.append(tmp_tw)
-        tmp_comb  = f_nominal.Get(var+'_data_comb'); backgrounds.append(tmp_comb)
-        tmp_vv    = f_nominal.Get(var+'_VV'       ); backgrounds.append(tmp_vv)
+        tmp_sig   = f_nominal.Get(var+'_ttbar'    ); tmp_sig .SetTitle('t#bar{t}'   )
+        tmp_tw    = f_nominal.Get(var+'_tW'       ); tmp_tw  .SetTitle('tW'         )
+        tmp_comb  = f_nominal.Get(var+'_data_comb'); tmp_comb.SetTitle('comb (data)')
+        tmp_vv    = f_nominal.Get(var+'_VV'       ); tmp_vv  .SetTitle('VV'         )
         tmp_zg    = f_nominal.Get(var+'_zg'       )
 
         ## now construct the Z histogram
         ## first get onZ data
         f_onZ = ROOT.TFile(targetdir+'/flav{flav}_onZ/{fname}.root'.format(flav=flav,fname=fname_base),'read')
-        tmp_zconstructed    = f_onZ.Get(var+'_data'     );tmp_zconstructed.SetName('zg_constructed')
+        tmp_zconstructed    = f_onZ.Get(var+'_data'     );tmp_zconstructed.SetName('zg_constructed'); tmp_zconstructed.SetTitle('Z/#gamma (data)')
         tmp_nonZ_tt         = f_onZ.Get(var+'_ttbar'    )
         tmp_nonZ_tw         = f_onZ.Get(var+'_tW'       )
         tmp_nonZ_comb       = f_onZ.Get(var+'_data_comb')
         tmp_nonZ_vv         = f_onZ.Get(var+'_VV'       )
+
+        ## for em add all the non-Z backgrounds back to the off-Z ones
+        if (flav == 'em'):
+            tmp_sig   .Add(tmp_nonZ_tt)
+            tmp_tw    .Add(tmp_nonZ_tw)
+            tmp_comb  .Add(tmp_nonZ_comb)
+            tmp_vv    .Add(tmp_nonZ_vv)
+            tmp_data  .Add(tmp_zconstructed) ## can do, because not yet scaled!!
+
+        ## ATTENTION!!! FIXME WHAT TO DO WITH THE Z HERE...
+
 
         ## subtract everything that isn't Z (mostly the SS i guess)
         tmp_zconstructed.Add(tmp_nonZ_tt  , -1.)
@@ -236,8 +246,14 @@ def plotJetVariables(replot):
 
         ## scale it
         tmp_zconstructed.Scale(tmp_numerator/tmp_denominator)
+
+        ## putting all backgrounds into a list for sorting
+        backgrounds = []
+        backgrounds.append(tmp_comb)
+        backgrounds.append(tmp_vv)
+        backgrounds.append(tmp_tw)
         backgrounds.append(tmp_zconstructed)
-        backgrounds = sorted(backgrounds, key = lambda x: x.Integral(), reverse = True)
+        ## don't sort... backgrounds = sorted(backgrounds, key = lambda x: x.Integral())#, reverse = True if flav == 'em' else False)
         backgrounds.append(tmp_sig)
 
         ## now on to the plotting
@@ -251,7 +267,7 @@ def plotJetVariables(replot):
         tmp_comb        .SetFillColor(17)
 
         ## more plotting. this is really boring to code...
-        leg = ROOT.TLegend(0.5,0.7,0.9,0.9)
+        leg = ROOT.TLegend(0.5,0.80,0.95,0.95)
         leg.SetNColumns(2); leg.SetLineWidth(0); leg.SetFillStyle(0)
 
         tmp_total = backgrounds[0].Clone('total_bkg'); tmp_total.SetMarkerSize(0.); tmp_total.SetTitle('')
@@ -259,8 +275,8 @@ def plotJetVariables(replot):
         for ib,bkg in enumerate(backgrounds):
             tmp_stack.Add(bkg)
             if ib: tmp_total.Add(bkg)
-            leg.AddEntry(bkg, bkg.GetName().split('_')[1], 'f')
-        leg.AddEntry(tmp_data, 'data', 'pe')
+            leg.AddEntry(bkg, bkg.GetTitle(), 'f')
+        leg.AddEntry(tmp_data, 'Data', 'pe')
 
         tmp_sigcopy = tmp_sig.Clone('sigcopy')
         tmp_sigcopy.SetFillStyle(0)
@@ -273,6 +289,8 @@ def plotJetVariables(replot):
         tmp_canv.GetPad(0).SetBottomMargin(0.32);
         tmp_canv.GetPad(0).SetLeftMargin  (0.18);
         tmp_canv.GetPad(0).SetRightMargin (0.04);
+        tmp_canv.GetPad(0).SetTickx(1);
+        tmp_canv.GetPad(0).SetTicky(1);
 
         ## now to the main PAD
         
@@ -280,6 +298,7 @@ def plotJetVariables(replot):
         tmp_canv.SetLogy()
         tmp_total.SetMaximum(2.*max(tmp_total.GetMaximum(),tmp_data.GetMaximum()))
         tmp_total.SetMinimum(0.9)
+        tmp_total.GetXaxis().SetLabelSize(0)
         tmp_total.Draw()
         
         tmp_stack.Draw('hist same')
@@ -288,19 +307,40 @@ def plotJetVariables(replot):
         leg.Draw('same')
         tmp_total.Draw('AXIS same')
 
+        lat = ROOT.TLatex()
+        lat.SetNDC(); lat.SetTextFont(42); lat.SetTextSize(0.03)
+        lat.DrawLatex(0.18, 0.97, '#font[61]{CMS} #font[52]{Preliminary}')
+        lat.DrawLatex(0.68, 0.97, '446.9 #mub^{-1} (5.02 TeV)')
+
         ## FIRST!!! to the ratio:
-        tmp_ratio = tmp_data.Clone('ratio')
+        tmp_ratio = tmp_data.Clone('ratio'); tmp_ratio.SetTitle('')
         tmp_ratio.Divide(tmp_total)
 
-        ratiopad = ROOT.TPad('padratio', '', 0.,0.,1.,0.9)
-        ratiopad.SetTopMargin   (0.65);
-        ratiopad.SetBottomMargin(0.04);
+        tmp_ratio.GetYaxis().SetRangeUser(0.,2.)
+        tmp_ratio.GetYaxis().SetTitle('Data/pred.')
+        tmp_ratio.GetYaxis().SetTitleSize(0.16)
+        tmp_ratio.GetYaxis().SetTitleOffset(0.5)
+        tmp_ratio.GetYaxis().SetLabelSize(0.10)
+        tmp_ratio.GetYaxis().SetNdivisions(505)
+        tmp_ratio.GetXaxis().SetLabelSize(0.10)
+        tmp_ratio.GetXaxis().SetTitleSize(0.15)
+        tmp_ratio.GetXaxis().SetTitleOffset(1.1)
+
+        ratiopad = ROOT.TPad('padratio', '', 0.,0.,1.,0.28)
+        ratiopad.SetTopMargin   (0.00);
+        ratiopad.SetBottomMargin(0.32);
         ratiopad.SetLeftMargin  (0.18);
         ratiopad.SetRightMargin (0.04);
+        ratiopad.SetTickx(1);
+        ratiopad.SetTicky(1);
 
-        ratiopad.cd()
         ratiopad.Draw()
+        ratiopad.cd()
         tmp_ratio.Draw('pe')
+        line = ROOT.TLine()
+        line.SetLineWidth(2)
+        line.DrawLine(tmp_ratio.GetXaxis().GetXmin(),1.,tmp_ratio.GetXaxis().GetXmax(),1.)
+        tmp_ratio.Draw('pe same')
 
 
         for ext in ['pdf','png','root']:
@@ -319,7 +359,7 @@ def simplePlot():
     print '=========================================='
     print 'running simple plots'
     print '=========================================='
-    trees     = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim10Apr/'
+    trees     = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim11Apr/'
     friends   = ''
 
     fmca          = 'hin-ttbar/analysisSetup/mca.txt'
@@ -344,7 +384,7 @@ def simplePlot():
 
         extraopts = ' --maxRatioRange 0. 2. --fixRatioRange --legendColumns 2 --showIndivSigs ' #--plotmode=norm '#--preFitData bdt '
         #makeplots = ['d01', 'd02', 'dz1', 'dz2', 'sip2d1', 'sip2d2', 'iso1', 'iso2' ]
-        makeplots = ['nbjets']
+        makeplots = []
         showratio = True
         runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
 

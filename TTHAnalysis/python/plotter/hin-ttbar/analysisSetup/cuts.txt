@@ -6,20 +6,17 @@ iso2 : lep_isofull[1] < 0.16
 
 ## these three are for the plotting of leptonic variables
 ## ======================================================
-ee  : abs(lep_pdgId[0]*lep_pdgId[1]) == 121  && abs(llm-91.)>15. && llm> 20. ; Disable=True
-mm  : abs(lep_pdgId[0]*lep_pdgId[1]) == 169  && abs(llm-91.)>15. && llm> 20. ; Disable=True
-em  : abs(lep_pdgId[0]*lep_pdgId[1]) == 143                                  ; Disable=True
+ee  : abs(lep_pdgId[0]*lep_pdgId[1]) == 121  && llm > 20. && abs(llm-91.)>15. ; Disable=True
+mm  : abs(lep_pdgId[0]*lep_pdgId[1]) == 169  && llm > 20. && abs(llm-91.)>15. ; Disable=True
+em  : abs(lep_pdgId[0]*lep_pdgId[1]) == 143  && llm > 20.                     ; Disable=True
 
 ## then need all the flavor,charge,mass combinations 
 ## separately for the plotting of jet variables
 ## ======================================================
 
-ss  : lep_charge[0]*lep_charge[1] > 0          ; Disable=True
-os  : lep_charge[0]*lep_charge[1] < 0          ; Disable=True
-
-flavee : abs(lep_pdgId[0]*lep_pdgId[1]) == 121 ; Disable=True
-flavmm : abs(lep_pdgId[0]*lep_pdgId[1]) == 169 ; Disable=True
-flavem : abs(lep_pdgId[0]*lep_pdgId[1]) == 143 ; Disable=True
+flavee : abs(lep_pdgId[0]*lep_pdgId[1]) == 121 && llm > 20. ; Disable=True
+flavmm : abs(lep_pdgId[0]*lep_pdgId[1]) == 169 && llm > 20. ; Disable=True
+flavem : abs(lep_pdgId[0]*lep_pdgId[1]) == 143 && llm > 20. ; Disable=True
 
 onZ    : abs(llm-91.)<15.                      ; Disable=True
 offZ   : abs(llm-91.)>15.                      ; Disable=True

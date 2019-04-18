@@ -1,7 +1,8 @@
+distance5    : getAvgDistance(llpt,abs(dphi),abs(lleta),abs(lep_eta[0]+lep_eta[1]),lep_pt[0],5)    : 25,1.,4.; XTitle="d_{5}"
+distance100  : getAvgDistance(llpt,abs(dphi),abs(lleta),abs(lep_eta[0]+lep_eta[1]),lep_pt[0],100)  : 25,1.,4.; XTitle="d_{100}"
+
 #distance1    : getAvgDistance(llpt,abs(dphi),abs(lleta),abs(lep_eta[0]+lep_eta[1]),lep_pt[0],1)    : 25,0.,5.; XTitle="d_{1}"
-distance5    : getAvgDistance(llpt,abs(dphi),abs(lleta),abs(lep_eta[0]+lep_eta[1]),lep_pt[0],5)    : 25,0.,5.; XTitle="d_{5}"
 #distance10   : getAvgDistance(llpt,abs(dphi),abs(lleta),abs(lep_eta[0]+lep_eta[1]),lep_pt[0],10)   : 25,0.,5.; XTitle="d_{10}"
-distance100  : getAvgDistance(llpt,abs(dphi),abs(lleta),abs(lep_eta[0]+lep_eta[1]),lep_pt[0],100)  : 25,0.,5.; XTitle="d_{100}"
 #distance200  : getAvgDistance(llpt,abs(dphi),abs(lleta),abs(lep_eta[0]+lep_eta[1]),lep_pt[0],200)  : 25,0.,5.; XTitle="d_{200}"
 #distance500  : getAvgDistance(llpt,abs(dphi),abs(lleta),abs(lep_eta[0]+lep_eta[1]),lep_pt[0],500)  : 25,0.,5.; XTitle="d_{500}"
 
@@ -18,13 +19,17 @@ sip2d2    : abs(lep_d0[1])/lep_d0err[1]                  : 25,-0.1,10.  ; XTitle
 
 iso1      : lep_isofull[0]        : 25,-1.,2. ; XTitle='rel. iso. (l1)'
 iso2      : lep_isofull[1]        : 25,-1.,2. ; XTitle='rel. iso. (l2)'
+miniiso1  : lep_miniiso[0]        : 25,-1.,2. ; XTitle='mini rel. iso. (l1)'
+miniiso2  : lep_miniiso[1]        : 25,-1.,2. ; XTitle='mini rel. iso. (l2)'
 
+
+nleptons  : nlep                        : 4,0.5,4.5 ; XTitle='number of ID\'d leptons'
 flavor : abs(lep_pdgId[0]*lep_pdgId[1]) : 70,100,170 ; XTitle='abs(id1*id2)'
 mll       : llm                                                 : 25,0.,200.  ; XTitle='m_{ll}'
 mtll      : mt_2(lep_pt[0],lep_phi[0],lep_pt[1],lep_phi[1])     : 25,0.,150.  ; XTitle='m_{T} (ll)'
 bdt       : bdt                                                 : 20,-1.,1.   ; XTitle='bdt discr.'
 bdtrarity : bdtrarity                                           : 20,0.,1.    ; XTitle='bdt discr. (rarity)'
-fisher2   : fisher2                                             : 20,-3.,3.    ; XTitle='fisher discriminant'
+fisher2   : fisher2                                             : 20,-1.,1.    ; XTitle='fisher discriminant'
 l1pt      : lep_pt[0]                                           : 25,20.,120. ; XTitle='p_{T}^{l1}'
 l2pt      : lep_pt[1]                                           : 25,20.,120. ; XTitle='p_{T}^{l2}'
 l1eta     : lep_eta[0]                                          : 20,-2.5,2.5 ; XTitle='#eta^{l1}'
@@ -35,15 +40,16 @@ acoplan   : 1.-abs(dphi)/TMath::Pi()                            : 25,0.,1.    ; 
 lldr      : deltaR(lep_eta[0],lep_phi[0],lep_eta[1],lep_phi[1]) : 25,0.,5.    ; XTitle='#DeltaR_{ll}', Legend="TL"
 lldeta    : abs(lep_eta[0]-lep_eta[1])                          : 25,0.,5.    ; XTitle='#Delta#eta(ll)'
 llpt      : llpt                                                : 25,0.,150.  ; XTitle='p_{T}^{ll}'
+sphericity      : llpt/(lep_pt[0]+lep_pt[1])                    : 25,0.,1.  ; XTitle='sphericity'
 lleta     : abs(lleta)                                          : 25,0.,5.    ; XTitle='#eta^{ll}'
 llrap     : abs(rapidity_2(lep_pt[0],lep_eta[0],lep_phi[0],lep_pt[1],lep_eta[1],lep_phi[1]))  : 25,0.,3.    ; XTitle='y(ll)'
 apt       : apt                                                 : 25,0.,1.    ; XTitle='A_{pT}'
-dphilll1  : dphilll2                                            : 25,0.,3.142 ; XTitle='#Delta #phi_{ll\,l2}'
-dphilll2  : dphilll2                                            : 25,0.,3.142 ; XTitle='#Delta #phi_{ll\,l2}'
-correctpt : lep_pt[0]>lep_pt[1]                                 : 2,-0.5,1.5  ; XTitle='correct pt ordering'
 sumabseta : abs(lep_eta[0])+abs(lep_eta[1])                     : 25,0.,5.    ; XTitle='|#eta_{l1}|+|#eta_{l2}|'
 prodeta   : lep_eta[0]*lep_eta[1]                               : 25,-5.,5.   ; XTitle='#eta(l1)*#eta(l2)'
 
+#correctpt : lep_pt[0]>lep_pt[1]                                 : 2,-0.5,1.5  ; XTitle='correct pt ordering'
+#dphilll1  : dphilll2                                            : 25,0.,3.142 ; XTitle='#Delta #phi_{ll\,l2}'
+#dphilll2  : dphilll2                                            : 25,0.,3.142 ; XTitle='#Delta #phi_{ll\,l2}'
 ##simpleLH  : simpleLH3d(abs(dphi),llpt,abs(lleta))               : 25,0.,1.    ; XTitle='simpleLH3d'
 ##
 ##eliso : (abs(lep_pdgId)==11)*(lep_chiso+lep_nhiso+lep_phiso-rho_par(rho[el_isoIndex(lep_eta)]))/lep_pt : 50,-1.,2. ; XTitle='iso(e)'

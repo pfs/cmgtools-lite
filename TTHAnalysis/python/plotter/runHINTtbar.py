@@ -148,7 +148,7 @@ def compareCombBackgrounds():
     print '=========================================='
     print 'comparing wjets with data combinatorial'
     print '=========================================='
-    trees     = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim4Apr/'
+    trees     = treedir
     friends   = ''
 
     fmca          = 'hin-ttbar/checkCombinatorial/mca.txt'
@@ -173,7 +173,7 @@ def plotJetVariables(replot):
     print '=========================================='
     print 'plotting jet variables with DY from data'
     print '=========================================='
-    trees     = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim10Apr/'
+    trees     = treedir
     friends   = ''
 
     fmca          = 'hin-ttbar/analysisSetup/mca.txt'
@@ -186,18 +186,27 @@ def plotJetVariables(replot):
     fittodata = []
     scalethem = {}
 
-    jetvars = ['nbjets', 'njets']
+    jetvars = ['nbjets']#, 'njets']
 
-    for flav,mass in itertools.product(['flavem', 'flavee', 'flavmm'],['onZ','offZ']):
+    eff_e = 0.75
+    eff_m = 0.90
+
+    for flav,mass in itertools.product(['flavmm', 'flavee', 'flavem'],['onZ','offZ']):
         targetdir = basedir+'/jetPlots/{date}{pf}/{flav}_{mass}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav, mass=mass )
         enable    = [flav, mass]
+
     
         extraopts = ' --maxRatioRange 0. 2. --fixRatioRange --legendColumns 2 --showIndivSigs ' #--plotmode=norm '#--preFitData bdt '
+
+        ## reweight by hand to expected efficiency for isolation!
+        effscale  = eff_m**2 if 'mm' in flav else eff_e*eff_m if 'em' in flav else eff_e**2
+        extraopts += ' -W {eff} '.format(eff=effscale)
+
         makeplots = jetvars
         showratio = True
         if (replot): runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
 
-    for flav,var in itertools.product(['em', 'ee', 'mm'],jetvars):
+    for flav,var in itertools.product(['mm', 'ee', 'em'],jetvars):
         targetdir = basedir+'/jetPlots/{date}{pf}/'.format(date=date, pf=('-'+postfix if postfix else ''))
 
         fname_base = '_AND_'.join(jetvars)
@@ -217,11 +226,12 @@ def plotJetVariables(replot):
         ## now construct the Z histogram
         ## first get onZ data
         f_onZ = ROOT.TFile(targetdir+'/flav{flav}_onZ/{fname}.root'.format(flav=flav,fname=fname_base),'read')
-        tmp_zconstructed    = f_onZ.Get(var+'_data'     );tmp_zconstructed.SetName('zg_constructed'); tmp_zconstructed.SetTitle('Z/#gamma (data)')
+        tmp_zconstructed    = f_onZ.Get(var+'_data'     ); tmp_zconstructed.SetName('zg_constructed'); tmp_zconstructed.SetTitle('Z/#gamma (data)')
         tmp_nonZ_tt         = f_onZ.Get(var+'_ttbar'    )
         tmp_nonZ_tw         = f_onZ.Get(var+'_tW'       )
         tmp_nonZ_comb       = f_onZ.Get(var+'_data_comb')
         tmp_nonZ_vv         = f_onZ.Get(var+'_VV'       )
+        tmp_onZ_zg          = f_onZ.Get(var+'_zg'       )
 
         ## for em add all the non-Z backgrounds back to the off-Z ones
         if (flav == 'em'):
@@ -234,18 +244,33 @@ def plotJetVariables(replot):
         ## ATTENTION!!! FIXME WHAT TO DO WITH THE Z HERE...
 
 
-        ## subtract everything that isn't Z (mostly the SS i guess)
-        tmp_zconstructed.Add(tmp_nonZ_tt  , -1.)
-        tmp_zconstructed.Add(tmp_nonZ_tw  , -1.)
-        tmp_zconstructed.Add(tmp_nonZ_comb, -1.)
-        tmp_zconstructed.Add(tmp_nonZ_vv  , -1.)
+        if not flav == 'em':
+            ## subtract everything that isn't Z (mostly the SS i guess)
+            tmp_zconstructed.Add(tmp_nonZ_tt  , -1.)
+            tmp_zconstructed.Add(tmp_nonZ_tw  , -1.)
+            tmp_zconstructed.Add(tmp_nonZ_comb, -1.)
+            tmp_zconstructed.Add(tmp_nonZ_vv  , -1.)
 
-        ## get the numerator and denominator for the scaling
-        tmp_denominator = tmp_zconstructed.Integral()
-        tmp_numerator   = tmp_zg          .Integral()
+            ## get the numerator and denominator for the scaling
+            tmp_denominator = tmp_zconstructed.Integral()
+            tmp_numerator   = tmp_zg          .Integral()
 
-        ## scale it
-        tmp_zconstructed.Scale(tmp_numerator/tmp_denominator)
+            ## scale it
+            tmp_zconstructed.Scale(tmp_numerator/tmp_denominator)
+
+            ## save the mm spectrum of the on-Z data (subtracted)
+            if flav == 'mm':
+                em_zconstructed = copy.deepcopy(tmp_zconstructed.Clone('em_zconstructed'))
+
+        else:
+            tmp_zconstructed = em_zconstructed.Clone('zg_constructed'); tmp_zconstructed.SetTitle('Z/#gamma (data #mu#mu)')
+
+            ## get the numerator and denominator for the scaling
+            tmp_denominator = tmp_zconstructed.Integral()
+            tmp_numerator   = tmp_zg.Integral() + tmp_onZ_zg.Integral()
+
+            ## scale it
+            tmp_zconstructed.Scale(tmp_numerator/tmp_denominator)
 
         ## putting all backgrounds into a list for sorting
         backgrounds = []
@@ -354,12 +379,69 @@ def plotJetVariables(replot):
         os.system(' cp ~mdunser/public/index.php '+targetdir)
 
 
+def compareSignals():
+    print '=========================================='
+    print 'running comparison of pp vs embedded signals'
+    print '=========================================='
+    trees     = treedir
+    friends   = ''
+
+    fmca          = 'hin-ttbar/analysisSetup/mca_signals.txt'
+    fcut          = 'hin-ttbar/analysisSetup/cuts.txt'
+    fplots        = 'hin-ttbar/analysisSetup/plots.txt'
+
+    for iflav,flav in enumerate(['em', 'ee', 'mm']):
+        targetdir = basedir+'/signalComparison/{date}{pf}-{flav}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav )
+        enable    = [flav]
+        disable   = []
+        processes = ['ttbar', 'ttEmbedded', 'bjetQCD']
+        fittodata = []
+        scalethem = {}
+
+        extraopts = ' --maxRatioRange 0. 2. --fixRatioRange --legendColumns 2 --showIndivSigs --plotmode=norm --ratioDen ttbar --ratioNums ttbar,ttEmbedded '
+        makeplots = []
+        showratio = True
+        runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
+
+def makeZplots():
+    print '=========================================='
+    print 'running DY plots'
+    print '=========================================='
+    trees     = treedir
+    friends   = ''
+
+    fmca          = 'hin-ttbar/analysisSetup/mca.txt'
+    fcut          = 'hin-ttbar/analysisSetup/cuts.txt'
+    fplots        = 'hin-ttbar/analysisSetup/plots.txt'
+    fsysts        = 'hin-ttbar/analysisSetup/systs.txt'
+
+    eff_e = 0.75
+    eff_m = 0.90
+
+    for iflav,flav in enumerate(['ee', 'mm']):
+        targetdir = basedir+'/dy_plots/{date}{pf}-{flav}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav )
+
+        enable    = ['flav'+flav, 'onZ']
+        disable   = [flav]
+        processes = []
+        fittodata = []
+        scalethem = {}
+
+        extraopts = ' --maxRatioRange 0. 2. --fixRatioRange --legendColumns 2 --showIndivSigs ' #--plotmode=norm '#--preFitData bdt '
+
+        effscale  = eff_m**2 if flav == 'mm' else eff_e*eff_m if flav == 'em' else eff_e**2
+        extraopts += ' -W {eff} '.format(eff=effscale)
+
+        makeplots = ['dyllpt', 'dyleppt', 'dyl1pt', 'dyl2pt', 'dysphericity', 'dydphi', 'dyllm']
+        showratio = True
+        runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
+
 
 def simplePlot(makeCards):
     print '=========================================='
     print 'running simple plots'
     print '=========================================='
-    trees     = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim17Apr/'
+    trees     = treedir
     friends   = ''
 
     fmca          = 'hin-ttbar/analysisSetup/mca.txt'
@@ -368,14 +450,17 @@ def simplePlot(makeCards):
     fplots        = 'hin-ttbar/analysisSetup/plots.txt'
     fsysts        = 'hin-ttbar/analysisSetup/systs.txt'
 
-    nbinsForFit = 15
+    nbinsForFit = 10
     fitVars = [('bdt'         , 'bdtrarity                      {n},0.,1.'.format(n=nbinsForFit)), 
                ('acoplanarity', '\'(1.-abs(dphi)/TMath::Pi())\' {n},0.,1.'.format(n=nbinsForFit)),
                ('sphericity'  , '\'llpt/(lep_pt[0]+lep_pt[1])\' {n},0.,1.'.format(n=nbinsForFit)),
                ('distance5'   , '\'getAvgDistance(llpt,abs(dphi),abs(lleta),abs(lep_eta[0]+lep_eta[1]),lep_pt[0],5)\' {n},1.,4.'.format(n=nbinsForFit)),
               ]
 
-    for iflav,flav in enumerate(['em', 'ee', 'mm']):
+    eff_e = 0.75
+    eff_m = 0.90
+
+    for iflav,flav in enumerate(['em']):#, 'ee', 'mm']):
         targetdir = basedir+'/simple_plots/{date}{pf}-{flav}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav )
 
         enable    = [flav]
@@ -384,21 +469,23 @@ def simplePlot(makeCards):
         fittodata = []
         scalethem = {}
 
+
         extraopts = ' --maxRatioRange 0. 2. --fixRatioRange --legendColumns 2 --showIndivSigs ' #--plotmode=norm '#--preFitData bdt '
-        #makeplots = ['d01', 'd02', 'dz1', 'dz2', 'sip2d1', 'sip2d2', 'iso1', 'iso2' ]
+        effscale  = eff_m**2 if flav == 'mm' else eff_e*eff_m if flav == 'em' else eff_e**2
+        extraopts += ' -W {eff} '.format(eff=effscale)
         makeplots = []
         showratio = True
-        #runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
+        runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
 
         if makeCards:
 
             for fitVar in fitVars:
                 outdirCards = 'hin-ttbar/datacards_{date}_{pf}/{fitVarName}/'.format(date=date, pf=postfix,fitVarName=fitVar[0])
-                #os.system('python makeShapeCardsSusy.py --s2v -f -j 6 -l {lumi} --od {od} -P {tdir} {mca} {cuts} -E ^{flav} {fitVar} {systs} -v 3 -o {flav} -b {flav}'.format(lumi=lumi,tdir=trees,mca=fmca_forCards,cuts=fcut,systs=fsysts,flav=flav,fitVar=fitVar[1],od=outdirCards))
+                ## os.system('python makeShapeCardsSusy.py --s2v -f -j 6 -l {lumi} --od {od} -P {tdir} {mca} {cuts} -E ^{flav} {fitVar} {systs} -v 3 -o {flav} -b {flav} -W {scale} '.format(lumi=lumi,tdir=trees,mca=fmca_forCards,cuts=fcut,systs=fsysts,flav=flav,fitVar=fitVar[1],od=outdirCards, scale=effscale))
 
                 if iflav == 2:
                     print 'running combine cards'
-                    #os.system('combineCards.py em={p}/ttbar/em.card.txt mm={p}/ttbar/mm.card.txt ee={p}/ttbar/ee.card.txt > {p}/ttbar/allFlavors.card.txt'           .format(p=outdirCards))
+                    os.system('combineCards.py em={p}/ttbar/em.card.txt mm={p}/ttbar/mm.card.txt ee={p}/ttbar/ee.card.txt > {p}/ttbar/allFlavors.card.txt'           .format(p=outdirCards))
                     os.system('text2hdf5.py {p}/ttbar/allFlavors.card.txt --out {p}/ttbar/allFlavors.hdf5 '.format(p=outdirCards))
                     os.system('combinetf.py --binByBinStat --computeHistErrors --saveHists --doImpacts -t -1 {p}/ttbar/allFlavors.hdf5 '.format(p=outdirCards))
                     os.system('mv fitresults_123456789.root {p}/ttbar/fitresults_allFlavors.root'.format(p=outdirCards))
@@ -436,6 +523,8 @@ if __name__ == '__main__':
     parser.add_option('--jetvars', action='store_true' , default=False , help='plot jet variables')
     parser.add_option('--replot' , action='store_true' , default=False , help='replot all the input jet plots')
     parser.add_option('--fit'    , action='store_true' , default=False , help='perform the fits to data with combine')
+    parser.add_option('--compareSignals'    , action='store_true' , default=False , help='compareSignals')
+    parser.add_option('--dyPlots'    , action='store_true' , default=False , help='make plots for onZ ee/mm')
     (opts, args) = parser.parse_args()
 
 ## LUMI=1618.466*(1e-6)
@@ -444,10 +533,10 @@ if __name__ == '__main__':
 ##         'blind':446.931*(1e-6)}
 
 
-    global date, postfix, lumi, date, basedir
+    global date, postfix, lumi, date, basedir, treedir
     postfix = opts.postfix
     #lumi = 1618.466*1e-9 if not opts.lumi else opts.lumi
-    lumi = 446.931*1e-9 if not opts.lumi else opts.lumi
+    lumi = 446.931*1e-9 if not opts.lumi else float(opts.lumi)
     date = datetime.date.today().isoformat()
 
     user = os.environ['USER']
@@ -456,6 +545,7 @@ if __name__ == '__main__':
     elif user == 'psilva':
         basedir = 'foobar'
     
+    treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim27Apr/'
 
     if opts.date:
         date = opts.date
@@ -469,3 +559,9 @@ if __name__ == '__main__':
     if opts.jetvars:
         print 'plotting jet related variables'
         plotJetVariables(opts.replot)
+    if opts.compareSignals:
+        print 'plotting jet related variables'
+        compareSignals()
+    if opts.dyPlots:
+        print 'plotting jet related variables'
+        makeZplots()

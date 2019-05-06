@@ -31,6 +31,3 @@ offZ   : abs(llm-91.)>15.                      ; Disable=True
 
 ##
 ##
-##  centrality cuts
-highcen : cenBin<30.  ; Disable=True
-lowcen  : cenBin>=30. ; Disable=True

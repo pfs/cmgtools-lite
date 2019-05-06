@@ -443,6 +443,32 @@ def compareSignals():
         runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
 
 
+def compareDataPeriods():
+    print '=========================================='
+    print 'comparing data periods'
+    print '=========================================='
+    trees     = treedir
+    friends   = ''
+
+    fmca          = 'hin-ttbar/analysisSetup/mca_data.txt'
+    fcut          = 'hin-ttbar/analysisSetup/cuts.txt'
+    fplots        = 'hin-ttbar/analysisSetup/plots.txt'
+
+    flavs=['ee','mm']
+    for iflav,flav in enumerate(flavs):
+        targetdir = basedir+'/data/{date}{pf}-{flav}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav )
+        enable    = ['flav'+flav,'onZ']
+        disable   = [flav]
+        processes = ['data','dt_hicen','dt_locen']
+        fittodata = []
+        scalethem = {}
+
+        extraopts = ' --maxRatioRange 0.5 1.5 --fixRatioRange --legendColumns 2 --showIndivSigs --plotmode=norm --ratioDen data --ratioNums dt_hicen,dt_locen'
+        makeplots = []
+        showratio = True
+        runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
+
+
 
 def makeZplots():
     print '=========================================='
@@ -565,6 +591,7 @@ if __name__ == '__main__':
     parser.add_option('--replot' , action='store_true' , default=False , help='replot all the input jet plots')
     parser.add_option('--fit'    , action='store_true' , default=False , help='perform the fits to data with combine')
     parser.add_option('--compareSignals'    , action='store_true' , default=False , help='compareSignals')
+    parser.add_option('--compareData'    , action='store_true' , default=False , help='compare data periods')
     parser.add_option('--dyPlots'    , action='store_true' , default=False , help='make plots for onZ ee/mm')
     (opts, args) = parser.parse_args()
 
@@ -606,3 +633,6 @@ if __name__ == '__main__':
     if opts.dyPlots:
         print 'plotting jet related variables'
         makeZplots()
+    if opts.compareData:
+        print 'Comparing data periods'
+        compareDataPeriods()

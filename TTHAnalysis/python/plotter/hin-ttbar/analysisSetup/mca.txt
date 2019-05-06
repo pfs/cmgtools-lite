@@ -1,7 +1,7 @@
 # vim: syntax=sh
 * ; TreeName="treeProducerHIN"
 
-ttbar+     : TT_TuneCP5_5p02TeV-powheg-pythia8                          : 69*(208**2)   : lep_charge[0]*lep_charge[1]<0 ; FillColor=633            , NormSystematic=0.5, Label="t\#bar{t}"
+ttbar+    : TT_TuneCP5_5p02TeV-powheg-pythia8                          : 69*(208**2)   : lep_charge[0]*lep_charge[1]<0 ; FillColor=633            , NormSystematic=0.5, Label="t\#bar{t}"
 zg        : DYJetsToLL_M-10to50_TuneCP5_5020GeV-amcatnloFXFX-pythia8   : 1506*(208**2) : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kOrange+6 , NormSystematic=0.5,  Label="Z/\#gamma"
 zg        : DYJetsToLL_MLL-50_TuneCP5_5020GeV-amcatnloFXFX-pythia8     : 2010*(208**2) : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kOrange+6 , NormSystematic=0.5,  Label="Z/\#gamma"
 tW        : ST_tW_antitop_5f_NoFullyHadronicDecays_hdampDOWN_TuneCP5_5p02TeV-powheg-pythia8 : 3.04*(208**2) : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kTeal+9   , NormSystematic=0.5, Label="tW"

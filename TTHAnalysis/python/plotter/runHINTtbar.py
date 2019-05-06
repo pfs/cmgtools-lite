@@ -169,6 +169,40 @@ def compareCombBackgrounds():
         showratio = True
         runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
 
+
+def compareTTSysts():
+    print '=========================================='
+    print 'comparing TT systematics'
+    print '=========================================='
+    trees     = treedir
+    friends   = ''
+
+    fmca          = 'hin-ttbar/analysisSetup/mca_signalSysts.txt'
+    fcut          = 'hin-ttbar/analysisSetup/noiso-cuts.txt'
+    fplots        = 'hin-ttbar/analysisSetup/plots.txt'
+
+    flavs=['em']
+    nums=[('pttop','ttbar_ptup,ttbar_ptdn'),
+          ('mtop','ttbar_mup,ttbar_mdn'),
+          ('qcdscale','ttbar_ufup,ttbar_ufdn,ttbar_urup,ttbar_ufdn,ttbar_urufup,ttbar_urufdn')
+          ]
+
+    for flav,syst in itertools.product(flavs,nums):
+        sname,num=syst
+        targetdir = basedir+'/tt_systs/{date}{pf}-{flav}-{sname}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav,sname=sname )
+
+        enable    = [flav]
+        disable   = []
+        processes = []
+        fittodata = []
+        scalethem = {}
+
+        extraopts = ' --maxRatioRange 0. 2. --fixRatioRange --plotmode=norm --showRatio --ratioNums %s --ratioDen ttbar'%num
+        makeplots = ['llpt','sphericity','bdt','bdtrarity']
+        showratio = True
+        runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
+
+
 def plotJetVariables(replot):
     print '=========================================='
     print 'plotting jet variables with DY from data'
@@ -410,7 +444,7 @@ def makeZplots():
     trees     = treedir
     friends   = ''
 
-    fmca          = 'hin-ttbar/analysisSetup/mca.txt'
+    fmca          = ['hin-ttbar/analysisSetup/mca.txt','hin-ttbar/analysisSetup/mca_data.txt']
     fcut          = 'hin-ttbar/analysisSetup/cuts.txt'
     fplots        = 'hin-ttbar/analysisSetup/plots.txt'
     fsysts        = 'hin-ttbar/analysisSetup/systs.txt'
@@ -434,7 +468,8 @@ def makeZplots():
 
         makeplots = ['dyllpt', 'dyleppt', 'dyl1pt', 'dyl2pt', 'dysphericity', 'dydphi', 'dyllm']
         showratio = True
-        runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
+        for ifmca in fmca:
+            runplots(trees, friends, targetdir, ifmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
 
 
 def simplePlot(makeCards):
@@ -521,6 +556,7 @@ if __name__ == '__main__':
     parser.add_option('--simple'    ,                  dest='simple'       , action='store_true' , default=False , help='make simple plot')
     parser.add_option('--combinatorial'    , action='store_true' , default=False , help='compare data comb with wjets')
     parser.add_option('--jetvars', action='store_true' , default=False , help='plot jet variables')
+    parser.add_option('--ttSysts', action='store_true' , default=False , help='compare ttbar systematic variations')
     parser.add_option('--replot' , action='store_true' , default=False , help='replot all the input jet plots')
     parser.add_option('--fit'    , action='store_true' , default=False , help='perform the fits to data with combine')
     parser.add_option('--compareSignals'    , action='store_true' , default=False , help='compareSignals')
@@ -543,7 +579,7 @@ if __name__ == '__main__':
     if user == 'mdunser':
         basedir = '/afs/cern.ch/user/m/mdunser/www/private/heavyIons/plots/'
     elif user == 'psilva':
-        basedir = 'foobar'
+        basedir = 'PbPb2018'
     
     treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim27Apr/'
 
@@ -565,3 +601,6 @@ if __name__ == '__main__':
     if opts.dyPlots:
         print 'plotting jet related variables'
         makeZplots()
+    if opts.ttSysts:
+        print 'plotting ttbar systs'
+        compareTTSysts()

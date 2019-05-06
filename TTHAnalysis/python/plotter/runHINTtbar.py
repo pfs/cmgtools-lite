@@ -178,14 +178,15 @@ def compareTTSysts():
     trees     = treedir
     friends   = ''
 
-    fmca          = 'hin-ttbar/analysisSetup/mca_signalSysts.txt'
-    fcut          = 'hin-ttbar/analysisSetup/noiso-cuts.txt'
+    fmca          = 'hin-ttbar/analysisSetup/mca_signals.txt'
+    fcut          = 'hin-ttbar/analysisSetup/cuts.txt'
     fplots        = 'hin-ttbar/analysisSetup/plots.txt'
 
     flavs=['em']
     nums=[('pttop','ttbar_ptup,ttbar_ptdn'),
           ('mtop','ttbar_mup,ttbar_mdn'),
-          ('qcdscale','ttbar_ufup,ttbar_ufdn,ttbar_urup,ttbar_ufdn,ttbar_urufup,ttbar_urufdn')
+          ('qcdscale','ttbar_ufup,ttbar_ufdn,ttbar_urup,ttbar_ufdn,ttbar_urufup,ttbar_urufdn'),
+          ('alphaS', 'ttbar_asup,ttasdn')
           ]
 
     for flav,syst in itertools.product(flavs,nums):
@@ -194,11 +195,11 @@ def compareTTSysts():
 
         enable    = [flav]
         disable   = []
-        processes = []
+        processes = ['ttbar']+num.split(',')
         fittodata = []
         scalethem = {}
 
-        extraopts = ' --maxRatioRange 0. 2. --fixRatioRange --plotmode=norm --showRatio --ratioNums %s --ratioDen ttbar'%num
+        extraopts = ' --maxRatioRange 0.9 1.1 --fixRatioRange --showRatio --ratioNums %s --ratioDen ttbar'%num #--plotmode=norm
         makeplots = ['llpt','sphericity','bdt','bdtrarity']
         showratio = True
         runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
@@ -462,7 +463,7 @@ def makeZplots():
     trees     = treedir
     friends   = ''
 
-    fmca          = ['hin-ttbar/analysisSetup/mca.txt','hin-ttbar/analysisSetup/mca_data.txt']
+    fmca          = 'hin-ttbar/analysisSetup/mca.txt'
     fcut          = 'hin-ttbar/analysisSetup/cuts.txt'
     fplots        = 'hin-ttbar/analysisSetup/plots.txt'
     fsysts        = 'hin-ttbar/analysisSetup/systs.txt'
@@ -486,8 +487,7 @@ def makeZplots():
 
         makeplots = ['dyllpt', 'dyleppt', 'dyl1pt', 'dyl2pt', 'dysphericity', 'dydphi', 'dyllm']
         showratio = True
-        for ifmca in fmca:
-            runplots(trees, friends, targetdir, ifmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
+        runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
 
 
 def simplePlot(makeCards):

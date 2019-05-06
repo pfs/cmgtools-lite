@@ -24,37 +24,27 @@ TString CMSSW_BASE = gSystem->ExpandPathName("${CMSSW_BASE}");
 //
 //
 //
+//
 
-int el_isoIndex(float eta){
-    if      (eta < -2.1 ) return 1;
-    else if (eta < -1.3 ) return 2;
-    else if (eta <  1.3 ) return 3;
-    else if (eta <  2.1 ) return 4;
-    else return 5;
-}
 
-float rho_par(float rho){
-    // std::cout<< "for rho: " << rho << std::endl;
-    // std::cout << "returning rho parametric " << 0.0011 * TMath::Power(rho +142.6,2) - 0.14 * (rho+142.6) << std::endl;
-    return 0.0011 * TMath::Power(rho +142.6,2) - 0.14 * (rho+142.6);
-}
+float iso03(int pdgId, float pt, float isofull, float isofull30, float lep_rho){
 
-float el_iso(float chiso, float phiso, float nhiso, float rho, float pt){
-    return (chiso+phiso+nhiso-rho_par(rho))/pt;
-}
+    float ue(-1000.);
+    float iso(-1000.);
 
-float rho_eta(float rho1, float rho2, float rho3, float rho4, float rho5, float eta){
-    float myrho = 0.;
+    if      (pdgId == 11){
+        ue = 0.000817*TMath::Power(lep_rho+14.696,2)+0.201661*(lep_rho+14.696);
+        iso  = isofull*pt;
+        iso += 0.0011*TMath::Power(lep_rho+142.4,2)-0.14*(lep_rho+142.4);
+        iso -= ue;
+    }
 
-    if      (eta < -2.1 ) myrho = rho1;
-    else if (eta < -1.3 ) myrho = rho2;
-    else if (eta <  1.3 ) myrho = rho3;
-    else if (eta <  2.1 ) myrho = rho4;
-    else myrho = rho5;
+    else if (pdgId == 13) {
+        ue = 0.00102*TMath::Power(lep_rho+12.6255,2)+0.18535*(lep_rho+12.6255);
+        iso = isofull30 - ue;
+    }
 
-    float mynewrho = rho_par(myrho);
-    return mynewrho;
-
+    return iso/pt;
 }
 
 

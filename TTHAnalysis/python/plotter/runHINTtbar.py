@@ -186,7 +186,7 @@ def compareTTSysts():
     nums=[('pttop','ttbar_ptup,ttbar_ptdn'),
           ('mtop','ttbar_mup,ttbar_mdn'),
           ('qcdscale','ttbar_ufup,ttbar_ufdn,ttbar_urup,ttbar_ufdn,ttbar_urufup,ttbar_urufdn'),
-          ('alphaS', 'ttbar_asup,ttasdn')
+          ('alphaS', 'ttbar_asup,ttbar_asdn')
           ]
 
     for flav,syst in itertools.product(flavs,nums):
@@ -199,7 +199,7 @@ def compareTTSysts():
         fittodata = []
         scalethem = {}
 
-        extraopts = ' --maxRatioRange 0.9 1.1 --fixRatioRange --showRatio --ratioNums %s --ratioDen ttbar'%num #--plotmode=norm
+        extraopts = ' --maxRatioRange 0.9 1.1 --fixRatioRange --plotmode=norm --showRatio --ratioNums %s --ratioDen ttbar'%num
         makeplots = ['llpt','sphericity','bdt','bdtrarity']
         showratio = True
         runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)

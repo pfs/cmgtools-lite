@@ -1,7 +1,17 @@
 # vim: syntax=sh
 * ; TreeName="treeProducerHIN"
 
-ttbar+     : TT_TuneCP5_5p02TeV-powheg-pythia8   : 69*(208**2)   : lep_charge[0]*lep_charge[1]<0 ; FillColor=633            , NormSystematic=0.5, Label="t\#bar{t}"
-ttEmbedded : TTDilepton_TuneZ2_HydjetDrumMB      : 69*(208**2)   : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kCyan-1   , NormSystematic=0.5, Label="t\#bar{t} (HIN)"
-
-#bjetQCD    : bJet_TuneCP5_HydjetDrumMB           : 10000.        : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kOrange   , NormSystematic=0.5, Label="bbar (QCD)"
+ttbar+        : TT_TuneCP5_5p02TeV-powheg-pythia8   : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; FillColor=633            , Label="t\#bar{t}"
+ttEmbedded    : TTDilepton_TuneZ2_HydjetDrumMB      : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kCyan-1   , Label="t\#bar{t} (HIN)"
+ttbar_ptup    : TT_TuneCP5_5p02TeV-powheg-pythia8   : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kMagenta  , Label="top p_{T} up",          AddWeight="meWeights[0]"
+ttbar_ptdn    : TT_TuneCP5_5p02TeV-powheg-pythia8   : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kMagenta+2, Label="top p_{T} dn",          AddWeight="meWeights[1]"
+ttbar_mup     : TT_TuneCP5_5p02TeV-powheg-pythia8   : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kMagenta  , Label="\#Deltam=+1GeV",        AddWeight="meWeights[2]"
+ttbar_mdn     : TT_TuneCP5_5p02TeV-powheg-pythia8   : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kMagenta+2, Label="\#Deltam=-1GeV",        AddWeight="meWeights[3]"
+ttbar_ufup    : TT_TuneCP5_5p02TeV-powheg-pythia8   : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kMagenta  , Label="2\#mu_{F}",             AddWeight="meWeights[4]"
+ttbar_ufdn    : TT_TuneCP5_5p02TeV-powheg-pythia8   : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kMagenta+2, Label="\#mu_{F}/2",            AddWeight="meWeights[5]"
+ttbar_urup    : TT_TuneCP5_5p02TeV-powheg-pythia8   : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kMagenta-9, Label="2\#mu_{R}",             AddWeight="meWeights[6]"
+ttbar_urdn    : TT_TuneCP5_5p02TeV-powheg-pythia8   : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kRed+1    , Label="\#mu_{R}/2",            AddWeight="meWeights[9]"
+ttbar_urufup  : TT_TuneCP5_5p02TeV-powheg-pythia8   : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kAzure+7  , Label="2\#mu_{F}/2\#mu_{R}",   AddWeight="meWeights[7]"
+ttbar_urufdn  : TT_TuneCP5_5p02TeV-powheg-pythia8   : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kBlue-7   , Label="\#mu_{F}/2/\#mu_{R}/2", AddWeight="meWeights[11]"
+ttbar_asup    : TT_TuneCP5_5p02TeV-powheg-pythia8   : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kAzure+7  , Label="\#alpha_{S}=0.117",     AddWeight="meWeights[112]"
+ttbar_asdn    : TT_TuneCP5_5p02TeV-powheg-pythia8   : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kBlue-7   , Label="\#alpha_{S}=0.119",     AddWeight="meWeights[113]"

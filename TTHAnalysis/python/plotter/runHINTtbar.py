@@ -2,6 +2,7 @@ import optparse, subprocess, ROOT, datetime, math, array, copy, os, itertools
 import numpy as np
 
 
+
 def getFitresult(url):
     res=[]
     fIn=ROOT.TFile.Open(url)
@@ -206,6 +207,8 @@ def plotJetVariables(replot):
         showratio = True
         if (replot): runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
 
+    yields = {}
+
     for flav,var in itertools.product(['mm', 'ee', 'em'],jetvars):
         targetdir = basedir+'/jetPlots/{date}{pf}/'.format(date=date, pf=('-'+postfix if postfix else ''))
 
@@ -216,7 +219,7 @@ def plotJetVariables(replot):
 
         f_nominal = ROOT.TFile(targetdir+'/flav{flav}_offZ/{fname}.root'.format(flav=flav,fname=fname_base),'read')
     
-        tmp_data  = f_nominal.Get(var+'_data'     )
+        tmp_data  = f_nominal.Get(var+'_data'     ); tmp_data.SetTitle('data'       )
         tmp_sig   = f_nominal.Get(var+'_ttbar'    ); tmp_sig .SetTitle('t#bar{t}'   )
         tmp_tw    = f_nominal.Get(var+'_tW'       ); tmp_tw  .SetTitle('tW'         )
         tmp_comb  = f_nominal.Get(var+'_data_comb'); tmp_comb.SetTitle('comb (data)')
@@ -281,6 +284,7 @@ def plotJetVariables(replot):
         ## don't sort... backgrounds = sorted(backgrounds, key = lambda x: x.Integral())#, reverse = True if flav == 'em' else False)
         backgrounds.append(tmp_sig)
 
+
         ## now on to the plotting
         ## have to reset the fill colors?
         tmp_zconstructed.SetFillColor(ROOT.kOrange+6)
@@ -303,13 +307,23 @@ def plotJetVariables(replot):
             leg.AddEntry(bkg, bkg.GetTitle(), 'f')
         leg.AddEntry(tmp_data, 'Data', 'pe')
 
+        if var == 'nbjets':
+            for bkg in backgrounds+[tmp_data, tmp_total]:
+                err = ROOT.Double(-1.)
+                yields[bkg.GetTitle()+' '+flav+' 0b'  ] = bkg.GetBinContent(1)
+                yields[bkg.GetTitle()+' '+flav+' 0b_e'] = bkg.GetBinError  (1)
+                yields[bkg.GetTitle()+' '+flav+' 1b'  ] = bkg.IntegralAndError(2, bkg.GetXaxis().GetNbins()+1, err)
+                yields[bkg.GetTitle()+' '+flav+' 1b_e'] = err
+            
+        print yields
+
         tmp_sigcopy = tmp_sig.Clone('sigcopy')
         tmp_sigcopy.SetFillStyle(0)
         tmp_sigcopy.SetLineWidth(4)
 
         ROOT.gROOT.SetBatch(); ROOT.gStyle.SetOptStat(0)
         ##tmp_canv = f_nominal.Get(var+'_canvas')
-        tmp_canv= ROOT.TCanvas('whatever','',600,750)
+        tmp_canv= ROOT.TCanvas('whatever'+var+flav,'',600,750)
         tmp_canv.GetPad(0).SetTopMargin   (0.04);
         tmp_canv.GetPad(0).SetBottomMargin(0.32);
         tmp_canv.GetPad(0).SetLeftMargin  (0.18);
@@ -366,6 +380,10 @@ def plotJetVariables(replot):
         line.SetLineWidth(2)
         line.DrawLine(tmp_ratio.GetXaxis().GetXmin(),1.,tmp_ratio.GetXaxis().GetXmax(),1.)
         tmp_ratio.Draw('pe same')
+
+        for k,v in sorted(yields.items()):
+            if '_e' in k: continue
+            print '{k} {c:.2f} $\pm$ {e:.2f}'.format(k=k,c=v, e=yields[k+'_e'])
 
 
         for ext in ['pdf','png','root']:

@@ -1,6 +1,3 @@
-# vim: syntax=sh
-* ; TreeName="treeProducerHIN"
-
 ttbar_ptTop_Up  : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[0]"  , Label="top p_{T} up"         , SkipMe=True
 ttbar_ptTop_Dn  : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[1]"  , Label="top p_{T} dn"         , SkipMe=True
 

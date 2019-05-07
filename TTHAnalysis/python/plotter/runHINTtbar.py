@@ -485,11 +485,49 @@ def makeZplots():
     eff_e = 0.75
     eff_m = 0.90
 
-    for iflav,flav in enumerate(['ee', 'mm']):
+    for iflav,flav in enumerate(['sf']):
         targetdir = basedir+'/dy_plots/{date}{pf}-{flav}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav )
 
-        enable    = ['flav'+flav, 'onZ']
-        disable   = [flav]
+        enable    = ['flav'+flav, 'onZ', 'centralityHi']
+        disable   = []
+        processes = []
+        fittodata = []
+        scalethem = {}
+
+        extraopts = ' --maxRatioRange 0. 2. --fixRatioRange --legendColumns 2 --showIndivSigs ' #--plotmode=norm '#--preFitData bdt '
+
+        effscale  = eff_m**2 if flav == 'mm' else eff_e*eff_m if flav == 'em' else eff_e**2 if flav == 'ee' else (eff_e**2+eff_m**2)/2. if flav == 'sf' else -1.
+        extraopts += ' -W {eff} '.format(eff=effscale)
+
+        makeplots = ['dyllpt', 'dyleppt', 'dyl1pt', 'dyl2pt', 'dysphericity', 'dydphi', 'dyllm']
+        showratio = True
+        runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
+
+def makeCards():
+    print '=========================================='
+    print 'making datacards, including the Z for mm and ee'
+    print '=========================================='
+    trees     = treedir
+    friends   = ''
+
+    fmca   = 'hin-ttbar/analysisSetup/mca_forCards.txt'
+    fcut   = 'hin-ttbar/analysisSetup/cuts.txt'
+    fplots = 'hin-ttbar/analysisSetup/plots.txt'
+    fsysts = 'hin-ttbar/analysisSetup/systs.txt'
+
+    nbinsForFit = 10
+    fitVars = [('bdt'         , 'bdtrarity                      {n},0.,1.'.format(n=nbinsForFit)), 
+               ('sphericity'  , '\'llpt/(lep_pt[0]+lep_pt[1])\' {n},0.,1.'.format(n=nbinsForFit)),
+              ]
+
+    eff_e = 0.75
+    eff_m = 0.90
+
+    for iflav,flav in enumerate(['em']):#, 'ee', 'mm']):
+        targetdir = basedir+'/card_inputs/{date}{pf}-{flav}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav )
+
+        enable    = [flav]
+        disable   = []
         processes = []
         fittodata = []
         scalethem = {}
@@ -499,12 +537,58 @@ def makeZplots():
         effscale  = eff_m**2 if flav == 'mm' else eff_e*eff_m if flav == 'em' else eff_e**2
         extraopts += ' -W {eff} '.format(eff=effscale)
 
-        makeplots = ['dyllpt', 'dyleppt', 'dyl1pt', 'dyl2pt', 'dysphericity', 'dydphi', 'dyllm']
+        makeplots = [x[0] for x in fitVars]
         showratio = True
+
         runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
 
+        cmd_cards_base = 'python makeShapeCardsSusy.py --s2v -f -j 6 -v 3 -l {lumi} -P {tdir} {mca} {cuts} '.format(lumi=lumi,tdir=trees,mca=fmca,cuts=fcut)
+        for fitVar in fitVars:
+            outdirCards = 'hin-ttbar/datacards_{date}_{pf}/{fitVarName}/'.format(date=date, pf=postfix,fitVarName=fitVar[0])
 
-def simplePlot(makeCards):
+            cmd_cards  = cmd_cards_base + ' -W {scale} '.format(scale=effscale)
+            cmd_cards += ' --od {od} '                  .format(od=outdirCards)
+            cmd_cards += ' -E ^{flav} -o {flav} '       .format(flav=flav)
+            cmd_cards += ' {fitVar} {systs} '           .format(fitVar=fitVar[1], systs=fsysts)
+
+            
+            print 'running the cards with command'
+            print '==========================================='
+            print cmd_cards
+            os.system(cmd_cards)
+
+            ## if iflav == 2:
+            ##     print 'running combine cards'
+            ##     os.system('combineCards.py em={p}/ttbar/em.card.txt mm={p}/ttbar/mm.card.txt ee={p}/ttbar/ee.card.txt > {p}/ttbar/allFlavors.card.txt'           .format(p=outdirCards))
+            ##     os.system('text2hdf5.py {p}/ttbar/allFlavors.card.txt --out {p}/ttbar/allFlavors.hdf5 '.format(p=outdirCards))
+            ##     os.system('combinetf.py --binByBinStat --computeHistErrors --saveHists --doImpacts -t -1 {p}/ttbar/allFlavors.hdf5 '.format(p=outdirCards))
+            ##     os.system('mv fitresults_123456789.root {p}/ttbar/fitresults_allFlavors.root'.format(p=outdirCards))
+            ## 
+            ##     f_res = ROOT.TFile(' {p}/ttbar/fitresults_allFlavors.root'.format(p=outdirCards), 'read')
+            ##     t_res = f_res.Get('fitresults')
+            ##     for ev in t_res:
+            ##         print '================================================='
+            ##         print 'for fitvar', fitVar[0]
+            ##         print 'RESULT: mu(ttbar) = {mu:.2f} +- {err:.2f}'.format(mu=ev.ttbar_mu, err=ev.ttbar_mu_err)
+            ##         print '================================================='
+
+            ## print 'running combine with systs'
+            ## os.system('combine -M MultiDimFit {p}/ttbar/allFlavors.card.txt -t -1 --expectSignal=1 --saveFitResult --robustFit=1 --algo=cross --cl=0.68'     .format(p=outdirCards))
+            ## resTot=getFitresult('higgsCombineTest.MultiDimFit.mH120.root')
+
+            ## print 'running combine without systs'
+            ## os.system('combine -M MultiDimFit {p}/ttbar/allFlavors.card.txt -t -1 --expectSignal=1 --saveFitResult --robustFit=1 --algo=cross --cl=0.68 -S 0'.format(p=outdirCards))
+            ## resStat=getFitresult('higgsCombineTest.MultiDimFit.mH120.root')
+
+            ## systHi=math.sqrt(resTot[1]**2-resStat[1]**2)
+            ## systLo=math.sqrt(resTot[2]**2-resStat[2]**2)
+
+            ## print '%3.3f +%3.3f-%3.3f (syst) +%3.3f-%3.3f (stat)'%(resTot[0],systHi,systLo,resStat[1],resStat[2])
+            ## print resTot
+            ## print resStat
+
+
+def simplePlot():
     print '=========================================='
     print 'running simple plots'
     print '=========================================='
@@ -527,7 +611,7 @@ def simplePlot(makeCards):
     eff_e = 0.75
     eff_m = 0.90
 
-    for iflav,flav in enumerate(['em']):#, 'ee', 'mm']):
+    for iflav,flav in enumerate(['em', 'ee', 'mm']):
         targetdir = basedir+'/simple_plots/{date}{pf}-{flav}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav )
 
         enable    = [flav]
@@ -536,7 +620,6 @@ def simplePlot(makeCards):
         fittodata = []
         scalethem = {}
 
-
         extraopts = ' --maxRatioRange 0. 2. --fixRatioRange --legendColumns 2 --showIndivSigs ' #--plotmode=norm '#--preFitData bdt '
         effscale  = eff_m**2 if flav == 'mm' else eff_e*eff_m if flav == 'em' else eff_e**2
         extraopts += ' -W {eff} '.format(eff=effscale)
@@ -544,41 +627,6 @@ def simplePlot(makeCards):
         showratio = True
         runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
 
-        if makeCards:
-
-            for fitVar in fitVars:
-                outdirCards = 'hin-ttbar/datacards_{date}_{pf}/{fitVarName}/'.format(date=date, pf=postfix,fitVarName=fitVar[0])
-                ## os.system('python makeShapeCardsSusy.py --s2v -f -j 6 -l {lumi} --od {od} -P {tdir} {mca} {cuts} -E ^{flav} {fitVar} {systs} -v 3 -o {flav} -b {flav} -W {scale} '.format(lumi=lumi,tdir=trees,mca=fmca_forCards,cuts=fcut,systs=fsysts,flav=flav,fitVar=fitVar[1],od=outdirCards, scale=effscale))
-
-                if iflav == 2:
-                    print 'running combine cards'
-                    os.system('combineCards.py em={p}/ttbar/em.card.txt mm={p}/ttbar/mm.card.txt ee={p}/ttbar/ee.card.txt > {p}/ttbar/allFlavors.card.txt'           .format(p=outdirCards))
-                    os.system('text2hdf5.py {p}/ttbar/allFlavors.card.txt --out {p}/ttbar/allFlavors.hdf5 '.format(p=outdirCards))
-                    os.system('combinetf.py --binByBinStat --computeHistErrors --saveHists --doImpacts -t -1 {p}/ttbar/allFlavors.hdf5 '.format(p=outdirCards))
-                    os.system('mv fitresults_123456789.root {p}/ttbar/fitresults_allFlavors.root'.format(p=outdirCards))
-                
-                    f_res = ROOT.TFile(' {p}/ttbar/fitresults_allFlavors.root'.format(p=outdirCards), 'read')
-                    t_res = f_res.Get('fitresults')
-                    for ev in t_res:
-                        print '================================================='
-                        print 'for fitvar', fitVar[0]
-                        print 'RESULT: mu(ttbar) = {mu:.2f} +- {err:.2f}'.format(mu=ev.ttbar_mu, err=ev.ttbar_mu_err)
-                        print '================================================='
-
-                ## print 'running combine with systs'
-                ## os.system('combine -M MultiDimFit {p}/ttbar/allFlavors.card.txt -t -1 --expectSignal=1 --saveFitResult --robustFit=1 --algo=cross --cl=0.68'     .format(p=outdirCards))
-                ## resTot=getFitresult('higgsCombineTest.MultiDimFit.mH120.root')
-
-                ## print 'running combine without systs'
-                ## os.system('combine -M MultiDimFit {p}/ttbar/allFlavors.card.txt -t -1 --expectSignal=1 --saveFitResult --robustFit=1 --algo=cross --cl=0.68 -S 0'.format(p=outdirCards))
-                ## resStat=getFitresult('higgsCombineTest.MultiDimFit.mH120.root')
-
-                ## systHi=math.sqrt(resTot[1]**2-resStat[1]**2)
-                ## systLo=math.sqrt(resTot[2]**2-resStat[2]**2)
-
-                ## print '%3.3f +%3.3f-%3.3f (syst) +%3.3f-%3.3f (stat)'%(resTot[0],systHi,systLo,resStat[1],resStat[2])
-                ## print resTot
-                ## print resStat
 
 if __name__ == '__main__':
     parser = optparse.OptionParser(usage='usage: %prog [opts] ', version='%prog 1.0')
@@ -620,7 +668,7 @@ if __name__ == '__main__':
 
     if opts.simple:
         print 'making simple plots'
-        simplePlot(opts.fit)
+        simplePlot()
     if opts.combinatorial:
         print 'making comb comparison plots'
         compareCombBackgrounds()
@@ -636,3 +684,6 @@ if __name__ == '__main__':
     if opts.compareData:
         print 'Comparing data periods'
         compareDataPeriods()
+    if opts.fit:
+        print 'Making input for the datacards'
+        makeCards()

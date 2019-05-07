@@ -25,9 +25,13 @@ flavee : abs(lep_pdgId[0]*lep_pdgId[1]) == 121 && llm > 20. ; Disable=True
 flavmm : abs(lep_pdgId[0]*lep_pdgId[1]) == 169 && llm > 20. ; Disable=True
 flavem : abs(lep_pdgId[0]*lep_pdgId[1]) == 143 && llm > 20. ; Disable=True
 
+flavsf : (abs(lep_pdgId[0]*lep_pdgId[1]) == 121 || abs(lep_pdgId[0]*lep_pdgId[1]) == 169 ) && llm > 20. ; Disable=True
+
 onZ    : abs(llm-91.)<15.                      ; Disable=True
 offZ   : abs(llm-91.)>15.                      ; Disable=True
 
+centralityLo : cenbin<30 ; Disable=True
+centralityHi : cenbin>30 ; Disable=True
 
 ##
 ##

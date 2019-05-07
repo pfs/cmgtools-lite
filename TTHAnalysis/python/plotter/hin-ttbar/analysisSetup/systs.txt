@@ -16,7 +16,7 @@ mTop   : ttbar : .* : mTop   : templates
 muF    : ttbar : .* : muF    : templates
 muR    : ttbar : .* : muR    : templates
 muRmuF : ttbar : .* : muRmuF : templates
-alphaS : ttbar : .* : alphsS : templates
+alphaS : ttbar : .* : alphaS : templates
 
 ## a whole bunch of pdf uncertainties. so far only on ttbar
 ## ==========================================================

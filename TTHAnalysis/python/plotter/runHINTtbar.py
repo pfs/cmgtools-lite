@@ -516,14 +516,14 @@ def makeCards():
     fsysts = 'hin-ttbar/analysisSetup/systs.txt'
 
     nbinsForFit = 10
-    fitVars = [('bdt'         , 'bdtrarity                      {n},0.,1.'.format(n=nbinsForFit)), 
+    fitVars = [#('bdt'         , 'bdtrarity                      {n},0.,1.'.format(n=nbinsForFit)), 
                ('sphericity'  , '\'llpt/(lep_pt[0]+lep_pt[1])\' {n},0.,1.'.format(n=nbinsForFit)),
               ]
 
     eff_e = 0.75
     eff_m = 0.90
 
-    for iflav,flav in enumerate(['em']):#, 'ee', 'mm']):
+    for iflav,flav in enumerate(['em', 'ee', 'mm']):
         targetdir = basedir+'/card_inputs/{date}{pf}-{flav}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav )
 
         enable    = [flav]
@@ -540,9 +540,9 @@ def makeCards():
         makeplots = [x[0] for x in fitVars]
         showratio = True
 
-        runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
+        #runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
 
-        cmd_cards_base = 'python makeShapeCardsSusy.py --s2v -f -j 6 -v 3 -l {lumi} -P {tdir} {mca} {cuts} '.format(lumi=lumi,tdir=trees,mca=fmca,cuts=fcut)
+        cmd_cards_base = 'python makeShapeCards.py --s2v -f -j 6 -v 3 -l {lumi} -P {tdir} {mca} {cuts} '.format(lumi=lumi,tdir=trees,mca=fmca,cuts=fcut)
         for fitVar in fitVars:
             outdirCards = 'hin-ttbar/datacards_{date}_{pf}/{fitVarName}/'.format(date=date, pf=postfix,fitVarName=fitVar[0])
 
@@ -557,20 +557,21 @@ def makeCards():
             print cmd_cards
             os.system(cmd_cards)
 
-            ## if iflav == 2:
-            ##     print 'running combine cards'
-            ##     os.system('combineCards.py em={p}/ttbar/em.card.txt mm={p}/ttbar/mm.card.txt ee={p}/ttbar/ee.card.txt > {p}/ttbar/allFlavors.card.txt'           .format(p=outdirCards))
-            ##     os.system('text2hdf5.py {p}/ttbar/allFlavors.card.txt --out {p}/ttbar/allFlavors.hdf5 '.format(p=outdirCards))
-            ##     os.system('combinetf.py --binByBinStat --computeHistErrors --saveHists --doImpacts -t -1 {p}/ttbar/allFlavors.hdf5 '.format(p=outdirCards))
-            ##     os.system('mv fitresults_123456789.root {p}/ttbar/fitresults_allFlavors.root'.format(p=outdirCards))
-            ## 
-            ##     f_res = ROOT.TFile(' {p}/ttbar/fitresults_allFlavors.root'.format(p=outdirCards), 'read')
-            ##     t_res = f_res.Get('fitresults')
-            ##     for ev in t_res:
-            ##         print '================================================='
-            ##         print 'for fitvar', fitVar[0]
-            ##         print 'RESULT: mu(ttbar) = {mu:.2f} +- {err:.2f}'.format(mu=ev.ttbar_mu, err=ev.ttbar_mu_err)
-            ##         print '================================================='
+            if iflav == 2:
+                print 'running combine cards'
+                os.system('combineCards.py em={p}/em.card.txt mm={p}/mm.card.txt ee={p}/ee.card.txt > {p}/allFlavors.card.txt'.format(p=outdirCards))
+                print 'cards now combined. run the following commands!'
+                os.system('text2hdf5.py {p}/allFlavors.card.txt --out {p}/allFlavors.hdf5 '.format(p=outdirCards))
+                os.system('combinetf.py --binByBinStat --computeHistErrors --saveHists --doImpacts -t -1 {p}/allFlavors.hdf5 '.format(p=outdirCards))
+                os.system('mv fitresults_123456789.root {p}/fitresults_allFlavors.root'.format(p=outdirCards))
+            
+                f_res = ROOT.TFile(' {p}/fitresults_allFlavors.root'.format(p=outdirCards), 'read')
+                t_res = f_res.Get('fitresults')
+                for ev in t_res:
+                    print '================================================='
+                    print 'for fitvar', fitVar[0]
+                    print 'RESULT: mu(ttbar) = {mu:.2f} +- {err:.2f}'.format(mu=ev.ttbar_mu, err=ev.ttbar_mu_err)
+                    print '================================================='
 
             ## print 'running combine with systs'
             ## os.system('combine -M MultiDimFit {p}/ttbar/allFlavors.card.txt -t -1 --expectSignal=1 --saveFitResult --robustFit=1 --algo=cross --cl=0.68'     .format(p=outdirCards))

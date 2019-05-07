@@ -9,6 +9,10 @@ tW_lnN         : tW         : .* : 1.30
 VV_lnN         : VV         : .* : 1.30
 data_comb_lnN  : data_comb  : .* : 1.30
 
+## z-pT reweighting
+## ==========================================
+zg_zpt : zg    : .* : ptZ    : templates
+
 ## ttbar signal theory uncertainties
 ## ==========================================
 ptTop  : ttbar : .* : ptTop  : templates

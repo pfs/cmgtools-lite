@@ -26,6 +26,14 @@ TString CMSSW_BASE = gSystem->ExpandPathName("${CMSSW_BASE}");
 //
 //
 
+TF1 * zptFunc = NULL;
+
+
+float zptWeight(float zpt, int updn=0){
+    if (updn == 0) return 1.;
+    if (!zptFunc) zptFunc = new TF1("zptFunc","1.14*TMath::Erf((x+4.04)/9.83)",0.,1000.);
+    return zptFunc->Eval(zpt);
+}
 
 float iso03(int pdgId, float pt, float isofull, float isofull30, float lep_rho){
 

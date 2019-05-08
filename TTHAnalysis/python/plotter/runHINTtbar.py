@@ -101,11 +101,11 @@ def runefficiencies(trees, friends, targetdir, fmca, fcut, ftight, fxvar, enable
     subprocess.call(['python']+cmd.split())#+['/dev/null'],stderr=subprocess.PIPE)
 
 
-def runplots(trees, friends, targetdir, fmca, fcut, fplots, enabledcuts, disabledcuts, processes, scaleprocesses, fitdataprocess, plotlist, showratio, extraopts = '', invertedcuts = [], submitit = False, name = ''):
+def runplots(trees, friends, targetdir, fmca, fcut, fplots, enabledcuts, disabledcuts, processes, scaleprocesses, fitdataprocess, plotlist, showratio, extraopts = '', invertedcuts = [], submitit = False, name = '', newlumi=0.):
     
     if not type(trees)==list: trees = [trees]
     treestring = ' '.join(' -P '+ t for t in list(trees))
-    cmd  = ' mcPlots.py --s2v -f -j 6 -l {lumi} --pdir {td} {trees} {fmca} {fcut} {fplots}'.format(lumi=lumi, td=targetdir, trees=treestring, fmca=fmca, fcut=fcut, fplots=fplots)
+    cmd  = ' mcPlots.py --s2v -f -j 6 -l {lumi} --pdir {td} {trees} {fmca} {fcut} {fplots}'.format(lumi=lumi if not newlumi else newlumi, td=targetdir, trees=treestring, fmca=fmca, fcut=fcut, fplots=fplots)
     if friends:
         if not type(friends) == list: friends = [friends]
         #cmd += ' -F Friends {friends}/tree_Friend_{{cname}}.root'.format(friends=friends)
@@ -542,7 +542,7 @@ def makeCards():
         makeplots = [flav+'mll' if 'onZ' in flav else flav+x[0] for x in fitVars]
         showratio = True
 
-        ## runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
+        runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts, newlumi=1618.5/446.9*lumi if 'onZ' in flav else 0.)
 
         cmd_cards_base = 'python makeShapeCards.py --s2v -f -j 6 -v 3 -l {lumi} -P {tdir} {mca} {cuts} '.format(lumi=lumi if not 'onZ' in flav else 1618.5/446.9*lumi,tdir=trees,mca=fmca,cuts=fcut)
         for fitVar in fitVars:
@@ -594,14 +594,18 @@ def makeCards():
                 
                 print 'text2hdf5.py {p}/allFlavors.card.txt --out {p}/allFlavors.hdf5 '.format(p=outdirCards)
                 print 'combinetf.py --binByBinStat --computeHistErrors --saveHists --doImpacts -t -1 {p}/allFlavors.hdf5 '.format(p=outdirCards)
-                print 'mv fitresults_123456789.root {p}/fitresults_allFlavors.root'.format(p=outdirCards)
+                f_fitresults = '{p}/fitresults_allFlavors.root'.format(p=outdirCards)
+                print 'mv fitresults_123456789.root {f}'.format(f=f_fitresults)
                 
                 print '=========================================='
                 print '====== ONCE DONE WITH FITTING, MAKE ======'
                 print ' ... some plots for the postfit stuff'
-python hin-ttbar/scripts/diffNuisances.py --infile hin-ttbar/datacards_2019-05-08_test/sphericity/fitresults_allFlavors.root --pois "pdf.*,muR,muF,muRmuF,alphaS,ptTop,ptZ,mTop" --outdir ~/www/private/heavyIons/plots/card_inputs/2019-05-08-test/ -a --format html > nuisances_theory.html
-python hin-ttbar/scripts/diffNuisances.py --infile hin-ttbar/datacards_2019-05-08_test/sphericity/fitresults_allFlavors.root --pois ".*lnN.*,lumi" --outdir ~/www/private/heavyIons/plots/card_inputs/2019-05-08-test/ -a --format html > nuisances_experimental.html
-python hin-ttbar/scripts/subMatrix.py hin-ttbar/datacards_2019-05-08_test/sphericity/fitresults_allFlavors.root --params ".*" --outdir ~/www/private/heavyIons/plots/card_inputs/2019-05-08-test/ 
+                print 'python hin-ttbar/scripts/diffNuisances.py --infile {inf} --pois "pdf.*,muR,muF,muRmuF,alphaS,ptTop,ptZ,mTop" --outdir {pd} -a --format html > nuisances_theory.html'.format(inf=f_fitresults, pd=targetdir)
+                print 'python hin-ttbar/scripts/diffNuisances.py --infile {inf} --pois ".*lnN.*,lumi" --outdir {pd} -a --format html > nuisances_experimental.html'.format(inf=f_fitresults, pd=targetdir)
+                print 'python hin-ttbar/scripts/subMatrix.py {inf} --params ".*" --outdir {pd} '.format(inf=f_fitresults,pd=targetdir)
+
+                print '=========================================='
+                print 'that should be all for now... need to find a way to also do the numbers automatically...'
                 
             
                 ##f_res = ROOT.TFile(' {p}/fitresults_allFlavors.root'.format(p=outdirCards), 'read')

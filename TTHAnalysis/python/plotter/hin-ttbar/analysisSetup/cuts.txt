@@ -11,9 +11,11 @@ hem2 : lep_pdgId[1] == 13 || lep_eta[1] >= -1.39 || lep_phi[1] < -1.6 || lep_phi
 
 ## these three are for the plotting of leptonic variables
 ## ======================================================
-ee  : abs(lep_pdgId[0]*lep_pdgId[1]) == 121  && llm > 20. && abs(llm-91.)>15. ; Disable=True
-mm  : abs(lep_pdgId[0]*lep_pdgId[1]) == 169  && llm > 20. && abs(llm-91.)>15. ; Disable=True
-em  : abs(lep_pdgId[0]*lep_pdgId[1]) == 143  && llm > 20.                     ; Disable=True
+em     : abs(lep_pdgId[0]*lep_pdgId[1]) == 143  && llm > 20.                     ; Disable=True
+ee     : abs(lep_pdgId[0]*lep_pdgId[1]) == 121  && llm > 20. && abs(llm-91.)>15. ; Disable=True
+mm     : abs(lep_pdgId[0]*lep_pdgId[1]) == 169  && llm > 20. && abs(llm-91.)>15. ; Disable=True
+onZee  : abs(lep_pdgId[0]*lep_pdgId[1]) == 121               && abs(llm-91.)<15. ; Disable=True
+onZmm  : abs(lep_pdgId[0]*lep_pdgId[1]) == 169               && abs(llm-91.)<15. ; Disable=True
 
 blind : !(lep_pdgId[0]*lep_pdgId[1] == 143 && lep_charge[0]*lep_charge[1] < 0 && abs(llm-91.)<15. && run >=326887) ; Disable=True
 

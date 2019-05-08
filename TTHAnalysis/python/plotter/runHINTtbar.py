@@ -512,19 +512,21 @@ def makeCards():
 
     fmca   = 'hin-ttbar/analysisSetup/mca_forCards.txt'
     fcut   = 'hin-ttbar/analysisSetup/cuts.txt'
-    fplots = 'hin-ttbar/analysisSetup/plots.txt'
+    fplots = 'hin-ttbar/analysisSetup/plots_results.txt'
     fsysts = 'hin-ttbar/analysisSetup/systs.txt'
 
     nbinsForFit = 10
-    fitVars = [#('bdt'         , 'bdtrarity                      {n},0.,1.'.format(n=nbinsForFit)), 
+    fitVars = [('bdt'         , 'bdtrarity                      {n},0.,1.'.format(n=nbinsForFit)), 
                ('sphericity'  , '\'llpt/(lep_pt[0]+lep_pt[1])\' {n},0.,1.'.format(n=nbinsForFit)),
               ]
 
     eff_e = 0.75
     eff_m = 0.90
 
-    for iflav,flav in enumerate(['em', 'ee', 'mm']):
-        targetdir = basedir+'/card_inputs/{date}{pf}-{flav}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav )
+    regions = ['ee', 'mm', 'em', 'onZee', 'onZmm']
+
+    for iflav,flav in enumerate(regions):
+        targetdir = basedir+'/card_inputs/{date}{pf}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav )
 
         enable    = [flav]
         disable   = []
@@ -534,22 +536,27 @@ def makeCards():
 
         extraopts = ' --maxRatioRange 0. 2. --fixRatioRange --legendColumns 2 --showIndivSigs ' #--plotmode=norm '#--preFitData bdt '
 
-        effscale  = eff_m**2 if flav == 'mm' else eff_e*eff_m if flav == 'em' else eff_e**2
+        effscale  = eff_m**2 if 'mm' in flav else eff_e*eff_m if 'em' in flav else eff_e**2
         extraopts += ' -W {eff} '.format(eff=effscale)
 
-        makeplots = [x[0] for x in fitVars]
+        makeplots = [flav+'mll' if 'onZ' in flav else flav+x[0] for x in fitVars]
         showratio = True
 
-        #runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
+        ## runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
 
-        cmd_cards_base = 'python makeShapeCards.py --s2v -f -j 6 -v 3 -l {lumi} -P {tdir} {mca} {cuts} '.format(lumi=lumi,tdir=trees,mca=fmca,cuts=fcut)
+        cmd_cards_base = 'python makeShapeCards.py --s2v -f -j 6 -v 3 -l {lumi} -P {tdir} {mca} {cuts} '.format(lumi=lumi if not 'onZ' in flav else 1618.5/446.9*lumi,tdir=trees,mca=fmca,cuts=fcut)
         for fitVar in fitVars:
             outdirCards = 'hin-ttbar/datacards_{date}_{pf}/{fitVarName}/'.format(date=date, pf=postfix,fitVarName=fitVar[0])
 
             cmd_cards  = cmd_cards_base + ' -W {scale} '.format(scale=effscale)
             cmd_cards += ' --od {od} '                  .format(od=outdirCards)
             cmd_cards += ' -E ^{flav} -o {flav} '       .format(flav=flav)
-            cmd_cards += ' {fitVar} {systs} '           .format(fitVar=fitVar[1], systs=fsysts)
+
+            ## use the fitvar for offZ and em, use mll for onZ
+            if not 'onZ' in flav:
+                cmd_cards += ' {fitVar} {systs} '.format(fitVar=fitVar[1], systs=fsysts)
+            else:
+                cmd_cards += ' llm  30,76.,106. '
 
             
             print 'running the cards with command'
@@ -557,21 +564,53 @@ def makeCards():
             print cmd_cards
             os.system(cmd_cards)
 
-            if iflav == 2:
+            if flav == regions[-1]:
                 print 'running combine cards'
-                os.system('combineCards.py em={p}/em.card.txt mm={p}/mm.card.txt ee={p}/ee.card.txt > {p}/allFlavors.card.txt'.format(p=outdirCards))
-                print 'cards now combined. run the following commands!'
-                os.system('text2hdf5.py {p}/allFlavors.card.txt --out {p}/allFlavors.hdf5 '.format(p=outdirCards))
-                os.system('combinetf.py --binByBinStat --computeHistErrors --saveHists --doImpacts -t -1 {p}/allFlavors.hdf5 '.format(p=outdirCards))
-                os.system('mv fitresults_123456789.root {p}/fitresults_allFlavors.root'.format(p=outdirCards))
+                cmd_combinecards = 'combineCards.py '
+                for r in regions:
+                    cmd_combinecards += ' {f}={p}/{f}.card.txt '.format(p=outdirCards, f=r)
+                f_card_allFlavors = '{p}/allFlavors.card.txt'.format(p=outdirCards)
+                cmd_combinecards += ' > '+f_card_allFlavors
+                print 'combining cards with this command:'
+                print '===================================='
+                print cmd_combinecards
+                os.system(cmd_combinecards)
+                
+                print 'now putting the groups and stuff in the datacards'
+                os.system('cp {f} {f}.tmp'.format(f=f_card_allFlavors))
+
+                with open(f_card_allFlavors, 'a') as tmp_file:
+                    tmp_file.write('theory      group = alphaS muR muF muRmuF ' + ' '.join('pdf'+str(x) for x in range(1,101)) +'\n')
+                    tmp_file.write('ptModel     group = ptTop ptZ \n')  
+                    tmp_file.write('topMass     group = mTop \n')  
+                    tmp_file.write('luminosity  group = lumi \n')  
+                    tmp_file.write('bkg         group = VV_lnN data_comb_lnN tW_lnN zg_lnN \n')  
+
+                tmp_file.close()
+
+                print '=========================================='
+                print '====== DONE SO FAR. NOW RUN COMBINE ======'
+                print ' ... load the right version, and then run:'
+                
+                print 'text2hdf5.py {p}/allFlavors.card.txt --out {p}/allFlavors.hdf5 '.format(p=outdirCards)
+                print 'combinetf.py --binByBinStat --computeHistErrors --saveHists --doImpacts -t -1 {p}/allFlavors.hdf5 '.format(p=outdirCards)
+                print 'mv fitresults_123456789.root {p}/fitresults_allFlavors.root'.format(p=outdirCards)
+                
+                print '=========================================='
+                print '====== ONCE DONE WITH FITTING, MAKE ======'
+                print ' ... some plots for the postfit stuff'
+python hin-ttbar/scripts/diffNuisances.py --infile hin-ttbar/datacards_2019-05-08_test/sphericity/fitresults_allFlavors.root --pois "pdf.*,muR,muF,muRmuF,alphaS,ptTop,ptZ,mTop" --outdir ~/www/private/heavyIons/plots/card_inputs/2019-05-08-test/ -a --format html > nuisances_theory.html
+python hin-ttbar/scripts/diffNuisances.py --infile hin-ttbar/datacards_2019-05-08_test/sphericity/fitresults_allFlavors.root --pois ".*lnN.*,lumi" --outdir ~/www/private/heavyIons/plots/card_inputs/2019-05-08-test/ -a --format html > nuisances_experimental.html
+python hin-ttbar/scripts/subMatrix.py hin-ttbar/datacards_2019-05-08_test/sphericity/fitresults_allFlavors.root --params ".*" --outdir ~/www/private/heavyIons/plots/card_inputs/2019-05-08-test/ 
+                
             
-                f_res = ROOT.TFile(' {p}/fitresults_allFlavors.root'.format(p=outdirCards), 'read')
-                t_res = f_res.Get('fitresults')
-                for ev in t_res:
-                    print '================================================='
-                    print 'for fitvar', fitVar[0]
-                    print 'RESULT: mu(ttbar) = {mu:.2f} +- {err:.2f}'.format(mu=ev.ttbar_mu, err=ev.ttbar_mu_err)
-                    print '================================================='
+                ##f_res = ROOT.TFile(' {p}/fitresults_allFlavors.root'.format(p=outdirCards), 'read')
+                ##t_res = f_res.Get('fitresults')
+                ##for ev in t_res:
+                ##    print '================================================='
+                ##    print 'for fitvar', fitVar[0]
+                ##    print 'RESULT: mu(ttbar) = {mu:.2f} +- {err:.2f}'.format(mu=ev.ttbar_mu, err=ev.ttbar_mu_err)
+                ##    print '================================================='
 
             ## print 'running combine with systs'
             ## os.system('combine -M MultiDimFit {p}/ttbar/allFlavors.card.txt -t -1 --expectSignal=1 --saveFitResult --robustFit=1 --algo=cross --cl=0.68'     .format(p=outdirCards))

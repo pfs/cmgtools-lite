@@ -530,7 +530,7 @@ for mass in masses:
         datacard.write("shapes ttH_htt  * ../common/%s.input.root x_$PROCESS$MASS x_$PROCESS$MASS_$SYSTEMATIC\n" % binname)
     else:
         myyields = dict([(k,v) for (k,v) in allyields.iteritems()]) 
-        if not os.path.exists(myout): os.mkdir(myout)
+        if not os.path.exists(myout): os.makedirs(myout)
         datacard = open(myout+binname+".card.txt", "w"); 
         datacard.write("## Datacard for cut file %s\n"%args[1])
         datacard.write("shapes *        * %s.input.root x_$PROCESS x_$PROCESS_$SYSTEMATIC\n" % binname)

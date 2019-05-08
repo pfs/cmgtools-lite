@@ -11,7 +11,7 @@ data_comb_lnN  : data_comb  : .* : 1.30
 
 ## z-pT reweighting
 ## ==========================================
-zg_zpt : zg    : .* : ptZ    : templates
+ptZ    : zg    : .* : ptZ    : templates
 
 ## ttbar signal theory uncertainties
 ## ==========================================

@@ -602,7 +602,8 @@ def makeCards():
                 print ' ... some plots for the postfit stuff'
                 print 'python hin-ttbar/scripts/diffNuisances.py --infile {inf} --pois "pdf.*,muR,muF,muRmuF,alphaS,ptTop,ptZ,mTop" --outdir {pd} -a --format html > nuisances_theory.html'.format(inf=f_fitresults, pd=targetdir)
                 print 'python hin-ttbar/scripts/diffNuisances.py --infile {inf} --pois ".*lnN.*,lumi" --outdir {pd} -a --format html > nuisances_experimental.html'.format(inf=f_fitresults, pd=targetdir)
-                print 'python hin-ttbar/scripts/subMatrix.py {inf} --params ".*" --outdir {pd} '.format(inf=f_fitresults,pd=targetdir)
+                print 'python hin-ttbar/scripts/subMatrix.py {inf} --params "ttbar_mu,pdf.*" --outdir {pd} '.format(inf=f_fitresults,pd=targetdir)
+                print 'python hin-ttbar/scripts/subMatrix.py {inf} --params "ttbar_mu,muR,muF,muRmuF,alphaS,ptTop,ptZ,mTop,.*lnN.*,lumi" --outdir {pd} '.format(inf=f_fitresults,pd=targetdir)
 
                 print '=========================================='
                 print 'that should be all for now... need to find a way to also do the numbers automatically...'

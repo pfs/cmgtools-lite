@@ -1,8 +1,7 @@
 # vim: syntax=sh
 * ; TreeName="treeProducerHIN"
 
-data_ss        : SkimElectrons_04Apr2019-v1+SkimMuons_04Apr2019-v1                              : lep_charge[0]*lep_charge[1]>0 ;                            FillColor=ROOT.kRed+1,  Label="SS"
-data_mix1      : SkimElectrons_04Apr2019-v1_Combinatorial+SkimMuons_04Apr2019-v1_Combinatorial  : lep_charge[0]*lep_charge[1]<0 && mixrank<=1;               FillColor=ROOT.kTeal+9, Label="Mix 1^{st}close"
-data_mix2      : SkimElectrons_04Apr2019-v1_Combinatorial+SkimMuons_04Apr2019-v1_Combinatorial  : lep_charge[0]*lep_charge[1]<0 && mixrank>=2 && mixrank<4;  FillColor=ROOT.kCyan+1, Label="Mix 2^{nd}close"
-W              : WJetsToLNu_TuneCP5_HydjetDrumMB             : 21159*(208**2)                   : lep_charge[0]*lep_charge[1]<0;                             FillColor=1,            Label="W+jets"
+W        : WJetsToLNu_TuneCP5_HydjetDrumMB             : 21159*(208**2)                   : lep_charge[0]*lep_charge[1]<0;               FillColor=1,            Label="W+jets"
+data_ss  : SkimElectrons_04Apr2019-v1+SkimMuons_04Apr2019-v1                              : lep_charge[0]*lep_charge[1]>0 ;              FillColor=ROOT.kRed+1,  Label="SS"
+data_mix : SkimElectrons_04Apr2019-v1_Combinatorial+SkimMuons_04Apr2019-v1_Combinatorial  : lep_charge[0]*lep_charge[1]<0 && mixrank<=1; FillColor=ROOT.kTeal+9, Label="Mix"
 

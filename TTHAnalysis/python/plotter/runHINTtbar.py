@@ -152,26 +152,46 @@ def compareCombBackgrounds():
     trees     = treedir
     friends   = ''
 
-    fmca          = 'hin-ttbar/analysisSetup/mca-combinatorial.txt'
-    fplots        = 'hin-ttbar/analysisSetup/plots.txt'
+    fmca   = 'hin-ttbar/analysisSetup/mca_combinatorial.txt'
+    fplots = 'hin-ttbar/analysisSetup/plots.txt'
+    fsysts = 'hin-ttbar/analysisSetup/systs.txt'
 
-    for flav in ['ee','mm','em']:
+    for flav in ['em','flavsf']:
         for pfix in ['','-noiso']:
 
             fcut      = 'hin-ttbar/analysisSetup/cuts%s.txt'%pfix
-            targetdir = basedir+'/combinatorialBackground/{date}{pf}-{flav}{pfix}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav='_'.join(flav),pfix=pfix )
+            targetdir = basedir+'/combinatorialBackground/{date}{pf}-{flav}{pfix}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav,pfix=pfix )
 
-            enable    = flav
+            enable    = [flav]
             disable   = []
-            processes = ['W','data_mix1','data_mix2','data_ss']
+            processes = ['W','data_mix','data_ss']
             fittodata = []
             scalethem = {}
 
-            extraopts = ' --maxRatioRange 0. 2. --fixRatioRange --plotmode=norm --showRatio --legendColumns 2 --ratioNums %s --ratioDen %s'%(','.join(processes[1:]),processes[0])
+            extraopts = '--maxRatioRange 0. 2. --fixRatioRange --plotmode=norm --showRatio --ratioNums %s --ratioDen %s'%(','.join(processes[1:]),processes[0])
             makeplots = ['llpt','l1pt','l2pt','sphericity','dphi','mll','bdt','bdtrarity']
             showratio = False
-            runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
+            runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts, newlumi=1618.5/446.9*lumi)
 
+            varList = [('bdt'         , 'bdt                            10,0.,1.'),
+                       ('bdtrarity'   , 'bdtrarity                      10,0.,1.'),
+                       ('sphericity'  , '\'llpt/(lep_pt[0]+lep_pt[1])\' 10,0.,1.'),
+                   ]
+
+            for varName,var in varList:
+                cmd_cards  = 'python makeShapeCards.py --s2v -f -j 6 -v 3 -l {lumi}'.format(lumi=1618.5/446.9*lumi)
+                cmd_cards += ' -P {tdir} --od {odir}/{varName} {mca} {cuts} {var} {systs}'.format(tdir=trees,
+                                                                                                  odir=targetdir,
+                                                                                                  varName=varName,
+                                                                                                  mca=fmca.replace('.txt','_systs.txt'),
+                                                                                                  cuts=fcut,
+                                                                                                  plots=fplots.replace('.txt','_discriminators.txt'),
+                                                                                                  var=var,
+                                                                                                  systs=fsysts)
+                cmd_cards += ' -E ^{flav} -o {flav}'.format(flav=flav)
+                print 'Running cards with command'
+                print cmd_cards
+                os.system(cmd_cards)
 
 def plotJetVariables(replot):
     print '=========================================='

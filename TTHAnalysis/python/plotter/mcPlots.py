@@ -503,6 +503,7 @@ def doRatioHists(pspec,pmap,total,maxRange,fixRange=False,fitRatio=None,errorsOn
         ratio.Draw("E SAME" if ratio.ClassName() != "TGraphAsymmErrors" else "PZ SAME");
     leg0 = ROOT.TLegend(0.12 if doWide else 0.2, 0.84, 0.25 if doWide else 0.45, 0.94)
     leg0.SetFillColor(0)
+    leg0.SetBorderSize(0)
     leg0.SetShadowColor(0)
     leg0.SetLineColor(0)
     leg0.SetTextFont(42)
@@ -511,6 +512,7 @@ def doRatioHists(pspec,pmap,total,maxRange,fixRange=False,fitRatio=None,errorsOn
     if showStatTotLegend: leg0.Draw()
     leg1 = ROOT.TLegend(0.25 if doWide else 0.45, 0.84, 0.38 if doWide else 0.7, 0.94)
     leg1.SetFillColor(0)
+    leg1.SetBorderSize(0)
     leg1.SetShadowColor(0)
     leg1.SetLineColor(0)
     leg1.SetTextFont(42)
@@ -599,6 +601,7 @@ def doLegend(pmap,mca,corner="TR",textSize=0.035,cutoff=1e-6,cutoffSignals=True,
         leg = ROOT.TLegend(x1,y1,x2,y2)
         if header: leg.SetHeader(header.replace("\#", "#"))
         leg.SetFillColor(0)
+        leg.SetBorderSize(0)
         leg.SetFillStyle(0)
         leg.SetShadowColor(0)
         if header: leg.SetHeader(header.replace("\#", "#"))       

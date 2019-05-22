@@ -22,7 +22,7 @@ datasetleg={'PbPb': '#scale[1.1]{PbPb, XX.X #mub^{-1}, (#sqrt{s_{NN}}=5.02 TeV)}
 theo={
     'PbPb' : [
         ('#left(#splitline{CT14+EPPS16}{NLO MCFM}#right) #upoint K_{NNLO+NNLL}(Top++)',     59.0, 5.3, 5.3, 2.0, 1.6),
-        ('#left(#splitline{CT10+EPS09}{NLO MCFM}#right) #upoint K_{NNLO+NNLL}(Top++)',      57.5, 3.3, 4.3, 2.0, 1.5)
+        #('#left(#splitline{CT10+EPS09}{NLO MCFM}#right) #upoint K_{NNLO+NNLL}(Top++)',      57.5, 3.3, 4.3, 2.0, 1.5)
         
         ],
     'pp'  : [
@@ -43,9 +43,9 @@ exp={'PbPb':
         ]
      }
 
-colors  = {'PbPb':1,          'pp':1} #ROOT.TColor.GetColor('#fc8d59')}
-fill    = {'PbPb':ROOT.kAzure-2, 'pp':ROOT.kGreen-5} 
-markers = {'PbPb':20,         'pp':20}
+colors  = {'PbPb':1            , 'pp':1} #ROOT.TColor.GetColor('#fc8d59')}
+fill    = {'PbPb':ROOT.kAzure+7, 'pp':ROOT.kGreen-5} 
+markers = {'PbPb':20           , 'pp':20}
 
 dy=3.5
 for key in exp:
@@ -109,7 +109,7 @@ for key in exp:
             theoTotGr[-1].SetFillColorAlpha(fill[key]-i, 0.5);
             theoTotGr[-1].SetFillStyle(3001)
 
-            ymin,ymax=dy,dy+expdy+1
+            ymin,ymax=dy+0.5,dy+expdy+0.5
             if i>0: ymin,ymax=dy+expdy+i,dy+expdy+1+i
 
             theoPDFGr[-1].SetPoint(0,mu-pdfDn,ymin)
@@ -127,10 +127,10 @@ for key in exp:
             theoTotGr[-1].Draw('f')
             theoPDFGr[-1].Draw('f')
 
-            labels.DrawLatex(68,ymax-0.75,'#scale[0.6]{%s}'%title)
+            labels.DrawLatex(68,ymax-1.07,'#scale[0.6]{%s}'%title)
 
     dy+=expdy+theody
-    labels.DrawLatex(5,dy-0.5,'#scale[0.7]{#bf{%s}}'%datasetleg[key])
+    labels.DrawLatex(5,dy-0.0,'#scale[0.7]{#bf{%s}}'%datasetleg[key])
 
     ROOT.gStyle.SetEndErrorSize(5)
     for i in xrange(0,len(exp[key])):

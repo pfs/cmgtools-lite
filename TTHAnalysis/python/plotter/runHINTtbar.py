@@ -205,7 +205,7 @@ def plotJetVariables(replot):
 
         makeplots = jetvars
         showratio = True
-        if (replot): runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
+        if (replot): runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts, newlumi=1618.5/446.9*lumi if 'onZ' in mass else 0.)
 
     yields = {}
 
@@ -259,11 +259,24 @@ def plotJetVariables(replot):
             tmp_numerator   = tmp_zg          .Integral()
 
             ## scale it
-            tmp_zconstructed.Scale(tmp_numerator/tmp_denominator)
+            if tmp_denominator:
+                tmp_scale_ratio = tmp_numerator/tmp_denominator
+            else:
+                tmp_scale_ratio = -1.
+            tmp_zconstructed.Scale(tmp_scale_ratio)
 
             ## save the mm spectrum of the on-Z data (subtracted)
             if flav == 'mm':
                 em_zconstructed = copy.deepcopy(tmp_zconstructed.Clone('em_zconstructed'))
+
+            print '========================================'
+            print ' the overall scaling is', tmp_scale_ratio
+            print 'THIS IS THE SCALING PER BIN IN', var, 'FOR ', flav
+            for ibin in range(1,tmp_zconstructed.GetXaxis().GetNbins()+1):
+                print 'bincenter {a:.1f}: scaling is {b:.3f}/{c:.3f} = {d:.3f}'.format(a=tmp_zconstructed.GetXaxis().GetBinCenter(ibin), 
+                                                                                       b=tmp_zconstructed.GetBinContent(ibin), 
+                                                                                       c=tmp_zg.GetBinContent(ibin), 
+                                                                                       d=tmp_zconstructed.GetBinContent(ibin)/tmp_zg.GetBinContent(ibin) if tmp_zg.GetBinContent(ibin) else -1.)
 
         else:
             tmp_zconstructed = em_zconstructed.Clone('zg_constructed'); tmp_zconstructed.SetTitle('Z/#gamma (data #mu#mu)')
@@ -273,7 +286,20 @@ def plotJetVariables(replot):
             tmp_numerator   = tmp_zg.Integral() + tmp_onZ_zg.Integral()
 
             ## scale it
-            tmp_zconstructed.Scale(tmp_numerator/tmp_denominator)
+            if tmp_denominator:
+                tmp_scale_ratio = tmp_numerator/tmp_denominator
+            else:
+                tmp_scale_ratio = -1.
+            tmp_zconstructed.Scale(tmp_scale_ratio)
+
+            print '========================================'
+            print ' the overall scaling is', tmp_scale_ratio
+            print 'THIS IS THE SCALING PER BIN IN', var, 'FOR ', flav
+            for ibin in range(1,tmp_zconstructed.GetXaxis().GetNbins()+1):
+                print 'bincenter {a:.1f}: scaling is {b:.3f}/{c:.3f} = {d:.3f}'.format(a=tmp_zconstructed.GetXaxis().GetBinCenter(ibin), 
+                                                                                       b=tmp_zconstructed.GetBinContent(ibin), 
+                                                                                       c=tmp_zg.GetBinContent(ibin), 
+                                                                                       d=tmp_zconstructed.GetBinContent(ibin)/tmp_zg.GetBinContent(ibin) if tmp_zg.GetBinContent(ibin) else -1.)
 
         ## putting all backgrounds into a list for sorting
         backgrounds = []
@@ -503,6 +529,135 @@ def makeZplots():
         showratio = True
         runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
 
+def makeJetAnalysis():
+    print '=========================================='
+    print 'making datacards for jet analysis'
+    print '=========================================='
+    trees     = treedir
+    friends   = ''
+
+    fmca   = 'hin-ttbar/analysisSetup/mca_forCards.txt'
+    fcut   = 'hin-ttbar/analysisSetup/cuts.txt'
+    fplots = 'hin-ttbar/analysisSetup/plots_jetanalysis.txt'
+    fsysts = 'hin-ttbar/analysisSetup/systs.txt'
+
+    nbinsForFit = 3
+    fitVars = [ ('sphericity'  , '\'llpt/(lep_pt[0]+lep_pt[1])\' {n},0.,1.'.format(n=nbinsForFit)) ]
+
+    eff_e = 0.75
+    eff_m = 0.90
+
+    regions = ['0b_ee', '1b_ee', '2b_ee',
+               '0b_mm', '1b_mm', '2b_mm',
+               '0b_em', '1b_em', '2b_em']
+## ========================================
+##  the overall scaling is 0.0322374207729
+## THIS IS THE SCALING PER BIN IN nbjets FOR  mm
+## bincenter 0.0: scaling is 443.286/456.153 = 0.972
+## bincenter 1.0: scaling is 13.668/1.184 = 11.545
+## bincenter 2.0: scaling is 0.400/0.049 = 8.126
+## bincenter 3.0: scaling is 0.032/0.000 = -1.000
+## 
+## ========================================
+##  the overall scaling is 0.0337666630852
+## THIS IS THE SCALING PER BIN IN nbjets FOR  ee
+## bincenter 0.0: scaling is 199.122/205.087 = 0.971
+## bincenter 1.0: scaling is 6.551/0.646 = 10.134
+## bincenter 2.0: scaling is 0.075/0.014 = 5.238
+## bincenter 3.0: scaling is -0.000/0.000 = -1.000
+## 
+## ========================================
+##  the overall scaling is 0.0627764709195
+## THIS IS THE SCALING PER BIN IN nbjets FOR  em
+## bincenter 0.0: scaling is 27.828/20.202 = 1.377
+## bincenter 1.0: scaling is 0.858/0.083 = 10.400
+## bincenter 2.0: scaling is 0.025/0.000 = -1.000
+## bincenter 3.0: scaling is 0.002/0.000 = -1.000
+    zscaling ={'0b_ee': 0.971, '1b_ee': 10.31, '2b_ee': 5.238,
+               '0b_mm': 0.972, '1b_mm': 11.55, '2b_mm': 8.126,
+               '0b_em': 1.377, '1b_em': 10.40, '2b_em': 0.000 }
+
+
+    for iflav,flav in enumerate(regions):
+        targetdir = basedir+'/card_inputs_jetanalysis/{date}{pf}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav )
+
+        enable    = flav.split('_')
+        disable   = []
+        processes = []
+        fittodata = []
+        scalethem = {'zg': zscaling[flav]}
+
+        extraopts = ' --maxRatioRange 0. 2. --fixRatioRange --legendColumns 2 --showIndivSigs ' #--plotmode=norm '#--preFitData bdt '
+
+        effscale  = eff_m**2 if 'mm' in flav else eff_e*eff_m if 'em' in flav else eff_e**2
+        extraopts += ' -W {eff} '.format(eff=effscale)
+
+        makeplots = [flav]
+        showratio = True
+
+        runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts, newlumi=1618.5/446.9*lumi if 'onZ' in flav else 0.)
+
+        cmd_cards_base = 'python makeShapeCardsSusy.py --s2v -f -j 6 -v 3 -l {lumi} -P {tdir} {mca} {cuts} '.format(lumi=lumi if not 'onZ' in flav else 1618.5/446.9*lumi,tdir=trees,mca=fmca,cuts=fcut)
+        for fitVar in fitVars:
+            outdirCards = 'hin-ttbar/datacards_{date}_{pf}/{fitVarName}/'.format(date=date, pf=postfix,fitVarName=fitVar[0])
+
+            cmd_cards  = cmd_cards_base + ' -W {scale} '.format(scale=effscale)
+            cmd_cards += ' --od {od} '                  .format(od=outdirCards)
+            cmd_cards += ' -o {flav} '                  .format(flav=flav)
+            cmd_cards += ' '.join([' -E ^'+i+' ' for i in flav.split('_')])
+            cmd_cards += ' --scale-process zg {f:.3f} '.format(f=zscaling[flav])
+
+            cmd_cards += ' {fitVar} {systs} '.format(fitVar=fitVar[1].replace(str(nbinsForFit),'1') if '2b' in flav else fitVar[1], systs=fsysts)
+
+            print 'running the cards with command'
+            print '==========================================='
+            print cmd_cards
+            os.system(cmd_cards)
+
+            ## if flav == regions[-1]:
+            ##     print 'running combine cards'
+            ##     cmd_combinecards = 'combineCards.py '
+            ##     for r in regions:
+            ##         cmd_combinecards += ' {f}={p}/{f}.card.txt '.format(p=outdirCards, f=r)
+            ##     f_card_allFlavors = '{p}/allFlavors.card.txt'.format(p=outdirCards)
+            ##     cmd_combinecards += ' > '+f_card_allFlavors
+            ##     print 'combining cards with this command:'
+            ##     print '===================================='
+            ##     print cmd_combinecards
+            ##     os.system(cmd_combinecards)
+            ##     
+            ##     print 'now putting the groups and stuff in the datacards'
+            ##     os.system('cp {f} {f}.tmp'.format(f=f_card_allFlavors))
+
+            ##     with open(f_card_allFlavors, 'a') as tmp_file:
+            ##         tmp_file.write('theory      group = alphaS muR muF muRmuF ' + ' '.join('pdf'+str(x) for x in range(1,101)) +'\n')
+            ##         tmp_file.write('ptModel     group = ptTop ptZ \n')  
+            ##         tmp_file.write('topMass     group = mTop \n')  
+            ##         tmp_file.write('luminosity  group = lumi \n')  
+            ##         tmp_file.write('bkg         group = VV_lnN data_comb_lnN tW_lnN zg_lnN \n')  
+
+            ##     tmp_file.close()
+
+            ##     print '=========================================='
+            ##     print '====== DONE SO FAR. NOW RUN COMBINE ======'
+            ##     print ' ... load the right version, and then run:'
+            ##     
+            ##     print 'text2hdf5.py {p}/allFlavors.card.txt --out {p}/allFlavors.hdf5 '.format(p=outdirCards)
+            ##     print 'combinetf.py --binByBinStat --computeHistErrors --saveHists --doImpacts -t -1 {p}/allFlavors.hdf5 '.format(p=outdirCards)
+            ##     f_fitresults = '{p}/fitresults_allFlavors.root'.format(p=outdirCards)
+            ##     print 'mv fitresults_123456789.root {f}'.format(f=f_fitresults)
+            ##     
+            ##     print '=========================================='
+            ##     print '====== ONCE DONE WITH FITTING, MAKE ======'
+            ##     print ' ... some plots for the postfit stuff'
+            ##     print 'python hin-ttbar/scripts/diffNuisances.py --infile {inf} --pois "pdf.*,muR,muF,muRmuF,alphaS,ptTop,ptZ,mTop" --outdir {pd} -a --format html > nuisances_theory.html'.format(inf=f_fitresults, pd=targetdir)
+            ##     print 'python hin-ttbar/scripts/diffNuisances.py --infile {inf} --pois ".*lnN.*,lumi" --outdir {pd} -a --format html > nuisances_experimental.html'.format(inf=f_fitresults, pd=targetdir)
+            ##     print 'python hin-ttbar/scripts/subMatrix.py {inf} --params "ttbar_mu,pdf.*" --outdir {pd} '.format(inf=f_fitresults,pd=targetdir)
+            ##     print 'python hin-ttbar/scripts/subMatrix.py {inf} --params "ttbar_mu,muR,muF,muRmuF,alphaS,ptTop,ptZ,mTop,.*lnN.*,lumi" --outdir {pd} '.format(inf=f_fitresults,pd=targetdir)
+
+            ##     print '=========================================='
+            ##     print 'that should be all for now... need to find a way to also do the numbers automatically...'
+
 def makeCards():
     print '=========================================='
     print 'making datacards, including the Z for mm and ee'
@@ -523,7 +678,7 @@ def makeCards():
     eff_e = 0.75
     eff_m = 0.90
 
-    regions = ['ee', 'mm', 'em', 'onZee', 'onZmm']
+    regions = ['ee', 'mm', 'em', 'leponZee', 'leponZmm']
 
     for iflav,flav in enumerate(regions):
         targetdir = basedir+'/card_inputs/{date}{pf}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav )
@@ -686,6 +841,7 @@ if __name__ == '__main__':
     parser.add_option('--compareSignals'    , action='store_true' , default=False , help='compareSignals')
     parser.add_option('--compareData'    , action='store_true' , default=False , help='compare data periods')
     parser.add_option('--dyPlots'    , action='store_true' , default=False , help='make plots for onZ ee/mm')
+    parser.add_option('--jetAnalysis'    , action='store_true' , default=False , help='make the jet analysis datacards')
     (opts, args) = parser.parse_args()
 
 ## LUMI=1618.466*(1e-6)
@@ -732,3 +888,6 @@ if __name__ == '__main__':
     if opts.fit:
         print 'Making input for the datacards'
         makeCards()
+    if opts.jetAnalysis:
+        print 'making the cards for the jet based analysis'
+        makeJetAnalysis()

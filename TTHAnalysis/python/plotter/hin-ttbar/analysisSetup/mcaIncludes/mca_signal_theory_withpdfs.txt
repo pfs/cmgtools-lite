@@ -1,0 +1,318 @@
+ttbar_ptTop_Up  : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[0]"  , Label="top p_{T} up"         , SkipMe=True
+ttbar_ptTop_Dn  : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[1]"  , Label="top p_{T} dn"         , SkipMe=True
+
+ttbar_mTop_Up   : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[2]"  , Label="\#Deltam=+1GeV"       , SkipMe=True
+ttbar_mTop_Dn   : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[3]"  , Label="\#Deltam=-1GeV"       , SkipMe=True
+
+ttbar_muF_Up    : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[4]"  , Label="2\#mu_{F}"            , SkipMe=True
+ttbar_muF_Dn    : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[5]"  , Label="\#mu_{F}/2"           , SkipMe=True
+
+ttbar_muR_Up    : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[6]"  , Label="2\#mu_{R}"            , SkipMe=True
+ttbar_muR_Dn    : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[9]"  , Label="\#mu_{R}/2"           , SkipMe=True
+
+ttbar_muRmuF_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[7]"  , Label="2\#mu_{F}/2\#mu_{R}"  , SkipMe=True
+ttbar_muRmuF_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[11]" , Label="\#mu_{F}/2/\#mu_{R}/2", SkipMe=True
+
+ttbar_alphaS_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[112]", Label="\#alpha_{S}=0.117"    , SkipMe=True
+ttbar_alphaS_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[113]", Label="\#alpha_{S}=0.119"    , SkipMe=True
+
+ttbar_pdf1_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[12]"       , Label="t\#bar{t} pdf1 Up"   , SkipMe=True
+ttbar_pdf1_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[12]"    , Label="t\#bar{t} pdf1 Dn"   , SkipMe=True
+
+ttbar_pdf2_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[13]"       , Label="t\#bar{t} pdf2 Up"   , SkipMe=True
+ttbar_pdf2_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[13]"    , Label="t\#bar{t} pdf2 Dn"   , SkipMe=True
+
+ttbar_pdf3_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[14]"       , Label="t\#bar{t} pdf3 Up"   , SkipMe=True
+ttbar_pdf3_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[14]"    , Label="t\#bar{t} pdf3 Dn"   , SkipMe=True
+
+ttbar_pdf4_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[15]"       , Label="t\#bar{t} pdf4 Up"   , SkipMe=True
+ttbar_pdf4_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[15]"    , Label="t\#bar{t} pdf4 Dn"   , SkipMe=True
+
+ttbar_pdf5_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[16]"       , Label="t\#bar{t} pdf5 Up"   , SkipMe=True
+ttbar_pdf5_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[16]"    , Label="t\#bar{t} pdf5 Dn"   , SkipMe=True
+
+ttbar_pdf6_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[17]"       , Label="t\#bar{t} pdf6 Up"   , SkipMe=True
+ttbar_pdf6_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[17]"    , Label="t\#bar{t} pdf6 Dn"   , SkipMe=True
+
+ttbar_pdf7_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[18]"       , Label="t\#bar{t} pdf7 Up"   , SkipMe=True
+ttbar_pdf7_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[18]"    , Label="t\#bar{t} pdf7 Dn"   , SkipMe=True
+
+ttbar_pdf8_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[19]"       , Label="t\#bar{t} pdf8 Up"   , SkipMe=True
+ttbar_pdf8_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[19]"    , Label="t\#bar{t} pdf8 Dn"   , SkipMe=True
+
+ttbar_pdf9_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[20]"       , Label="t\#bar{t} pdf9 Up"   , SkipMe=True
+ttbar_pdf9_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[20]"    , Label="t\#bar{t} pdf9 Dn"   , SkipMe=True
+
+ttbar_pdf10_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[21]"      , Label="t\#bar{t} pdf10 Up"  , SkipMe=True
+ttbar_pdf10_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[21]"   , Label="t\#bar{t} pdf10 Dn"  , SkipMe=True
+
+ttbar_pdf11_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[22]"      , Label="t\#bar{t} pdf11 Up"  , SkipMe=True
+ttbar_pdf11_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[22]"   , Label="t\#bar{t} pdf11 Dn"  , SkipMe=True
+
+ttbar_pdf12_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[23]"      , Label="t\#bar{t} pdf12 Up"  , SkipMe=True
+ttbar_pdf12_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[23]"   , Label="t\#bar{t} pdf12 Dn"  , SkipMe=True
+
+ttbar_pdf13_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[24]"      , Label="t\#bar{t} pdf13 Up"  , SkipMe=True
+ttbar_pdf13_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[24]"   , Label="t\#bar{t} pdf13 Dn"  , SkipMe=True
+
+ttbar_pdf14_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[25]"      , Label="t\#bar{t} pdf14 Up"  , SkipMe=True
+ttbar_pdf14_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[25]"   , Label="t\#bar{t} pdf14 Dn"  , SkipMe=True
+
+ttbar_pdf15_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[26]"      , Label="t\#bar{t} pdf15 Up"  , SkipMe=True
+ttbar_pdf15_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[26]"   , Label="t\#bar{t} pdf15 Dn"  , SkipMe=True
+
+ttbar_pdf16_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[27]"      , Label="t\#bar{t} pdf16 Up"  , SkipMe=True
+ttbar_pdf16_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[27]"   , Label="t\#bar{t} pdf16 Dn"  , SkipMe=True
+
+ttbar_pdf17_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[28]"      , Label="t\#bar{t} pdf17 Up"  , SkipMe=True
+ttbar_pdf17_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[28]"   , Label="t\#bar{t} pdf17 Dn"  , SkipMe=True
+
+ttbar_pdf18_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[29]"      , Label="t\#bar{t} pdf18 Up"  , SkipMe=True
+ttbar_pdf18_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[29]"   , Label="t\#bar{t} pdf18 Dn"  , SkipMe=True
+
+ttbar_pdf19_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[30]"      , Label="t\#bar{t} pdf19 Up"  , SkipMe=True
+ttbar_pdf19_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[30]"   , Label="t\#bar{t} pdf19 Dn"  , SkipMe=True
+
+ttbar_pdf20_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[31]"      , Label="t\#bar{t} pdf20 Up"  , SkipMe=True
+ttbar_pdf20_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[31]"   , Label="t\#bar{t} pdf20 Dn"  , SkipMe=True
+
+ttbar_pdf21_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[32]"      , Label="t\#bar{t} pdf21 Up"  , SkipMe=True
+ttbar_pdf21_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[32]"   , Label="t\#bar{t} pdf21 Dn"  , SkipMe=True
+
+ttbar_pdf22_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[33]"      , Label="t\#bar{t} pdf22 Up"  , SkipMe=True
+ttbar_pdf22_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[33]"   , Label="t\#bar{t} pdf22 Dn"  , SkipMe=True
+
+ttbar_pdf23_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[34]"      , Label="t\#bar{t} pdf23 Up"  , SkipMe=True
+ttbar_pdf23_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[34]"   , Label="t\#bar{t} pdf23 Dn"  , SkipMe=True
+
+ttbar_pdf24_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[35]"      , Label="t\#bar{t} pdf24 Up"  , SkipMe=True
+ttbar_pdf24_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[35]"   , Label="t\#bar{t} pdf24 Dn"  , SkipMe=True
+
+ttbar_pdf25_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[36]"      , Label="t\#bar{t} pdf25 Up"  , SkipMe=True
+ttbar_pdf25_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[36]"   , Label="t\#bar{t} pdf25 Dn"  , SkipMe=True
+
+ttbar_pdf26_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[37]"      , Label="t\#bar{t} pdf26 Up"  , SkipMe=True
+ttbar_pdf26_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[37]"   , Label="t\#bar{t} pdf26 Dn"  , SkipMe=True
+
+ttbar_pdf27_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[38]"      , Label="t\#bar{t} pdf27 Up"  , SkipMe=True
+ttbar_pdf27_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[38]"   , Label="t\#bar{t} pdf27 Dn"  , SkipMe=True
+
+ttbar_pdf28_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[39]"      , Label="t\#bar{t} pdf28 Up"  , SkipMe=True
+ttbar_pdf28_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[39]"   , Label="t\#bar{t} pdf28 Dn"  , SkipMe=True
+
+ttbar_pdf29_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[40]"      , Label="t\#bar{t} pdf29 Up"  , SkipMe=True
+ttbar_pdf29_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[40]"   , Label="t\#bar{t} pdf29 Dn"  , SkipMe=True
+
+ttbar_pdf30_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[41]"      , Label="t\#bar{t} pdf30 Up"  , SkipMe=True
+ttbar_pdf30_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[41]"   , Label="t\#bar{t} pdf30 Dn"  , SkipMe=True
+
+ttbar_pdf31_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[42]"      , Label="t\#bar{t} pdf31 Up"  , SkipMe=True
+ttbar_pdf31_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[42]"   , Label="t\#bar{t} pdf31 Dn"  , SkipMe=True
+
+ttbar_pdf32_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[43]"      , Label="t\#bar{t} pdf32 Up"  , SkipMe=True
+ttbar_pdf32_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[43]"   , Label="t\#bar{t} pdf32 Dn"  , SkipMe=True
+
+ttbar_pdf33_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[44]"      , Label="t\#bar{t} pdf33 Up"  , SkipMe=True
+ttbar_pdf33_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[44]"   , Label="t\#bar{t} pdf33 Dn"  , SkipMe=True
+
+ttbar_pdf34_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[45]"      , Label="t\#bar{t} pdf34 Up"  , SkipMe=True
+ttbar_pdf34_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[45]"   , Label="t\#bar{t} pdf34 Dn"  , SkipMe=True
+
+ttbar_pdf35_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[46]"      , Label="t\#bar{t} pdf35 Up"  , SkipMe=True
+ttbar_pdf35_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[46]"   , Label="t\#bar{t} pdf35 Dn"  , SkipMe=True
+
+ttbar_pdf36_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[47]"      , Label="t\#bar{t} pdf36 Up"  , SkipMe=True
+ttbar_pdf36_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[47]"   , Label="t\#bar{t} pdf36 Dn"  , SkipMe=True
+
+ttbar_pdf37_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[48]"      , Label="t\#bar{t} pdf37 Up"  , SkipMe=True
+ttbar_pdf37_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[48]"   , Label="t\#bar{t} pdf37 Dn"  , SkipMe=True
+
+ttbar_pdf38_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[49]"      , Label="t\#bar{t} pdf38 Up"  , SkipMe=True
+ttbar_pdf38_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[49]"   , Label="t\#bar{t} pdf38 Dn"  , SkipMe=True
+
+ttbar_pdf39_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[50]"      , Label="t\#bar{t} pdf39 Up"  , SkipMe=True
+ttbar_pdf39_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[50]"   , Label="t\#bar{t} pdf39 Dn"  , SkipMe=True
+
+ttbar_pdf40_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[51]"      , Label="t\#bar{t} pdf40 Up"  , SkipMe=True
+ttbar_pdf40_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[51]"   , Label="t\#bar{t} pdf40 Dn"  , SkipMe=True
+
+ttbar_pdf41_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[52]"      , Label="t\#bar{t} pdf41 Up"  , SkipMe=True
+ttbar_pdf41_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[52]"   , Label="t\#bar{t} pdf41 Dn"  , SkipMe=True
+
+ttbar_pdf42_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[53]"      , Label="t\#bar{t} pdf42 Up"  , SkipMe=True
+ttbar_pdf42_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[53]"   , Label="t\#bar{t} pdf42 Dn"  , SkipMe=True
+
+ttbar_pdf43_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[54]"      , Label="t\#bar{t} pdf43 Up"  , SkipMe=True
+ttbar_pdf43_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[54]"   , Label="t\#bar{t} pdf43 Dn"  , SkipMe=True
+
+ttbar_pdf44_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[55]"      , Label="t\#bar{t} pdf44 Up"  , SkipMe=True
+ttbar_pdf44_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[55]"   , Label="t\#bar{t} pdf44 Dn"  , SkipMe=True
+
+ttbar_pdf45_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[56]"      , Label="t\#bar{t} pdf45 Up"  , SkipMe=True
+ttbar_pdf45_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[56]"   , Label="t\#bar{t} pdf45 Dn"  , SkipMe=True
+
+ttbar_pdf46_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[57]"      , Label="t\#bar{t} pdf46 Up"  , SkipMe=True
+ttbar_pdf46_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[57]"   , Label="t\#bar{t} pdf46 Dn"  , SkipMe=True
+
+ttbar_pdf47_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[58]"      , Label="t\#bar{t} pdf47 Up"  , SkipMe=True
+ttbar_pdf47_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[58]"   , Label="t\#bar{t} pdf47 Dn"  , SkipMe=True
+
+ttbar_pdf48_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[59]"      , Label="t\#bar{t} pdf48 Up"  , SkipMe=True
+ttbar_pdf48_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[59]"   , Label="t\#bar{t} pdf48 Dn"  , SkipMe=True
+
+ttbar_pdf49_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[60]"      , Label="t\#bar{t} pdf49 Up"  , SkipMe=True
+ttbar_pdf49_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[60]"   , Label="t\#bar{t} pdf49 Dn"  , SkipMe=True
+
+ttbar_pdf50_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[61]"      , Label="t\#bar{t} pdf50 Up"  , SkipMe=True
+ttbar_pdf50_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[61]"   , Label="t\#bar{t} pdf50 Dn"  , SkipMe=True
+
+ttbar_pdf51_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[62]"      , Label="t\#bar{t} pdf51 Up"  , SkipMe=True
+ttbar_pdf51_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[62]"   , Label="t\#bar{t} pdf51 Dn"  , SkipMe=True
+
+ttbar_pdf52_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[63]"      , Label="t\#bar{t} pdf52 Up"  , SkipMe=True
+ttbar_pdf52_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[63]"   , Label="t\#bar{t} pdf52 Dn"  , SkipMe=True
+
+ttbar_pdf53_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[64]"      , Label="t\#bar{t} pdf53 Up"  , SkipMe=True
+ttbar_pdf53_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[64]"   , Label="t\#bar{t} pdf53 Dn"  , SkipMe=True
+
+ttbar_pdf54_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[65]"      , Label="t\#bar{t} pdf54 Up"  , SkipMe=True
+ttbar_pdf54_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[65]"   , Label="t\#bar{t} pdf54 Dn"  , SkipMe=True
+
+ttbar_pdf55_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[66]"      , Label="t\#bar{t} pdf55 Up"  , SkipMe=True
+ttbar_pdf55_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[66]"   , Label="t\#bar{t} pdf55 Dn"  , SkipMe=True
+
+ttbar_pdf56_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[67]"      , Label="t\#bar{t} pdf56 Up"  , SkipMe=True
+ttbar_pdf56_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[67]"   , Label="t\#bar{t} pdf56 Dn"  , SkipMe=True
+
+ttbar_pdf57_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[68]"      , Label="t\#bar{t} pdf57 Up"  , SkipMe=True
+ttbar_pdf57_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[68]"   , Label="t\#bar{t} pdf57 Dn"  , SkipMe=True
+
+ttbar_pdf58_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[69]"      , Label="t\#bar{t} pdf58 Up"  , SkipMe=True
+ttbar_pdf58_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[69]"   , Label="t\#bar{t} pdf58 Dn"  , SkipMe=True
+
+ttbar_pdf59_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[70]"      , Label="t\#bar{t} pdf59 Up"  , SkipMe=True
+ttbar_pdf59_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[70]"   , Label="t\#bar{t} pdf59 Dn"  , SkipMe=True
+
+ttbar_pdf60_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[71]"      , Label="t\#bar{t} pdf60 Up"  , SkipMe=True
+ttbar_pdf60_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[71]"   , Label="t\#bar{t} pdf60 Dn"  , SkipMe=True
+
+ttbar_pdf61_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[72]"      , Label="t\#bar{t} pdf61 Up"  , SkipMe=True
+ttbar_pdf61_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[72]"   , Label="t\#bar{t} pdf61 Dn"  , SkipMe=True
+
+ttbar_pdf62_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[73]"      , Label="t\#bar{t} pdf62 Up"  , SkipMe=True
+ttbar_pdf62_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[73]"   , Label="t\#bar{t} pdf62 Dn"  , SkipMe=True
+
+ttbar_pdf63_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[74]"      , Label="t\#bar{t} pdf63 Up"  , SkipMe=True
+ttbar_pdf63_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[74]"   , Label="t\#bar{t} pdf63 Dn"  , SkipMe=True
+
+ttbar_pdf64_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[75]"      , Label="t\#bar{t} pdf64 Up"  , SkipMe=True
+ttbar_pdf64_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[75]"   , Label="t\#bar{t} pdf64 Dn"  , SkipMe=True
+
+ttbar_pdf65_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[76]"      , Label="t\#bar{t} pdf65 Up"  , SkipMe=True
+ttbar_pdf65_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[76]"   , Label="t\#bar{t} pdf65 Dn"  , SkipMe=True
+
+ttbar_pdf66_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[77]"      , Label="t\#bar{t} pdf66 Up"  , SkipMe=True
+ttbar_pdf66_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[77]"   , Label="t\#bar{t} pdf66 Dn"  , SkipMe=True
+
+ttbar_pdf67_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[78]"      , Label="t\#bar{t} pdf67 Up"  , SkipMe=True
+ttbar_pdf67_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[78]"   , Label="t\#bar{t} pdf67 Dn"  , SkipMe=True
+
+ttbar_pdf68_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[79]"      , Label="t\#bar{t} pdf68 Up"  , SkipMe=True
+ttbar_pdf68_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[79]"   , Label="t\#bar{t} pdf68 Dn"  , SkipMe=True
+
+ttbar_pdf69_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[80]"      , Label="t\#bar{t} pdf69 Up"  , SkipMe=True
+ttbar_pdf69_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[80]"   , Label="t\#bar{t} pdf69 Dn"  , SkipMe=True
+
+ttbar_pdf70_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[81]"      , Label="t\#bar{t} pdf70 Up"  , SkipMe=True
+ttbar_pdf70_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[81]"   , Label="t\#bar{t} pdf70 Dn"  , SkipMe=True
+
+ttbar_pdf71_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[82]"      , Label="t\#bar{t} pdf71 Up"  , SkipMe=True
+ttbar_pdf71_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[82]"   , Label="t\#bar{t} pdf71 Dn"  , SkipMe=True
+
+ttbar_pdf72_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[83]"      , Label="t\#bar{t} pdf72 Up"  , SkipMe=True
+ttbar_pdf72_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[83]"   , Label="t\#bar{t} pdf72 Dn"  , SkipMe=True
+
+ttbar_pdf73_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[84]"      , Label="t\#bar{t} pdf73 Up"  , SkipMe=True
+ttbar_pdf73_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[84]"   , Label="t\#bar{t} pdf73 Dn"  , SkipMe=True
+
+ttbar_pdf74_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[85]"      , Label="t\#bar{t} pdf74 Up"  , SkipMe=True
+ttbar_pdf74_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[85]"   , Label="t\#bar{t} pdf74 Dn"  , SkipMe=True
+
+ttbar_pdf75_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[86]"      , Label="t\#bar{t} pdf75 Up"  , SkipMe=True
+ttbar_pdf75_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[86]"   , Label="t\#bar{t} pdf75 Dn"  , SkipMe=True
+
+ttbar_pdf76_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[87]"      , Label="t\#bar{t} pdf76 Up"  , SkipMe=True
+ttbar_pdf76_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[87]"   , Label="t\#bar{t} pdf76 Dn"  , SkipMe=True
+
+ttbar_pdf77_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[88]"      , Label="t\#bar{t} pdf77 Up"  , SkipMe=True
+ttbar_pdf77_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[88]"   , Label="t\#bar{t} pdf77 Dn"  , SkipMe=True
+
+ttbar_pdf78_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[89]"      , Label="t\#bar{t} pdf78 Up"  , SkipMe=True
+ttbar_pdf78_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[89]"   , Label="t\#bar{t} pdf78 Dn"  , SkipMe=True
+
+ttbar_pdf79_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[90]"      , Label="t\#bar{t} pdf79 Up"  , SkipMe=True
+ttbar_pdf79_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[90]"   , Label="t\#bar{t} pdf79 Dn"  , SkipMe=True
+
+ttbar_pdf80_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[91]"      , Label="t\#bar{t} pdf80 Up"  , SkipMe=True
+ttbar_pdf80_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[91]"   , Label="t\#bar{t} pdf80 Dn"  , SkipMe=True
+
+ttbar_pdf81_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[92]"      , Label="t\#bar{t} pdf81 Up"  , SkipMe=True
+ttbar_pdf81_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[92]"   , Label="t\#bar{t} pdf81 Dn"  , SkipMe=True
+
+ttbar_pdf82_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[93]"      , Label="t\#bar{t} pdf82 Up"  , SkipMe=True
+ttbar_pdf82_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[93]"   , Label="t\#bar{t} pdf82 Dn"  , SkipMe=True
+
+ttbar_pdf83_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[94]"      , Label="t\#bar{t} pdf83 Up"  , SkipMe=True
+ttbar_pdf83_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[94]"   , Label="t\#bar{t} pdf83 Dn"  , SkipMe=True
+
+ttbar_pdf84_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[95]"      , Label="t\#bar{t} pdf84 Up"  , SkipMe=True
+ttbar_pdf84_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[95]"   , Label="t\#bar{t} pdf84 Dn"  , SkipMe=True
+
+ttbar_pdf85_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[96]"      , Label="t\#bar{t} pdf85 Up"  , SkipMe=True
+ttbar_pdf85_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[96]"   , Label="t\#bar{t} pdf85 Dn"  , SkipMe=True
+
+ttbar_pdf86_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[97]"      , Label="t\#bar{t} pdf86 Up"  , SkipMe=True
+ttbar_pdf86_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[97]"   , Label="t\#bar{t} pdf86 Dn"  , SkipMe=True
+
+ttbar_pdf87_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[98]"      , Label="t\#bar{t} pdf87 Up"  , SkipMe=True
+ttbar_pdf87_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[98]"   , Label="t\#bar{t} pdf87 Dn"  , SkipMe=True
+
+ttbar_pdf88_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[99]"      , Label="t\#bar{t} pdf88 Up"  , SkipMe=True
+ttbar_pdf88_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[99]"   , Label="t\#bar{t} pdf88 Dn"  , SkipMe=True
+
+ttbar_pdf89_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[100]"     , Label="t\#bar{t} pdf89 Up"  , SkipMe=True
+ttbar_pdf89_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[100]"  , Label="t\#bar{t} pdf89 Dn"  , SkipMe=True
+
+ttbar_pdf90_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[101]"     , Label="t\#bar{t} pdf90 Up"  , SkipMe=True
+ttbar_pdf90_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[101]"  , Label="t\#bar{t} pdf90 Dn"  , SkipMe=True
+
+ttbar_pdf91_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[102]"     , Label="t\#bar{t} pdf91 Up"  , SkipMe=True
+ttbar_pdf91_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[102]"  , Label="t\#bar{t} pdf91 Dn"  , SkipMe=True
+
+ttbar_pdf92_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[103]"     , Label="t\#bar{t} pdf92 Up"  , SkipMe=True
+ttbar_pdf92_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[103]"  , Label="t\#bar{t} pdf92 Dn"  , SkipMe=True
+
+ttbar_pdf93_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[104]"     , Label="t\#bar{t} pdf93 Up"  , SkipMe=True
+ttbar_pdf93_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[104]"  , Label="t\#bar{t} pdf93 Dn"  , SkipMe=True
+
+ttbar_pdf94_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[105]"     , Label="t\#bar{t} pdf94 Up"  , SkipMe=True
+ttbar_pdf94_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[105]"  , Label="t\#bar{t} pdf94 Dn"  , SkipMe=True
+
+ttbar_pdf95_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[106]"     , Label="t\#bar{t} pdf95 Up"  , SkipMe=True
+ttbar_pdf95_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[106]"  , Label="t\#bar{t} pdf95 Dn"  , SkipMe=True
+
+ttbar_pdf96_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[107]"     , Label="t\#bar{t} pdf96 Up"  , SkipMe=True
+ttbar_pdf96_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[107]"  , Label="t\#bar{t} pdf96 Dn"  , SkipMe=True
+
+ttbar_pdf97_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[108]"     , Label="t\#bar{t} pdf97 Up"  , SkipMe=True
+ttbar_pdf97_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[108]"  , Label="t\#bar{t} pdf97 Dn"  , SkipMe=True
+
+ttbar_pdf98_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[109]"     , Label="t\#bar{t} pdf98 Up"  , SkipMe=True
+ttbar_pdf98_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[109]"  , Label="t\#bar{t} pdf98 Dn"  , SkipMe=True
+
+ttbar_pdf99_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[110]"     , Label="t\#bar{t} pdf99 Up"  , SkipMe=True
+ttbar_pdf99_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[110]"  , Label="t\#bar{t} pdf99 Dn"  , SkipMe=True
+
+ttbar_pdf100_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[111]"    , Label="t\#bar{t} pdf100 Up" , SkipMe=True
+ttbar_pdf100_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="1./meWeights[111]" , Label="t\#bar{t} pdf100 Dn" , SkipMe=True
+

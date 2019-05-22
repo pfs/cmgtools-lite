@@ -342,6 +342,10 @@ for name in systsEnv.keys():
             effect12 = "-"
         effmap0[p]  = effect0 
         effmap12[p] = effect12 
+    ## print 'this is procs', procs
+    ## print 'at systematic name', name
+    ## print 'effmaps', effmap0, effmap12
+    ## print 'mode:', mode
     systsEnv[name] = (effmap0,effmap12,mode)
 
 

@@ -1,0 +1,10 @@
+emsphericity : llpt/(lep_pt[0]+lep_pt[1])  : 10,0.,1.    ; XTitle='sphericity (e#mu)'
+mmsphericity : llpt/(lep_pt[0]+lep_pt[1])  : 10,0.,1.    ; XTitle='sphericity (#mu#mu)'
+eesphericity : llpt/(lep_pt[0]+lep_pt[1])  : 10,0.,1.    ; XTitle='sphericity (ee)'
+
+embdt        : bdtrarity                   : 10,0.,1.    ; XTitle='bdt discr. (e#mu)'
+mmbdt        : bdtrarity                   : 10,0.,1.    ; XTitle='bdt discr. (#mu#mu)'
+eebdt        : bdtrarity                   : 10,0.,1.    ; XTitle='bdt discr. (ee)'
+
+onZeemll     : llm                         : 30,76.,106. ; XTitle='m_{ee}'
+onZmmmll     : llm                         : 30,76.,106. ; XTitle='m_{#mu#mu}'

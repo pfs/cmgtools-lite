@@ -48,6 +48,24 @@ float iso03(int pdgId, float pt, float isofull, float isofull30, float lep_rho){
 }
 
 
+float isoLepton(int pdgId, float pt, float isofull20, float rho,bool passFlag){
+
+    float rho0(120),a(0.000288),b(0.066820),c(3.094171),d(0.),e(6.567681);
+    float isoThr(0.08);
+    if(abs(pdgId)==13){
+      rho0=120; a=0.001793; b=-0.021769; c=4.637176; d=0.; e=22.939220;
+      isoThr=-0.06;
+    }
+    float ue(rho<rho0 ?
+             a*pow(rho,2)+b*rho+c :
+             d*pow(log(rho),2)+e*log(rho)+c+a*pow(rho0,2)-d*pow(log(rho0),2)+b*rho0-e*log(rho0));
+    float iso((isofull20-ue)/pt);
+
+    if(!passFlag) return iso;
+    return iso<isoThr ?  1.0 : -1.0;
+}
+
+
 TFile * lhinfile = NULL;
 TH1F * hist_lh_dphi  = NULL;
 TH1F * hist_lh_llpt  = NULL;

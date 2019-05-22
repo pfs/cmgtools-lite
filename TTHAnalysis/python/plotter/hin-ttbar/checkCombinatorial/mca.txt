@@ -1,8 +1,0 @@
-# vim: syntax=sh
-* ; TreeName="treeProducerHIN"
-
-data_comb : SkimMuons_PromptRecov1+SkimMuons_PromptRecov2+SkimElectrons_PromptRecov1+SkimElectrons          : lep_charge[0]*lep_charge[1]>0 ; FillColor=17             , NormSystematic=0.5, Label="comb. (data)", AddWeight="446./1618."
-
-W          : WJetsToLNu_TuneCP5_5020GeV-amcatnloFXFX-pythia8               : 21159*(208**2) : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kGreen           , NormSystematic=0.50, Label="W"
-
-ttbar+    : TT_TuneCP5_5p02TeV-powheg-pythia8                          : 69*(208**2)   : lep_charge[0]*lep_charge[1]<0 ; FillColor=633            , NormSystematic=0.5, Label="ttbar"

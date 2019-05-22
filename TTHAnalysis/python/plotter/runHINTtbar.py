@@ -152,23 +152,26 @@ def compareCombBackgrounds():
     trees     = treedir
     friends   = ''
 
-    fmca          = 'hin-ttbar/checkCombinatorial/mca.txt'
-    fcut          = 'hin-ttbar/analysisSetup/cuts.txt'
+    fmca          = 'hin-ttbar/analysisSetup/mca-combinatorial.txt'
     fplots        = 'hin-ttbar/analysisSetup/plots.txt'
 
-    for flav in ['ee']:
-        targetdir = basedir+'/combinatorialBackground/{date}{pf}-{flav}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav )
+    for flav in ['ee','mm','em']:
+        for pfix in ['','-noiso']:
 
-        enable    = [flav]
-        disable   = []
-        processes = []
-        fittodata = []
-        scalethem = {}
+            fcut      = 'hin-ttbar/analysisSetup/cuts%s.txt'%pfix
+            targetdir = basedir+'/combinatorialBackground/{date}{pf}-{flav}{pfix}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav='_'.join(flav),pfix=pfix )
 
-        extraopts = ' --maxRatioRange 0. 2. --fixRatioRange --plotmode=norm --showRatio --ratioNums W,data_comb,ttbar --ratioDen data_comb '#--preFitData bdt '
-        makeplots = []
-        showratio = True
-        runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
+            enable    = flav
+            disable   = []
+            processes = ['W','data_mix1','data_mix2','data_ss']
+            fittodata = []
+            scalethem = {}
+
+            extraopts = ' --maxRatioRange 0. 2. --fixRatioRange --plotmode=norm --showRatio --legendColumns 2 --ratioNums %s --ratioDen %s'%(','.join(processes[1:]),processes[0])
+            makeplots = ['llpt','l1pt','l2pt','sphericity','dphi','mll','bdt','bdtrarity']
+            showratio = False
+            runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
+
 
 def plotJetVariables(replot):
     print '=========================================='
@@ -470,6 +473,8 @@ def compareDataPeriods():
 
 
 
+
+
 def makeZplots():
     print '=========================================='
     print 'running DY plots'
@@ -585,6 +590,7 @@ if __name__ == '__main__':
     parser.add_option('--pf'        , '--postfix'    , dest='postfix'      , type='string'       , default=''    , help='postfix for running each module')
     parser.add_option('-d'          , '--date'       , dest='date'         , type='string'       , default=''    , help='run with specified date instead of today')
     parser.add_option('-l'          , '--lumi'       , dest='lumi'         , type='float'        , default=0.    , help='change lumi by hand')
+    parser.add_option('-i'          , '--input'      , dest='input'        , type='string'       ,  default='/eos/cms/store/cmst3/group/hintt/PbPb2018_skim27Apr/'    , help='input directory')
     parser.add_option('--simple'    ,                  dest='simple'       , action='store_true' , default=False , help='make simple plot')
     parser.add_option('--combinatorial'    , action='store_true' , default=False , help='compare data comb with wjets')
     parser.add_option('--jetvars', action='store_true' , default=False , help='plot jet variables')
@@ -611,13 +617,11 @@ if __name__ == '__main__':
     if user == 'mdunser':
         basedir = '/afs/cern.ch/user/m/mdunser/www/private/heavyIons/plots/'
     elif user == 'psilva':
-        basedir = 'PbPb2018'
+        basedir = '/eos/user/p/psilva/www/HIN-19-001'
     
-    treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim27Apr/'
-
+    treedir=opts.input
     if opts.date:
         date = opts.date
-
     if opts.simple:
         print 'making simple plots'
         simplePlot(opts.fit)

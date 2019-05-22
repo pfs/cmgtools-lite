@@ -21,9 +21,9 @@ l2dz       : abs(lep_dz[1])                  : 10,0.,0.025  ; XTitle='d_{z} (l2)
 l1sip2d    : abs(lep_d0[0])/lep_d0err[0]                  : 10,-0.1,10.  ; XTitle='d_{0}/#sigma(d_{0}) (l1)'
 l2sip2d    : abs(lep_d0[1])/lep_d0err[1]                  : 10,-0.1,10.  ; XTitle='d_{0}/#sigma(d_{0}) (l2)'
 
-l1iso03   : iso03(lep_pdgId[0],lep_pt[0],lep_isofull[0],lep_isofull30[0],lep_rho[0])  : 10,-1.,2. ; XTitle='rel. iso. 0.3 (l1)'
-l2iso03   : iso03(lep_pdgId[1],lep_pt[1],lep_isofull[1],lep_isofull30[1],lep_rho[1])  : 10,-1.,2. ; XTitle='rel. iso. 0.3 (l2)'
-lepiso03  : iso03(lep_pdgId,lep_pt,lep_isofull,lep_isofull30,lep_rho)                 : 10,-1.,2. ; XTitle='rel. iso. 0.3 (both l)'
+l1iso02   : iso02(lep_pdgId[0],lep_pt[0],lep_isofull20[0],lep_rho[0],0)  : 10,-1.,2. ; XTitle='rel. iso. 0.2 (l1)'
+l2iso02   : iso02(lep_pdgId[1],lep_pt[1],lep_isofull20[1],lep_rho[1],0)  : 10,-1.,2. ; XTitle='rel. iso. 0.2 (l2)'
+lepiso02  : iso02(lep_pdgId,lep_pt,lep_isofull20,lep_rho,0)              : 10,-1.,2. ; XTitle='rel. iso. 0.3 (both l)'
 
 nleptons  : nlep                        : 4,0.5,4.5 ; XTitle='number of ID\'d leptons'
 flavor : abs(lep_pdgId[0]*lep_pdgId[1]) : 70,100,170 ; XTitle='abs(id1*id2)'

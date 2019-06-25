@@ -35,6 +35,37 @@ float zptWeight(float zpt, int updn=0){
     return zptFunc->Eval(zpt);
 }
 
+float iso02(int pdgId, float pt, float iso02, float lep_rho){
+    float ue(-1000.);
+
+    float rho0(0.), a(0.), b(0.), c(0.), d(0.), e(0.), f(0.);
+
+    if (pdgId == 11){
+        rho0 = 108.5698;
+        a =  0.000707;
+        b =  0.063990;
+        c =  4.113015;
+        d =  0.000000;
+        e = 17.075343;
+    } else if (pdgId == 13) {
+        rho0 = 103.57603;
+        a =  0.001974;
+        b = -0.022796;
+        c =  5.830865;
+        d =  0.000000;
+        e = 40.140637;
+    }
+
+    // isoFormula  = 'x<[0] ? [1]*pow(x,2)+[2]*x+[3] : [4]*pow(log(x),2)+[5]*log(x)+[3]+[1]*pow([0],2)-[4]*pow(log([0]),2)+[2]*[0]-[5]*log([0])'
+    float value_true  = a*TMath::Power(lep_rho,2) + b*lep_rho + c;
+    float value_false = a*TMath::Power(rho0   ,2) + b*rho0    + c + e*TMath::Log(lep_rho) - e*TMath::Log(rho0);
+
+    ue = lep_rho < rho0 ? value_true : value_false ;
+
+    return (iso02 - ue)/pt;
+
+}
+
 float iso03(int pdgId, float pt, float isofull, float isofull30, float lep_rho){
 
     float ue(-1000.);

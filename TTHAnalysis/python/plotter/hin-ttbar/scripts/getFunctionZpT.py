@@ -2,9 +2,9 @@ import ROOT, os, math
 
 ROOT.gStyle.SetOptStat(0)
 
-file_inc= ROOT.TFile('~/www/private/heavyIons/plots/dy_plots/2019-05-06-withIsoApplied_scaledToEff-sf/dyllpt_AND_dyleppt_AND_dyl1pt_AND_dyl2pt_AND_dysphericity_AND_dydphi_AND_dyllm.root')
-file_chi= ROOT.TFile('~/www/private/heavyIons/plots/dy_plots/2019-05-06-withIsoApplied_scaledToEff_centralityHi-sf/dyllpt_AND_dyleppt_AND_dyl1pt_AND_dyl2pt_AND_dysphericity_AND_dydphi_AND_dyllm.root')
-file_clo= ROOT.TFile('~/www/private/heavyIons/plots/dy_plots/2019-05-06-withIsoApplied_scaledToEff_centralityLo-sf/dyllpt_AND_dyleppt_AND_dyl1pt_AND_dyl2pt_AND_dysphericity_AND_dydphi_AND_dyllm.root')
+file_inc= ROOT.TFile('~/www/private/heavyIons/plots/dy_plots/2019-06-25-mixedMC_newIso_withSF-mm/dyllpt_AND_dyleppt_AND_dyl1pt_AND_dyl2pt_AND_dysphericity_AND_dydphi_AND_dyllm.root')
+file_chi= ROOT.TFile('~/www/private/heavyIons/plots/dy_plots/2019-06-25-mixedMC_newIso_withSF_centralityHi-mm/nleptons_AND_l1iso02_AND_l2iso02_AND_dyllpt_AND_dyleppt_AND_dyl1pt_AND_dyl2pt_AND_dysphericity_AND_dydphi_AND_dyllm_AND_lepiso02_AND_l1d0_AND_l2d0.root')
+file_clo= ROOT.TFile('~/www/private/heavyIons/plots/dy_plots/2019-06-25-mixedMC_newIso_withSF_centralityLo-mm/nleptons_AND_l1iso02_AND_l2iso02_AND_dyllpt_AND_dyleppt_AND_dyl1pt_AND_dyl2pt_AND_dysphericity_AND_dydphi_AND_dyllm_AND_lepiso02_AND_l1d0_AND_l2d0.root')
 
 
 plotname = 'dyllpt_zg'
@@ -84,13 +84,32 @@ erf = ROOT.TF1('erf', '[0]*TMath::Erf((x-[1])/[2])', 0., 150.)
 erf.SetLineColor(ROOT.kGray+2)
 erf.SetLineWidth(2)
 erf.SetParameters(1., -5., 15.)
-ratio_da_inc .Fit('erf')
+
+ff = ROOT.TF1('myfunc', '[0]*x*x*x + [1]*x*x + [2]*x + [3]', -50., 150.)
+ff.SetParameter(0, -0.00050785)
+ff.SetParameter(1, -0.010089)
+ff.SetParameter(2, 1.2293)
+ff.SetParameter(3, 0.8)
+ff.SetLineColor(ROOT.kAzure+2)
+ff.SetLineWidth(2)
+
+lan = ROOT.TF1('lan', 'TMath::Landau(x,[0],[1],0)',0., 50.)
+lan.SetParameters(1.3, 10.)
+lan.SetLineColor(ROOT.kPink+2)
+lan.SetLineWidth(2)
+
+wat = ROOT.TF1('wat', 'pol1(0)*expo(2)', 0., 100.)
+wat.SetLineColor(ROOT.kPink+2)
+wat.SetLineWidth(2)
+
+ratio_da_inc .Fit('pol3', '', '', 0, 50.)
+##ff.Draw('same')
 
 #tmp_canv.cd(0)
 lat = ROOT.TLatex()
 lat.SetNDC(); lat.SetTextSize(0.08); lat.SetTextFont(42)
-x1=erf.GetParameter(1)
-lat.DrawLatex(0.4, 0.35, 'fit: {x0:.2f}*Erf( (p_{{T}}(ll) {s} {x1:.2f}) / {x2:.2f} ) '.format(x0=erf.GetParameter(0), x1=x1 if x1  >0 else abs(x1), x2=erf.GetParameter(2), s='-'if x1 >0. else '+' ))
+#x1=erf.GetParameter(1)
+#lat.DrawLatex(0.4, 0.35, 'fit: {x0:.2f}*Erf( (p_{{T}}(ll) {s} {x1:.2f}) / {x2:.2f} ) '.format(x0=erf.GetParameter(0), x1=x1 if x1  >0 else abs(x1), x2=erf.GetParameter(2), s='-'if x1 >0. else '+' ))
 
-tmp_canv.SaveAs('~/www/private/heavyIons/plots/dy_plots/ptllFunction.png')
-tmp_canv.SaveAs('~/www/private/heavyIons/plots/dy_plots/ptllFunction.pdf')
+tmp_canv.SaveAs('~/www/private/heavyIons/plots/dy_plots/ptllFunction_mixedWithSFs_2019-06-25.png')
+tmp_canv.SaveAs('~/www/private/heavyIons/plots/dy_plots/ptllFunction_mixedWithSFs_2019-06-25.pdf')

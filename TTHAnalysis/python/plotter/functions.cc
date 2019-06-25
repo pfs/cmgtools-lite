@@ -30,9 +30,14 @@ TF1 * zptFunc = NULL;
 
 
 float zptWeight(float zpt, int updn=0){
-    if (updn == 0) return 1.;
-    if (!zptFunc) zptFunc = new TF1("zptFunc","1.14*TMath::Erf((x+4.04)/9.83)",0.,1000.);
-    return zptFunc->Eval(zpt);
+    // old one with pp MC if (updn == 0) return 1.;
+    // old one with pp MC if (!zptFunc) zptFunc = new TF1("zptFunc","1.14*TMath::Erf((x+4.04)/9.83)",0.,1000.);
+    // old one with pp MC return zptFunc->Eval(zpt);
+    if (updn == 0) return 1.0;
+
+    if (!zptFunc) zptFunc = new TF1("zptFunc","0.703302 + 0.0704182*x - 0.00294974*TMath::Power(x,2) + 0.0000307175*TMath::Power(x,3)",0.,1000.);
+    return zpt >= 45. ? zptFunc->Eval(45.) : zptFunc->Eval(zpt);
+    
 }
 
 float iso02(int pdgId, float pt, float iso02, float lep_rho){

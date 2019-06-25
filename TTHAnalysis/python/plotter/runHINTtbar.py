@@ -495,6 +495,35 @@ def compareDataPeriods():
         runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
 
 
+def dyReweighting():
+    print '=========================================='
+    print 'running DY Z-pT plots'
+    print '=========================================='
+    trees     = treedir
+    friends   = ''
+
+    fmca          = 'hin-ttbar/analysisSetup/mca_Z.txt'
+    fcut          = 'hin-ttbar/analysisSetup/cuts.txt'
+    fplots        = 'hin-ttbar/analysisSetup/plots.txt'
+    fsysts        = 'hin-ttbar/analysisSetup/systs.txt'
+
+    for iflav,flav in enumerate(['mm', 'ee']):
+        targetdir = basedir+'/zptReweighting/{date}{pf}-{flav}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav )
+
+        enable    = ['flav'+flav, 'onZ']
+        disable   = []
+        processes = ['data', 'zg', 'zg_ptZ_Up']
+        fittodata = []
+        scalethem = {}
+
+        extraopts = ' --maxRatioRange 0.5 1.5 --fixRatioRange --legendColumns 2 --plotmode=norm --ratioDen data --ratioNums data,zg,zg_ptZ_Up '#--preFitData bdt '
+
+        extraopts += ' -W 1. '
+
+        makeplots = ['dyllpt', 'dyleppt', 'dyl1pt', 'dyl2pt', 'dysphericity', 'dydphi', 'dyllm']
+        showratio = True
+        runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
+
 
 def makeZplots():
     print '=========================================='
@@ -508,10 +537,9 @@ def makeZplots():
     fplots        = 'hin-ttbar/analysisSetup/plots.txt'
     fsysts        = 'hin-ttbar/analysisSetup/systs.txt'
 
-    eff_e = 0.75
-    eff_m = 0.90
+    sf = 'trigSF[0]*lepSF[0]*lepSF[1]*lepIsoSF[0]*lepIsoSF[1]'
 
-    for iflav,flav in enumerate(['sf']):
+    for iflav,flav in enumerate(['ee','mm']):
         targetdir = basedir+'/dy_plots/{date}{pf}-{flav}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav )
 
         enable    = ['flav'+flav, 'onZ', 'centralityHi']
@@ -522,10 +550,9 @@ def makeZplots():
 
         extraopts = ' --maxRatioRange 0. 2. --fixRatioRange --legendColumns 2 --showIndivSigs ' #--plotmode=norm '#--preFitData bdt '
 
-        effscale  = eff_m**2 if flav == 'mm' else eff_e*eff_m if flav == 'em' else eff_e**2 if flav == 'ee' else (eff_e**2+eff_m**2)/2. if flav == 'sf' else -1.
-        extraopts += ' -W {eff} '.format(eff=effscale)
+        extraopts += ' -W {sf} '.format(sf=sf)
 
-        makeplots = ['dyllpt', 'dyleppt', 'dyl1pt', 'dyl2pt', 'dysphericity', 'dydphi', 'dyllm']
+        makeplots = ['dyllpt', 'dyleppt', 'dyl1pt', 'dyl2pt', 'dysphericity', 'dydphi', 'dyllm', 'l1iso02', 'l2iso02', 'lepiso02', 'l1d0', 'l2d0']
         showratio = True
         runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
 
@@ -595,7 +622,7 @@ def makeJetAnalysis():
         makeplots = [flav]
         showratio = True
 
-        runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts, newlumi=1618.5/446.9*lumi if 'onZ' in flav else 0.)
+        ##runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts, newlumi=1618.5/446.9*lumi if 'onZ' in flav else 0.)
 
         cmd_cards_base = 'python makeShapeCardsSusy.py --s2v -f -j 6 -v 3 -l {lumi} -P {tdir} {mca} {cuts} '.format(lumi=lumi if not 'onZ' in flav else 1618.5/446.9*lumi,tdir=trees,mca=fmca,cuts=fcut)
         for fitVar in fitVars:
@@ -612,7 +639,7 @@ def makeJetAnalysis():
             print 'running the cards with command'
             print '==========================================='
             print cmd_cards
-            os.system(cmd_cards)
+            ##os.system(cmd_cards)
 
             ## if flav == regions[-1]:
             ##     print 'running combine cards'
@@ -842,6 +869,7 @@ if __name__ == '__main__':
     parser.add_option('--compareData'    , action='store_true' , default=False , help='compare data periods')
     parser.add_option('--dyPlots'    , action='store_true' , default=False , help='make plots for onZ ee/mm')
     parser.add_option('--jetAnalysis'    , action='store_true' , default=False , help='make the jet analysis datacards')
+    parser.add_option('--dyReweighting'    , action='store_true' , default=False , help='make Z-pT reweighting test plots')
     (opts, args) = parser.parse_args()
 
 ## LUMI=1618.466*(1e-6)
@@ -862,7 +890,8 @@ if __name__ == '__main__':
     elif user == 'psilva':
         basedir = 'PbPb2018'
     
-    treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim27Apr/'
+    ## this is pp MC treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim27Apr/'
+    treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim19June/' ## rereco data and mixed, official MC
 
     if opts.date:
         date = opts.date
@@ -882,6 +911,9 @@ if __name__ == '__main__':
     if opts.dyPlots:
         print 'plotting jet related variables'
         makeZplots()
+    if opts.dyReweighting:
+        print 'plotting some control plots for dy pT reweighting'
+        dyReweighting()
     if opts.compareData:
         print 'Comparing data periods'
         compareDataPeriods()

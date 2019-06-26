@@ -20,9 +20,12 @@ leponZmm  : abs(lep_pdgId[0]*lep_pdgId[1]) == 169               && abs(llm-91.)<
 
 blind : !(lep_pdgId[0]*lep_pdgId[1] == 143 && lep_charge[0]*lep_charge[1] < 0 && abs(llm-91.)<15. && run >=326887) ; Disable=True
 
-0b : Sum$(deltaR(lep_eta[0],lep_phi[0],bjet_eta,bjet_phi)>0.3 && deltaR(lep_eta[1],lep_phi[1],bjet_eta,bjet_phi)>0.3 && bjet_csvv2 > 0.92) == 0 ; Disable=True
-1b : Sum$(deltaR(lep_eta[0],lep_phi[0],bjet_eta,bjet_phi)>0.3 && deltaR(lep_eta[1],lep_phi[1],bjet_eta,bjet_phi)>0.3 && bjet_csvv2 > 0.92) == 1 ; Disable=True
-2b : Sum$(deltaR(lep_eta[0],lep_phi[0],bjet_eta,bjet_phi)>0.3 && deltaR(lep_eta[1],lep_phi[1],bjet_eta,bjet_phi)>0.3 && bjet_csvv2 > 0.92) == 2 ; Disable=True
+##0b : Sum$(deltaR(lep_eta[0],lep_phi[0],bjet_eta,bjet_phi)>0.3 && deltaR(lep_eta[1],lep_phi[1],bjet_eta,bjet_phi)>0.3 && bjet_csvv2 > 0.92) == 0 ; Disable=True
+##1b : Sum$(deltaR(lep_eta[0],lep_phi[0],bjet_eta,bjet_phi)>0.3 && deltaR(lep_eta[1],lep_phi[1],bjet_eta,bjet_phi)>0.3 && bjet_csvv2 > 0.92) == 1 ; Disable=True
+##2b : Sum$(deltaR(lep_eta[0],lep_phi[0],bjet_eta,bjet_phi)>0.3 && deltaR(lep_eta[1],lep_phi[1],bjet_eta,bjet_phi)>0.3 && bjet_csvv2 > 0.92) == 2 ; Disable=True
+0b : nbjet_sel == 0 ; Disable=True
+1b : nbjet_sel == 1 ; Disable=True
+2b : nbjet_sel == 2 ; Disable=True
 
 ## then need all the flavor,charge,mass combinations 
 ## separately for the plotting of jet variables

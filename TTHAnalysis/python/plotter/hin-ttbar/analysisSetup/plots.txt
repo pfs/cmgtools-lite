@@ -6,12 +6,15 @@ distance100  : getAvgDistance(llpt,abs(dphi),abs(lleta),abs(lep_eta[0]+lep_eta[1
 #distance200  : getAvgDistance(llpt,abs(dphi),abs(lleta),abs(lep_eta[0]+lep_eta[1]),lep_pt[0],200)  : 10,0.,5.; XTitle="d_{200}"
 #distance500  : getAvgDistance(llpt,abs(dphi),abs(lleta),abs(lep_eta[0]+lep_eta[1]),lep_pt[0],500)  : 10,0.,5.; XTitle="d_{500}"
 
+nbjets   : nbjet_sel : 4,-0.5,3.5 ; XTitle='n_{b-tagged}', Logy=True, Legend='TR'
+##njets    : Sum$(bjet_drSafe > 0.5)                      : 8,-0.5,7.5 ; XTitle='n_{jets}', Logy=True, Legend='TR'
+
 ## nbjets   : Sum$(bjet_drSafe > 0.5 && bjet_csvv2 > 0.92) : 4,-0.5,3.5 ; XTitle='n_{b-tagged}', Logy=True, Legend='TR'
 ## njets    : Sum$(bjet_drSafe > 0.5)                      : 8,-0.5,7.5 ; XTitle='n_{jets}', Logy=True, Legend='TR'
 
 jetpt : bjet_pt : 50,20,170 ; XTitle='p_{T} of jets'
-nbjets   : Sum$(deltaR(lep_eta[0],lep_phi[0],bjet_eta,bjet_phi)>0.3 && deltaR(lep_eta[1],lep_phi[1],bjet_eta,bjet_phi)>0.3 && bjet_csvv2 > 0.92) : 4,-0.5,3.5 ; XTitle='n_{b-tagged}', Logy=True, Legend='TR'
-njets    : Sum$(deltaR(lep_eta[0],lep_phi[0],bjet_eta,bjet_phi)>0.3 && deltaR(lep_eta[1],lep_phi[1],bjet_eta,bjet_phi)>0.3 ) : 8,-0.5,7.5 ; XTitle='n_{jets}', Logy=True, Legend='TR'
+## nbjets   : Sum$(deltaR(lep_eta[0],lep_phi[0],bjet_eta,bjet_phi)>0.3 && deltaR(lep_eta[1],lep_phi[1],bjet_eta,bjet_phi)>0.3 && bjet_csvv2 > 0.92) : 4,-0.5,3.5 ; XTitle='n_{b-tagged}', Logy=True, Legend='TR'
+## njets    : Sum$(deltaR(lep_eta[0],lep_phi[0],bjet_eta,bjet_phi)>0.3 && deltaR(lep_eta[1],lep_phi[1],bjet_eta,bjet_phi)>0.3 ) : 8,-0.5,7.5 ; XTitle='n_{jets}', Logy=True, Legend='TR'
 
 l1d0       : abs(lep_d0[0])                  : 10,0.,0.025  ; XTitle='d_{0} (l1)'
 l2d0       : abs(lep_d0[1])                  : 10,0.,0.025  ; XTitle='d_{0} (l2)'
@@ -60,5 +63,41 @@ dyl1pt       : lep_pt[0]                                         : 25,20.,120. ;
 dyl2pt       : lep_pt[1]                                         : 25,20.,120. ; XTitle='p_{T}^{l2}'
 dysphericity : llpt/(lep_pt[0]+lep_pt[1])                        : 25,0.,1.    ; XTitle='sphericity'
 dydphi       : abs(dphi)                                         : 25,0.,3.142 ; XTitle='#Delta #phi_{ll}'
+
+leponZmmmll : llm : 30, 76., 106. ; XTitle='m_{#mu#mu}'
+leponZeemll : llm : 30, 76., 106. ; XTitle='m_{ee}'
+
+mtll      : mt_2(lep_pt[0],lep_phi[0],lep_pt[1],lep_phi[1])     : 10,0.,150.  ; XTitle='m_{T} (ll)'
+bdt       : bdt                                                 : 10,-1.,1.   ; XTitle='bdt discr.'
+bdtrarity : bdtrarity                                           : 10,0.,1.    ; XTitle='bdt discr. (rarity)'
+fisher2   : fisher2                                             : 10,-1.,1.   ; XTitle='fisher discriminant'
+l1pt      : lep_pt[0]                                           : 10,20.,120. ; XTitle='p_{T}^{l1}'
+l2pt      : lep_pt[1]                                           : 10,20.,120. ; XTitle='p_{T}^{l2}'
+l1eta     : lep_eta[0]                                          : 10,-2.5,2.5 ; XTitle='#eta^{l1}'
+l2eta     : lep_eta[1]                                          : 10,-2.5,2.5 ; XTitle='#eta^{l2}'
+lepeta    : lep_eta                                             : 10,-2.5,2.5 ; XTitle='both lepton etas'
+dphi      : abs(dphi)                                           : 10,0.,3.142 ; XTitle='#Delta #phi_{ll}'
+acoplan   : 1.-abs(dphi)/TMath::Pi()                            : 10,0.,1.    ; XTitle='1.-|#Delta#phi(ll)|/#pi'
+lldr      : deltaR(lep_eta[0],lep_phi[0],lep_eta[1],lep_phi[1]) : 10,0.,5.    ; XTitle='#DeltaR_{ll}', Legend="TL"
+lldeta    : abs(lep_eta[0]-lep_eta[1])                          : 10,0.,5.    ; XTitle='#Delta#eta(ll)'
+llpt      : llpt                                                : 10,0.,150.  ; XTitle='p_{T}^{ll}'
+sphericity      : llpt/(lep_pt[0]+lep_pt[1])                    : 10,0.,1.    ; XTitle='sphericity'
+lleta     : abs(lleta)                                          : 10,0.,5.    ; XTitle='#eta^{ll}'
+llrap     : abs(rapidity_2(lep_pt[0],lep_eta[0],lep_phi[0],lep_pt[1],lep_eta[1],lep_phi[1]))  : 25,0.,3.    ; XTitle='y(ll)'
+apt       : apt                                                 : 10,0.,1.    ; XTitle='A_{pT}'
+sumabseta : abs(lep_eta[0])+abs(lep_eta[1])                     : 10,0.,5.    ; XTitle='|#eta_{l1}|+|#eta_{l2}|'
+prodeta   : lep_eta[0]*lep_eta[1]                               : 10,-5.,5.   ; XTitle='#eta(l1)*#eta(l2)'
+
+dyllpt       : llpt                                              : 25,0.,150.  ; XTitle='p_{T}^{ll}'
+dyllm        : llm                                               : 25,70.,120. ; XTitle='m_{ll}'
+dyleppt      : lep_pt                                            : 25,20.,120. ; XTitle='p_{T}^{l1}'
+dyl1pt       : lep_pt[0]                                         : 25,20.,120. ; XTitle='p_{T}^{l1}'
+dyl2pt       : lep_pt[1]                                         : 25,20.,120. ; XTitle='p_{T}^{l2}'
+dysphericity : llpt/(lep_pt[0]+lep_pt[1])                        : 25,0.,1.    ; XTitle='sphericity'
+dydphi       : abs(dphi)                                         : 25,0.,3.142 ; XTitle='#Delta #phi_{ll}'
+
+leponZmmml : llm 
+
+nunmatched : lep_matched[0] < 0.5 || lep_matched[1] < 0.5   : 2,-0.5,1.5 ; XTitle='lep1 or lep2 unmatched'
 
 nunmatched : lep_matched[0] < 0.5 || lep_matched[1] < 0.5   : 2,-0.5,1.5 ; XTitle='lep1 or lep2 unmatched'

@@ -138,8 +138,10 @@ def runplots(trees, friends, targetdir, fmca, fcut, fplots, enabledcuts, disable
         cmd += ' '+extraopts
 
     if not submitit:
+        print '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n'
         print 'running: python', cmd
         subprocess.call(['python']+cmd.split())#+['/dev/null'],stderr=subprocess.PIPE)
+        print '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n'
     elif submitit == 'return':
         return 'python '+cmd
     else:
@@ -189,8 +191,7 @@ def plotJetVariables(replot):
 
     jetvars = ['nbjets']#, 'njets']
 
-    eff_e = 0.75
-    eff_m = 0.90
+    sf = 'ncollWgt*trigSF[0]*lepSF[0]*lepSF[1]*lepIsoSF[0]*lepIsoSF[1]'
 
     for flav,mass in itertools.product(['flavmm', 'flavee', 'flavem'],['onZ','offZ']):
         targetdir = basedir+'/jetPlots/{date}{pf}/{flav}_{mass}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav, mass=mass )
@@ -199,9 +200,7 @@ def plotJetVariables(replot):
     
         extraopts = ' --maxRatioRange 0. 2. --fixRatioRange --legendColumns 2 --showIndivSigs ' #--plotmode=norm '#--preFitData bdt '
 
-        ## reweight by hand to expected efficiency for isolation!
-        effscale  = eff_m**2 if 'mm' in flav else eff_e*eff_m if 'em' in flav else eff_e**2
-        extraopts += ' -W {eff} '.format(eff=effscale)
+        extraopts += ' -W {sfs} '.format(sfs=sf)
 
         makeplots = jetvars
         showratio = True
@@ -537,12 +536,12 @@ def makeZplots():
     fplots        = 'hin-ttbar/analysisSetup/plots.txt'
     fsysts        = 'hin-ttbar/analysisSetup/systs.txt'
 
-    sf = 'trigSF[0]*lepSF[0]*lepSF[1]*lepIsoSF[0]*lepIsoSF[1]'
+    sf = 'ncollWgt*trigSF[0]*lepSF[0]*lepSF[1]*lepIsoSF[0]*lepIsoSF[1]'
 
-    for iflav,flav in enumerate(['ee','mm']):
+    for iflav,flav in enumerate(['ee']):
         targetdir = basedir+'/dy_plots/{date}{pf}-{flav}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav )
 
-        enable    = ['flav'+flav, 'onZ', 'centralityHi']
+        enable    = ['flav'+flav, 'onZ']
         disable   = []
         processes = []
         fittodata = []
@@ -552,9 +551,13 @@ def makeZplots():
 
         extraopts += ' -W {sf} '.format(sf=sf)
 
-        makeplots = ['dyllpt', 'dyleppt', 'dyl1pt', 'dyl2pt', 'dysphericity', 'dydphi', 'dyllm', 'l1iso02', 'l2iso02', 'lepiso02', 'l1d0', 'l2d0']
+        makeplots = ['nleptons', 'l1iso02', 'l2iso02', 'dyllpt', 'dyleppt', 'dyl1pt', 'dyl2pt', 'dysphericity', 'dydphi', 'dyllm', 'lepiso02', 'l1d0', 'l2d0']
         showratio = True
-        runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
+
+        unblinded = 1618.5 - (0. if 'ee' in flav else 30.103)
+        unblinded = unblinded*1e-9
+
+        runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts, newlumi=unblinded)
 
 def makeJetAnalysis():
     print '=========================================='
@@ -569,40 +572,64 @@ def makeJetAnalysis():
     fsysts = 'hin-ttbar/analysisSetup/systs.txt'
 
     nbinsForFit = 3
-    fitVars = [ ('sphericity'  , '\'llpt/(lep_pt[0]+lep_pt[1])\' {n},0.,1.'.format(n=nbinsForFit)) ]
+    ## fitVars = [ ('sphericity'  , '\'llpt/(lep_pt[0]+lep_pt[1])\' {n},0.,1.'.format(n=nbinsForFit)) ]
+    fitVars = [('bdt'         , '\'bdtrarity\'                      {n},0.,1.'.format(n=nbinsForFit))]
 
-    eff_e = 0.75
-    eff_m = 0.90
+    sf = 'ncollWgt*trigSF[0]*lepSF[0]*lepSF[1]*lepIsoSF[0]*lepIsoSF[1]'
 
     regions = ['0b_ee', '1b_ee', '2b_ee',
                '0b_mm', '1b_mm', '2b_mm',
                '0b_em', '1b_em', '2b_em']
-## ========================================
-##  the overall scaling is 0.0322374207729
-## THIS IS THE SCALING PER BIN IN nbjets FOR  mm
-## bincenter 0.0: scaling is 443.286/456.153 = 0.972
-## bincenter 1.0: scaling is 13.668/1.184 = 11.545
-## bincenter 2.0: scaling is 0.400/0.049 = 8.126
-## bincenter 3.0: scaling is 0.032/0.000 = -1.000
+## old ========================================
+## old  the overall scaling is 0.0322374207729
+## old THIS IS THE SCALING PER BIN IN nbjets FOR  mm
+## old bincenter 0.0: scaling is 443.286/456.153 = 0.972
+## old bincenter 1.0: scaling is 13.668/1.184 = 11.545
+## old bincenter 2.0: scaling is 0.400/0.049 = 8.126
+## old bincenter 3.0: scaling is 0.032/0.000 = -1.000
+## old 
+## new ========================================
+## new  the overall scaling is 0.0249785192128
+## new THIS IS THE SCALING PER BIN IN nbjets FOR  mm
+## new bincenter 0.0: scaling is 317.954/313.643 = 1.014
+## new bincenter 1.0: scaling is 9.384/13.270 = 0.707
+## new bincenter 2.0: scaling is 0.367/0.698 = 0.526
+## new bincenter 3.0: scaling is 0.025/0.119 = 0.210
+## old ========================================
+## old  the overall scaling is 0.0337666630852
+## old THIS IS THE SCALING PER BIN IN nbjets FOR  ee
+## old bincenter 0.0: scaling is 199.122/205.087 = 0.971
+## old bincenter 1.0: scaling is 6.551/0.646 = 10.134
+## old bincenter 2.0: scaling is 0.075/0.014 = 5.238
+## old bincenter 3.0: scaling is -0.000/0.000 = -1.000
 ## 
-## ========================================
-##  the overall scaling is 0.0337666630852
-## THIS IS THE SCALING PER BIN IN nbjets FOR  ee
-## bincenter 0.0: scaling is 199.122/205.087 = 0.971
-## bincenter 1.0: scaling is 6.551/0.646 = 10.134
-## bincenter 2.0: scaling is 0.075/0.014 = 5.238
-## bincenter 3.0: scaling is -0.000/0.000 = -1.000
-## 
-## ========================================
-##  the overall scaling is 0.0627764709195
-## THIS IS THE SCALING PER BIN IN nbjets FOR  em
-## bincenter 0.0: scaling is 27.828/20.202 = 1.377
-## bincenter 1.0: scaling is 0.858/0.083 = 10.400
-## bincenter 2.0: scaling is 0.025/0.000 = -1.000
-## bincenter 3.0: scaling is 0.002/0.000 = -1.000
-    zscaling ={'0b_ee': 0.971, '1b_ee': 10.31, '2b_ee': 5.238,
-               '0b_mm': 0.972, '1b_mm': 11.55, '2b_mm': 8.126,
-               '0b_em': 1.377, '1b_em': 10.40, '2b_em': 0.000 }
+## new  the overall scaling is 0.02036707889
+## new THIS IS THE SCALING PER BIN IN nbjets FOR  ee
+## new bincenter 0.0: scaling is 107.906/108.894 = 0.991
+## new bincenter 1.0: scaling is 6.242/5.255 = 1.188
+## new bincenter 2.0: scaling is 0.191/0.161 = 1.187
+## new bincenter 3.0: scaling is -0.001/0.029 = -0.017
+
+## old ========================================
+## old  the overall scaling is 0.0627764709195
+## old THIS IS THE SCALING PER BIN IN nbjets FOR  em
+## old bincenter 0.0: scaling is 27.828/20.202 = 1.377
+## old bincenter 1.0: scaling is 0.858/0.083 = 10.400
+## old bincenter 2.0: scaling is 0.025/0.000 = -1.000
+## old bincenter 3.0: scaling is 0.002/0.000 = -1.000
+## new ========================================
+## new  the overall scaling is 0.0531295623779
+## new THIS IS THE SCALING PER BIN IN nbjets FOR  em
+## new bincenter 0.0: scaling is 16.893/12.183 = 1.387
+## new bincenter 1.0: scaling is 0.499/0.791 = 0.630
+## new bincenter 2.0: scaling is 0.019/0.044 = 0.445
+## new bincenter 3.0: scaling is 0.001/0.000 = -1.000
+    ## old zscaling ={'0b_ee': 0.971, '1b_ee': 10.31, '2b_ee': 5.238,
+    ## old            '0b_mm': 0.972, '1b_mm': 11.55, '2b_mm': 8.126,
+    ## old            '0b_em': 1.377, '1b_em': 10.40, '2b_em': 0.000 }
+    zscaling ={'0b_ee': 0.991, '1b_ee': 1.188, '2b_ee': 1.187,
+               '0b_mm': 1.014, '1b_mm': 0.707, '2b_mm': 0.526,
+               '0b_em': 1.387, '1b_em': 0.630, '2b_em': 0.445 }
 
 
     for iflav,flav in enumerate(regions):
@@ -616,19 +643,18 @@ def makeJetAnalysis():
 
         extraopts = ' --maxRatioRange 0. 2. --fixRatioRange --legendColumns 2 --showIndivSigs ' #--plotmode=norm '#--preFitData bdt '
 
-        effscale  = eff_m**2 if 'mm' in flav else eff_e*eff_m if 'em' in flav else eff_e**2
-        extraopts += ' -W {eff} '.format(eff=effscale)
+        extraopts += ' -W {sfs} '.format(sfs=sf)
 
         makeplots = [flav]
         showratio = True
 
         ##runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts, newlumi=1618.5/446.9*lumi if 'onZ' in flav else 0.)
 
-        cmd_cards_base = 'python makeShapeCardsSusy.py --s2v -f -j 6 -v 3 -l {lumi} -P {tdir} {mca} {cuts} '.format(lumi=lumi if not 'onZ' in flav else 1618.5/446.9*lumi,tdir=trees,mca=fmca,cuts=fcut)
+        cmd_cards_base = 'python makeShapeCards.py --s2v -f -j 6 -v 3 -l {lumi} -P {tdir} {mca} {cuts} '.format(lumi=lumi if not 'onZ' in flav else 1618.5/446.9*lumi,tdir=trees,mca=fmca,cuts=fcut)
         for fitVar in fitVars:
             outdirCards = 'hin-ttbar/datacards_{date}_{pf}/{fitVarName}/'.format(date=date, pf=postfix,fitVarName=fitVar[0])
 
-            cmd_cards  = cmd_cards_base + ' -W {scale} '.format(scale=effscale)
+            cmd_cards  = cmd_cards_base + ' -W {sfs} '.format(sfs=sf)
             cmd_cards += ' --od {od} '                  .format(od=outdirCards)
             cmd_cards += ' -o {flav} '                  .format(flav=flav)
             cmd_cards += ' '.join([' -E ^'+i+' ' for i in flav.split('_')])
@@ -639,7 +665,7 @@ def makeJetAnalysis():
             print 'running the cards with command'
             print '==========================================='
             print cmd_cards
-            ##os.system(cmd_cards)
+            os.system(cmd_cards)
 
             ## if flav == regions[-1]:
             ##     print 'running combine cards'
@@ -702,10 +728,9 @@ def makeCards():
                ('sphericity'  , '\'llpt/(lep_pt[0]+lep_pt[1])\' {n},0.,1.'.format(n=nbinsForFit)),
               ]
 
-    eff_e = 0.75
-    eff_m = 0.90
+    regions = ['ee', 'mm', 'em']#, 'leponZee', 'leponZmm']
 
-    regions = ['ee', 'mm', 'em', 'leponZee', 'leponZmm']
+    sf = 'ncollWgt*trigSF[0]*lepSF[0]*lepSF[1]*lepIsoSF[0]*lepIsoSF[1]'
 
     for iflav,flav in enumerate(regions):
         targetdir = basedir+'/card_inputs/{date}{pf}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav )
@@ -718,19 +743,28 @@ def makeCards():
 
         extraopts = ' --maxRatioRange 0. 2. --fixRatioRange --legendColumns 2 --showIndivSigs ' #--plotmode=norm '#--preFitData bdt '
 
-        effscale  = eff_m**2 if 'mm' in flav else eff_e*eff_m if 'em' in flav else eff_e**2
-        extraopts += ' -W {eff} '.format(eff=effscale)
+        extraopts += ' -W {sfs} '.format(sfs=sf)
 
-        makeplots = [flav+'mll' if 'onZ' in flav else flav+x[0] for x in fitVars]
+        if 'onZ' in flav:
+            makeplots = [flav+'mll']
+        else:
+            makeplots = [flav+x[0] for x in fitVars]
+
         showratio = True
 
-        runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts, newlumi=1618.5/446.9*lumi if 'onZ' in flav else 0.)
+        fs_lumi = 446.931*1e-9
+        if 'onZ' in flav:
+            fs_lumi = fs_lumi*1618.5/446.9
+        if 'mm' in flav:
+            fs_lumi = fs_lumi - 30.103*1e-9
 
-        cmd_cards_base = 'python makeShapeCards.py --s2v -f -j 6 -v 3 -l {lumi} -P {tdir} {mca} {cuts} '.format(lumi=lumi if not 'onZ' in flav else 1618.5/446.9*lumi,tdir=trees,mca=fmca,cuts=fcut)
+        runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts, newlumi=fs_lumi)
+
+        cmd_cards_base = 'python makeShapeCards.py --s2v -f -j 6 -v 3 -l {lumi} -P {tdir} {mca} {cuts} '.format(lumi=fs_lumi,tdir=trees,mca=fmca,cuts=fcut)
         for fitVar in fitVars:
             outdirCards = 'hin-ttbar/datacards_{date}_{pf}/{fitVarName}/'.format(date=date, pf=postfix,fitVarName=fitVar[0])
 
-            cmd_cards  = cmd_cards_base + ' -W {scale} '.format(scale=effscale)
+            cmd_cards  = cmd_cards_base + ' -W {sfs} '.format(sfs=sf)
             cmd_cards += ' --od {od} '                  .format(od=outdirCards)
             cmd_cards += ' -E ^{flav} -o {flav} '       .format(flav=flav)
 
@@ -762,7 +796,7 @@ def makeCards():
                 os.system('cp {f} {f}.tmp'.format(f=f_card_allFlavors))
 
                 with open(f_card_allFlavors, 'a') as tmp_file:
-                    tmp_file.write('theory      group = alphaS muR muF muRmuF ' + ' '.join('pdf'+str(x) for x in range(1,101)) +'\n')
+                    tmp_file.write('theory      group = muR muF muRmuF ') # alphaS + ' '.join('pdf'+str(x) for x in range(1,101)) +'\n')
                     tmp_file.write('ptModel     group = ptTop ptZ \n')  
                     tmp_file.write('topMass     group = mTop \n')  
                     tmp_file.write('luminosity  group = lumi \n')  
@@ -891,7 +925,7 @@ if __name__ == '__main__':
         basedir = 'PbPb2018'
     
     ## this is pp MC treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim27Apr/'
-    treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim19June/' ## rereco data and mixed, official MC
+    treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim21June/' ## rereco data and mixed, official MC
 
     if opts.date:
         date = opts.date

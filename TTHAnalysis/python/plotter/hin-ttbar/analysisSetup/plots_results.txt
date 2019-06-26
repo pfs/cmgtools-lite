@@ -6,5 +6,5 @@ embdt        : bdtrarity                   : 10,0.,1.    ; XTitle='bdt discr. (e
 mmbdt        : bdtrarity                   : 10,0.,1.    ; XTitle='bdt discr. (#mu#mu)'
 eebdt        : bdtrarity                   : 10,0.,1.    ; XTitle='bdt discr. (ee)'
 
-onZeemll     : llm                         : 30,76.,106. ; XTitle='m_{ee}'
-onZmmmll     : llm                         : 30,76.,106. ; XTitle='m_{#mu#mu}'
+leponZeemll  : llm                         : 30,76.,106. ; XTitle='m_{ee}'
+leponZmmmll  : llm                         : 30,76.,106. ; XTitle='m_{#mu#mu}'

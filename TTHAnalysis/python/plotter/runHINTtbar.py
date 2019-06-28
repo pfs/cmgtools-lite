@@ -158,7 +158,9 @@ def compareCombBackgrounds():
     fcut          = 'hin-ttbar/analysisSetup/cuts.txt'
     fplots        = 'hin-ttbar/analysisSetup/plots.txt'
 
-    for flav in ['ee']:
+    sf = 'ncollWgt*trigSF[0]*lepSF[0]*lepSF[1]*lepIsoSF[0]*lepIsoSF[1]'
+
+    for flav in ['ee', 'mm', 'em']:
         targetdir = basedir+'/combinatorialBackground/{date}{pf}-{flav}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav )
 
         enable    = [flav]
@@ -167,8 +169,10 @@ def compareCombBackgrounds():
         fittodata = []
         scalethem = {}
 
-        extraopts = ' --maxRatioRange 0. 2. --fixRatioRange --plotmode=norm --showRatio --ratioNums W,data_comb,ttbar --ratioDen data_comb '#--preFitData bdt '
-        makeplots = []
+        extraopts = ' --maxRatioRange 0. 2. --fixRatioRange --plotmode=nostack --showRatio --ratioNums W,data_comb,ttbarSS --ratioDen data_comb '#--preFitData bdt '
+        extraopts += ' -W {sfs} '.format(sfs=sf)
+
+        makeplots = ['bdtrarity', 'sphericity']
         showratio = True
         runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
 

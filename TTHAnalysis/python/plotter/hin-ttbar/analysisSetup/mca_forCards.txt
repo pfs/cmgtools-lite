@@ -20,6 +20,7 @@ tW           : ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5_HydjetDrumMB_5p02TeV-p
 VV           : ZZTo4L_HydjetDrumMB_5p02TeV_powheg_pythia8                       : 0.441*(208**2) : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kAzure-5, Label="VV"
 
 data_comb    : SkimElectrons_04Apr2019-v1+SkimMuons_04Apr2019-v1  : lep_charge[0]*lep_charge[1]>0 ; FillColor=17, Label="comb. (data)", AddWeight="446./1618."
+#wjets : WJetsToLNu_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8 : 21159*(208**2)*0.5 : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kAzure+1, Label="W (MC)"
 
 data         : SkimElectrons_04Apr2019-v1+SkimMuons_04Apr2019-v1  : lep_charge[0]*lep_charge[1]<0 ; 
 

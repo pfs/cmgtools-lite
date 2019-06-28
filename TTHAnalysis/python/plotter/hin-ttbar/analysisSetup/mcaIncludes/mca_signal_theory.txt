@@ -1,21 +1,18 @@
-# vim: syntax=sh
-* ; TreeName="treeProducerHIN"
+ttbar_ptTop_Up  : TTJets_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[0]"  , Label="top p_{T} up"         , SkipMe=True
+ttbar_ptTop_Dn  : TTJets_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[1]"  , Label="top p_{T} dn"         , SkipMe=True
 
-ttbar_ptTop_Up  : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[0]"  , Label="top p_{T} up"         , SkipMe=True
-ttbar_ptTop_Dn  : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[1]"  , Label="top p_{T} dn"         , SkipMe=True
+ttbar_mTop_Up   : TTJets_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[2]"  , Label="\#Deltam=+1GeV"       , SkipMe=True
+ttbar_mTop_Dn   : TTJets_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[3]"  , Label="\#Deltam=-1GeV"       , SkipMe=True
 
-ttbar_mTop_Up   : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[2]"  , Label="\#Deltam=+1GeV"       , SkipMe=True
-ttbar_mTop_Dn   : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[3]"  , Label="\#Deltam=-1GeV"       , SkipMe=True
+ttbar_muF_Up    : TTJets_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[5]"  , Label="2\#mu_{F}"            , SkipMe=True
+ttbar_muF_Dn    : TTJets_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[6]"  , Label="\#mu_{F}/2"           , SkipMe=True
 
-ttbar_muF_Up    : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[5]"  , Label="2\#mu_{F}"            , SkipMe=True
-ttbar_muF_Dn    : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[6]"  , Label="\#mu_{F}/2"           , SkipMe=True
+ttbar_muR_Up    : TTJets_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[7]"  , Label="2\#mu_{R}"            , SkipMe=True
+ttbar_muR_Dn    : TTJets_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[9]"  , Label="\#mu_{R}/2"           , SkipMe=True
 
-ttbar_muR_Up    : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[7]"  , Label="2\#mu_{R}"            , SkipMe=True
-ttbar_muR_Dn    : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[9]"  , Label="\#mu_{R}/2"           , SkipMe=True
+ttbar_muRmuF_Up : TTJets_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[8]"  , Label="2\#mu_{F}/2\#mu_{R}"  , SkipMe=True
+ttbar_muRmuF_Dn : TTJets_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[10]" , Label="\#mu_{F}/2/\#mu_{R}/2", SkipMe=True
 
-ttbar_muRmuF_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[8]"  , Label="2\#mu_{F}/2\#mu_{R}"  , SkipMe=True
-ttbar_muRmuF_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[10]" , Label="\#mu_{F}/2/\#mu_{R}/2", SkipMe=True
-
-#ttbar_alphaS_Up : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[112]", Label="\#alpha_{S}=0.117"    , SkipMe=True
-#ttbar_alphaS_Dn : TT_TuneCP5_5p02TeV-powheg-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[113]", Label="\#alpha_{S}=0.119"    , SkipMe=True
+#ttbar_alphaS_Up : TTJets_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[112]", Label="\#alpha_{S}=0.117"    , SkipMe=True
+#ttbar_alphaS_Dn : TTJets_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="meWeights[113]", Label="\#alpha_{S}=0.119"    , SkipMe=True
 

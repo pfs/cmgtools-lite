@@ -391,6 +391,13 @@ def doRatioHists(pspec,pmap,total,maxRange,fixRange=False,fitRatio=None,errorsOn
             total     = pmap[ratioDen]
         else:    
             return (None,None,None,None)
+    else:
+        if ratioDen != "background":
+            total = pmap[ratioDen]
+            for p in pmap.iterkeys():
+                for s in ratioNums.split(","):
+                    if re.match(s,p): 
+                        numkeys.append(p)
     ratios = [] #None
     for numkey in numkeys:
         if hasattr(pmap[numkey], 'poissonGraph'):

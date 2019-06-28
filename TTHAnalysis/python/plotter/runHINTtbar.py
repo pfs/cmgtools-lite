@@ -138,7 +138,7 @@ def runplots(trees, friends, targetdir, fmca, fcut, fplots, enabledcuts, disable
         cmd += ' '+extraopts
 
     if not submitit:
-        print '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n'
+        print '\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
         print 'running: python', cmd
         subprocess.call(['python']+cmd.split())#+['/dev/null'],stderr=subprocess.PIPE)
         print '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n'
@@ -433,26 +433,27 @@ def compareSignals():
     fcut          = 'hin-ttbar/analysisSetup/cuts.txt'
     fplots        = 'hin-ttbar/analysisSetup/plots.txt'
 
-    flavs=['em', 'ee', 'mm']
+    flavs=['mm']
     for iflav,flav in enumerate(flavs):
         targetdir = basedir+'/signalComparison/{date}{pf}-{flav}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav )
         enable    = [flav]
         disable   = []
-        processes = ['ttbar', 'ttEmbedded', 'bjetQCD']
+        processes = ['ttbar', 'ttPowheg', 'ttnCTEQ', 'ttpdf1']
         fittodata = []
         scalethem = {}
 
-        extraopts = ' --maxRatioRange 0. 2. --fixRatioRange --legendColumns 2 --showIndivSigs --plotmode=norm --ratioDen ttbar --ratioNums ttbar,ttEmbedded '
-        makeplots = []
+        extraopts = ' --maxRatioRange 0. 2. --fixRatioRange --legendColumns 2  --plotmode=nostack --ratioDen ttbar --ratioNums ttbar,ttPowheg,ttnCTEQ,ttpdf1 '
+        makeplots = ['bdtrarity', 'sphericity']
         showratio = True
         runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
 
 
     #a comparison of the nominal shape with different systematics
-    systList=[('pttop','ttbar_ptup,ttbar_ptdn'),
-              ('mtop','ttbar_mup,ttbar_mdn'),
-              ('qcdscale','ttbar_ufup,ttbar_ufdn,ttbar_urup,ttbar_ufdn,ttbar_urufup,ttbar_urufdn'),
-              ('alphaS', 'ttbar_asup,ttbar_asdn')
+    systList=[('pttop','ttptup,ttptdn'),
+              ('mtop','ttmup,ttmdn'),
+              ('qcdscale','ttmufup,ttmufdn,ttmurup,ttmufdn,ttmurufup,ttmurufdn'),
+              #('alphaS', 'ttbar_asup,ttbar_asdn')
+              ('pdf','ttpdf1,ttpdf42,ttnCTEQ'),
               ]
     for flav,syst in itertools.product(flavs,systList):
         sname,num=syst
@@ -462,7 +463,7 @@ def compareSignals():
         processes = ['ttbar']+num.split(',')
         fittodata = []
         scalethem = {}
-        extraopts = ' --maxRatioRange 0.9 1.1 --fixRatioRange --legendColumns 2 --showIndivSigs --plotmode=norm --ratioDen ttbar --ratioNums %s'%num
+        extraopts = ' --maxRatioRange 0.9 1.1 --fixRatioRange --legendColumns 2 --showIndivSigs --plotmode=nostack --ratioDen ttbar --ratioNums %s'%num
         makeplots = ['llpt','sphericity','bdt','bdtrarity']
         showratio = True
         runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)

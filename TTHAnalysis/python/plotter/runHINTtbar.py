@@ -433,6 +433,8 @@ def compareSignals():
     fcut          = 'hin-ttbar/analysisSetup/cuts.txt'
     fplots        = 'hin-ttbar/analysisSetup/plots.txt'
 
+    sf = 'ncollWgt*trigSF[0]*lepSF[0]*lepSF[1]*lepIsoSF[0]*lepIsoSF[1]'
+
     flavs=['mm']
     for iflav,flav in enumerate(flavs):
         targetdir = basedir+'/signalComparison/{date}{pf}-{flav}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav )
@@ -443,6 +445,8 @@ def compareSignals():
         scalethem = {}
 
         extraopts = ' --maxRatioRange 0. 2. --fixRatioRange --legendColumns 2  --plotmode=nostack --ratioDen ttbar --ratioNums ttbar,ttPowheg,ttnCTEQ,ttpdf1 '
+        extraopts += ' -W {sfs} '.format(sfs=sf)
+
         makeplots = ['bdtrarity', 'sphericity']
         showratio = True
         runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
@@ -463,7 +467,10 @@ def compareSignals():
         processes = ['ttbar']+num.split(',')
         fittodata = []
         scalethem = {}
+
         extraopts = ' --maxRatioRange 0.9 1.1 --fixRatioRange --legendColumns 2 --showIndivSigs --plotmode=nostack --ratioDen ttbar --ratioNums %s'%num
+        extraopts += ' -W {sfs} '.format(sfs=sf)
+
         makeplots = ['llpt','sphericity','bdt','bdtrarity']
         showratio = True
         runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)

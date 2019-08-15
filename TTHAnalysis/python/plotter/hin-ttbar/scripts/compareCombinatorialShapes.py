@@ -33,11 +33,12 @@ def getShapeVars(target,kfact,name):
     return vars,gr
 
 
-dir='/eos/user/p/psilva/www/HIN-19-001/combinatorialBackground/2019-05-22'
+dir='/eos/user/p/psilva/www/HIN-19-001/combinatorialBackground/2019-06-28'
 if len(sys.argv)>1 : dir=sys.argv[1]
 
 ROOT.gStyle.SetOptStat(0)
 ROOT.gStyle.SetOptTitle(0)
+ROOT.gROOT.SetBatch(True)
 c=ROOT.TCanvas('c','c',500,500)
 c.SetTopMargin(0.05)
 c.SetLeftMargin(0.12)
@@ -50,8 +51,9 @@ for v in ['sphericity','bdt','bdtrarity']:
         dists={}
         for i in ['','-noiso']:
             fIn=ROOT.TFile.Open(dir+'-{flav}{iso}/{var}/{flav}.input.root'.format(flav=f,iso=i,var=v))
-            for p in ['data_mix','data','W','data_mix_syst']:
+            for p in ['data_mix','data','W','data_mix_syst','tbartsig']:
                 dists[(p,i)]=fIn.Get('x_'+p).Clone(p+i)
+                print dists[(p,i)]
                 dists[(p,i)].SetDirectory(0)
                 dists[(p,i)].SetFillStyle(0)
             fIn.Close()
@@ -74,6 +76,11 @@ for v in ['sphericity','bdt','bdtrarity']:
         frame=dists[('data_mix','')].Clone('frame')
         frame.Reset('ICE')
         frame.Draw()
+
+        dists[('tbartsig','')].SetTitle('comb. background')
+        dists[('tbartsig','')].SetFillColor(ROOT.kGreen-10)
+        dists[('tbartsig','')].SetFillStyle(1001)
+        dists[('tbartsig','')].Draw('histsame')
 
         unc_ss.SetFillStyle(1001)
         unc_ss.SetFillColor(ROOT.kGray)
@@ -113,11 +120,12 @@ for v in ['sphericity','bdt','bdtrarity']:
         leg.SetFillStyle(0)
         leg.SetTextFont(42)
         leg.SetTextSize(0.035)
+        leg.AddEntry(dists[('tbartsig','')], 't#bar{t}',    'f')
         leg.AddEntry(dists[('data','')],       'Data (SS)',   'ep')
         leg.AddEntry(dists[('W','')],          'W+jets (MC)', 'l')
         leg.AddEntry(dists[('data_mix','')],   'Comb. model', 'l')  
         leg.AddEntry(unc_stat,                 'stat unc.', 'f')      
-        leg.AddEntry(unc_ss,                   'SS shape unc.', 'f')
+        #leg.AddEntry(unc_ss,                   'SS shape unc.', 'f')
         leg.AddEntry(unc_mix,                  'mix shape unc.', 'f')
         leg.SetNColumns(2)
         leg.Draw()
@@ -133,13 +141,14 @@ for v in ['sphericity','bdt','bdtrarity']:
 
         c.Modified()
         c.Update()
-
+        c.RedrawAxis()
         c.SetLogy(False)
         frame.GetYaxis().SetRangeUser(0,1.5*max([dists[(x,'')].GetMaximum() for x in ['data','W','data_mix']]))
         for ext in ['png','pdf']:
             c.SaveAs('{var}_{flav}_combmodel.{ext}'.format(var=v,flav=f,ext=ext))
 
         c.SetLogy(True)
+        c.RedrawAxis()
         frame.GetYaxis().SetRangeUser(1e-1,frame.GetMaximum()*5)
         for ext in ['png','pdf']:
             c.SaveAs('{var}_{flav}_combmodel_log.{ext}'.format(var=v,flav=f,ext=ext))

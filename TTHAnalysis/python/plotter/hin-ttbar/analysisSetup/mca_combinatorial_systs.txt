@@ -1,8 +1,8 @@
 # vim: syntax=sh
 * ; TreeName="treeProducerHIN"
 
-W              : WJetsToLNu_TuneCP5_HydjetDrumMB             : 21159*(208**2)                   : lep_charge[0]*lep_charge[1]<0;               FillColor=1,            Label="W+jets"
+W              : WJetsToLNu_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8  : 21159*(208**2) : lep_charge[0]*lep_charge[1]<0;               FillColor=1,            Label="W+jets", AddWeight="ncollWgt*trigSF[0]*lepSF[0]*lepSF[1]*lepIsoSF[0]*lepIsoSF[1]"
 data           : SkimElectrons_04Apr2019-v1+SkimMuons_04Apr2019-v1                              : lep_charge[0]*lep_charge[1]>0 ;              FillColor=ROOT.kRed+1,  Label="SS"
 data_mix       : SkimElectrons_04Apr2019-v1_Combinatorial+SkimMuons_04Apr2019-v1_Combinatorial  : lep_charge[0]*lep_charge[1]<0 && mixrank<=1; FillColor=ROOT.kTeal+9, Label="Mix"
 data_mix_syst  : SkimElectrons_04Apr2019-v1_Combinatorial+SkimMuons_04Apr2019-v1_Combinatorial  : lep_charge[0]*lep_charge[1]<0 && mixrank>=2 && mixrank<4;  FillColor=ROOT.kCyan+1, Label="MixSyst"
-
+tbartsig       : TTJets_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8      : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ;  FillColor=ROOT.kGreen+3,  Label="t\#bar{t}", AddWeight="ncollWgt*trigSF[0]*lepSF[0]*lepSF[1]*lepIsoSF[0]*lepIsoSF[1]"

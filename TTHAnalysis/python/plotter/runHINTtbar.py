@@ -170,8 +170,8 @@ def compareCombBackgrounds():
 
             extraopts = '--maxRatioRange 0. 2. --fixRatioRange --plotmode=norm --showRatio --ratioNums %s --ratioDen %s'%(','.join(processes[1:]),processes[0])
             makeplots = ['llpt','l1pt','l2pt','sphericity','dphi','mll','bdt','bdtrarity']
-            showratio = False
-            runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts, newlumi=1618.5/446.9*lumi)
+            showratio = True
+            #runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts, newlumi=1618.5/446.9*lumi)
 
             varList = [('bdt'         , 'bdt                            10,0.,1.'),
                        ('bdtrarity'   , 'bdtrarity                      10,0.,1.'),
@@ -192,6 +192,31 @@ def compareCombBackgrounds():
                 print 'Running cards with command'
                 print cmd_cards
                 os.system(cmd_cards)
+
+def doJetControlPlots():
+    print '=========================================='
+    print 'plotting jet control variables'
+    print '=========================================='
+    trees     = treedir
+    friends   = ''
+
+    fmca   = 'hin-ttbar/analysisSetup/mca_jetcontrol.txt'
+    fplots = 'hin-ttbar/analysisSetup/plots_jetcontrol.txt'
+    fcut   = 'hin-ttbar/analysisSetup/cuts.txt'
+    targetdir = basedir+'/jetControl/{date}/'.format(date=date)
+
+    enable    = []
+    disable   = []
+    processes = ['ttbar_PbPb','ttbar_PbPb_cen','ttbar_PbPb_periph']
+    fittodata = []
+    scalethem = {}
+
+    extraopts = '--maxRatioRange 0. 2. --fixRatioRange --plotmode=norm --showRatio --ratioNums %s --ratioDen %s'%(','.join(processes[1:]),processes[0])
+    makeplots = []
+    showratio = True
+    runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts, newlumi=1618.5/446.9*lumi)
+
+
 
 def plotJetVariables(replot):
     print '=========================================='
@@ -899,7 +924,8 @@ if __name__ == '__main__':
         compareCombBackgrounds()
     if opts.jetvars:
         print 'plotting jet related variables'
-        plotJetVariables(opts.replot)
+        doJetControlPlots()
+        #plotJetVariables(opts.replot)
     if opts.compareSignals:
         print 'plotting jet related variables'
         compareSignals()

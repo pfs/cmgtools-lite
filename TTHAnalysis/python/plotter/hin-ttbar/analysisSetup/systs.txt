@@ -8,6 +8,7 @@ zg_lnN         : zg         : .* : 1.30
 tW_lnN         : tW         : .* : 1.30
 VV_lnN         : VV         : .* : 1.30
 data_comb_lnN  : data_comb  : .* : 1.30
+data_comb_alt  : data_comb  : .* : data_comb_alt : alternateShapeOnly
 
 ## z-pT reweighting
 ## ==========================================
@@ -21,6 +22,15 @@ muF    : ttbar : .* : muF    : templates
 muR    : ttbar : .* : muR    : templates
 muRmuF : ttbar : .* : muRmuF : templates
 ##alphaS : ttbar : .* : alphaS : templates
+
+
+## ttbar singal experimental nbjet uncertainties
+## ==========================================
+btagB     : ttbar : .* : btagB : templates
+btagUDSG  : ttbar : .* : btagL : templates
+quenching : ttbar : .* : quen  : templates
+JEC       : ttbar : .* : jec   : templates
+JER       : ttbar : .* : jer   : templates
 
 ## a whole bunch of pdf uncertainties. so far only on ttbar
 ## ==========================================================

@@ -28,7 +28,7 @@ mca  = MCAnalysis(args[0],options)
 cuts = CutsFile(args[1],options)
 
 truebinname = os.path.basename(args[1]).replace(".txt","") if options.outname == None else options.outname
-binname = truebinname if truebinname[0] not in "234" else "ttH_"+truebinname
+binname = truebinname #if truebinname[0] not in "234" else "ttH_"+truebinname
 print binname
 outdir  = options.outdir+"/" if options.outdir else ""
 

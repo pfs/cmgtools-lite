@@ -161,7 +161,7 @@ for sysfile in args[4:]:
             if re.match(binmap+"$",binname) == None: continue
             if name not in systsU: systsU[name] = []
             systsU[name].append((re.compile(procmap+"$"),amount))
-        elif field[4] in ["envelop","shapeOnly","templates","alternateShapeOnly"]:
+        elif field[4] in ["envelop","shapeOnly","templates","alternateShapeOnly","alternateShapeOnlyNormalized"]:
             (name, procmap, binmap, amount) = field[:4]
             if re.match(binmap+"$",binname) == None: continue
             if name not in systsEnv: systsEnv[name] = []
@@ -205,7 +205,7 @@ for name in systsEnv.keys():
         effect12 = "-"
         for entry in systsEnv[name]:
             (procmap,amount,mode) = entry[:3]
-            if re.match(procmap, p): effect = float(amount) if mode not in ["templates","alternateShape", "alternateShapeOnly"] else amount
+            if re.match(procmap, p): effect = float(amount) if mode not in ["templates","alternateShape", "alternateShapeOnly", "alternateShapeOnlyNormalized"] else amount
             morefields=entry[3:]
         if mca._projection != None and effect not in ["-","0","1",1.0,0.0] and type(effect) == type(1.0):
             effect = mca._projection.scaleSyst(name, effect)
@@ -311,7 +311,7 @@ for name in systsEnv.keys():
                 raise RuntimeError,'mca._projection.scaleSystTemplate not implemented in the case of stat_foreach_shape_bins'
 ###                mca._projection.scaleSystTemplate(name,nominal,p0Up) # should be implemented differently
 ###                mca._projection.scaleSystTemplate(name,nominal,p0Dn) # should be implemented differently
-        elif mode in ["alternateShape", "alternateShapeOnly"]:
+        elif mode in ["alternateShape", "alternateShapeOnly", "alternateShapeOnlyNormalized"]:
             nominal = report[p]
             alternate = report[effect]
             if mca._projection != None:
@@ -319,6 +319,11 @@ for name in systsEnv.keys():
             alternate.SetName("%s_%sUp" % (nominal.GetName(),name))
             if mode == "alternateShapeOnly":
                 alternate.Scale(nominal.Integral()/alternate.Integral())
+            if mode == "alternateShapeOnlyNormalized": ## marc
+                
+                normalizationProcess = report[morefields[-1]]
+                nominal  .Scale(normalizationProcess.Integral()/nominal.Integral())
+                alternate.Scale(SCALETO OTHER PROCESS HERE)
             mirror = nominal.Clone("%s_%sDown" % (nominal.GetName(),name))
             for b in xrange(1,nominal.GetNbinsX()+1):
                 y0 = nominal.GetBinContent(b)

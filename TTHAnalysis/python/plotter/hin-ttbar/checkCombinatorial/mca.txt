@@ -1,9 +1,16 @@
 # vim: syntax=sh
 * ; TreeName="treeProducerHIN"
 
-data_comb : SkimElectrons_04Apr2019-v1+SkimMuons_04Apr2019-v1            : lep_charge[0]*lep_charge[1]>0 ; FillColor=17             , NormSystematic=0.5, Label="comb. (data)", AddWeight="446./1618."
+data_comb       : SkimElectrons_04Apr2019-v1+SkimMuons_04Apr2019-v1 : lep_charge[0]*lep_charge[1]>0 ; FillColor=17            , Label="comb. ss (data)", AddWeight="446./1618."
 
-W         : WJetsToLNu_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8 : 21159*(208**2) : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kGreen           , NormSystematic=0.50, Label="W (MC)"
+data_mixed_comb1 : Combinatorial_Electrons+Combinatorial_Muons      : (lep_charge[0]*lep_charge[1]>0)&&mixrank==0 ; FillColor=ROOT.kOrange  , Label="mixed pair 1", AddWeight="weightMixed(lep_pdgId[0]\,lep_pdgId[1]\,mixrank)"
+##data_mixed_comb2 : Combinatorial_Electrons+Combinatorial_Muons      : (lep_charge[0]*lep_charge[1]>0)&&mixrank==1 ; FillColor=ROOT.kOrange-2, Label="mixed pair 2", AddWeight="weightMixed(lep_pdgId[0]\,lep_pdgId[1]\,mixrank)"
+##data_mixed_comb3 : Combinatorial_Electrons+Combinatorial_Muons      : (lep_charge[0]*lep_charge[1]>0)&&mixrank==2 ; FillColor=ROOT.kOrange+8, Label="mixed pair 3", AddWeight="weightMixed(lep_pdgId[0]\,lep_pdgId[1]\,mixrank)"
+##data_mixed_comb4 : Combinatorial_Electrons+Combinatorial_Muons      : (lep_charge[0]*lep_charge[1]>0)&&mixrank==3 ; FillColor=ROOT.kOrange-5, Label="mixed pair 4", AddWeight="weightMixed(lep_pdgId[0]\,lep_pdgId[1]\,mixrank)"
+data_mixed_comb5 : Combinatorial_Electrons+Combinatorial_Muons      : (lep_charge[0]*lep_charge[1]>0)&&mixrank==4 ; FillColor=ROOT.kOrange-7, Label="mixed alt.", AddWeight="weightMixed(lep_pdgId[0]\,lep_pdgId[1]\,mixrank)"
+
+W         : WJetsToLNu_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8_Electrons+WJetsToLNu_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8_Muons : 21159*(208**2) : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kGreen, Label="W (MC)", AddWeight="weightW(lep_pdgId[0]\,lep_pdgId[1])"
 
 #ttbar+    : TTJets_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8     : 69*(208**2)   : lep_charge[0]*lep_charge[1]<0 ; FillColor=633            , NormSystematic=0.5, Label="ttbar"
-ttbarSS  : TTJets_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8     : 69*(208**2)   : lep_charge[0]*lep_charge[1]>0 ; FillColor=ROOT.kAzure            , NormSystematic=0.5, Label="ttbar SS"
+## ttbarSS  : TTJets_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8     : 69*(208**2)   : lep_charge[0]*lep_charge[1]>0 ; FillColor=ROOT.kAzure, Label="tt (ss)"
+

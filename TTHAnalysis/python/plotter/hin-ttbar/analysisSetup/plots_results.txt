@@ -1,10 +1,10 @@
-emsphericity : llpt/(lep_pt[0]+lep_pt[1])  : 10,0.,1.    ; XTitle='sphericity (e#mu)'
-mmsphericity : llpt/(lep_pt[0]+lep_pt[1])  : 10,0.,1.    ; XTitle='sphericity (#mu#mu)'
-eesphericity : llpt/(lep_pt[0]+lep_pt[1])  : 10,0.,1.    ; XTitle='sphericity (ee)'
+emsphericity : pt_2(lep_calpt[0],lep_phi[0],lep_calpt[1],lep_phi[1])/(lep_calpt[0]+lep_calpt[1])  : 10,0.,1.    ; XTitle='sphericity (e#mu)'
+mmsphericity : pt_2(lep_calpt[0],lep_phi[0],lep_calpt[1],lep_phi[1])/(lep_calpt[0]+lep_calpt[1])  : 10,0.,1.    ; XTitle='sphericity (#mu#mu)'
+eesphericity : pt_2(lep_calpt[0],lep_phi[0],lep_calpt[1],lep_phi[1])/(lep_calpt[0]+lep_calpt[1])  : 10,0.,1.    ; XTitle='sphericity (ee)'
 
 embdt        : bdtrarity                   : 10,0.,1.    ; XTitle='bdt discr. (e#mu)'
 mmbdt        : bdtrarity                   : 10,0.,1.    ; XTitle='bdt discr. (#mu#mu)'
 eebdt        : bdtrarity                   : 10,0.,1.    ; XTitle='bdt discr. (ee)'
 
-leponZeemll  : llm                         : 30,76.,106. ; XTitle='m_{ee}'
-leponZmmmll  : llm                         : 30,76.,106. ; XTitle='m_{#mu#mu}'
+leponZeemll  : mass_2(lep_calpt[0],lep_eta[0],lep_phi[0],0.,lep_calpt[1],lep_eta[1],lep_phi[1],0.)                         : 30,76.,106. ; XTitle='m_{ee}'
+leponZmmmll  : mass_2(lep_calpt[0],lep_eta[0],lep_phi[0],0.,lep_calpt[1],lep_eta[1],lep_phi[1],0.)                         : 30,76.,106. ; XTitle='m_{#mu#mu}'

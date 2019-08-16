@@ -28,6 +28,113 @@ TString CMSSW_BASE = gSystem->ExpandPathName("${CMSSW_BASE}");
 
 TF1 * zptFunc = NULL;
 
+float weightW(int id1, int id2){
+    if      (abs(id1*id2) == 121) return ( 3.58-0.00)/ 945.66;
+    else if (abs(id1*id2) == 143) return (10.75-0.82)/7240.57;
+    else if (abs(id1*id2) == 169) return ( 0.28-0.00)/2014.89;
+    return -999.;
+}
+
+float weightMixed(int id1, int id2, int mixrank){
+    if      (abs(id1*id2) == 121) {
+        if (mixrank == 0) return ( 3.58)/24167.;
+        if (mixrank == 1) return ( 3.58)/25126.;
+        if (mixrank == 2) return ( 3.58)/25836.;
+        if (mixrank == 3) return ( 3.58)/26604.;
+        if (mixrank == 4) return ( 3.58)/27205.;
+    }
+    else if (abs(id1*id2) == 143) {
+        if (mixrank == 0) return (10.75-0.82)/170.;
+        if (mixrank == 1) return (10.75-0.82)/136.;
+        if (mixrank == 2) return (10.75-0.82)/138.;
+        if (mixrank == 3) return (10.75-0.82)/139.;
+        if (mixrank == 4) return (10.75-0.82)/139.;
+    }
+    else if (abs(id1*id2) == 169) {
+        if (mixrank == 0) return ( 0.28)/75833.;
+        if (mixrank == 1) return ( 0.28)/77721.;
+        if (mixrank == 2) return ( 0.28)/79937.;
+        if (mixrank == 3) return ( 0.28)/81063.;
+        if (mixrank == 4) return ( 0.28)/81362.;
+    }
+    return -999.;
+}
+
+float systWgt(int nb, int syst, int var){
+
+// sorry for the ugly code...
+
+    if        (syst == 1) { // b-tagging b
+        if (nb == 0) {
+            if (var > 0) return 0.978;
+            if (var < 0) return 1.022;
+        }
+        if (nb == 1) {
+            if (var > 0) return 1.011;
+            if (var < 0) return 0.990;
+        }
+        if (nb == 2) {
+            if (var > 0) return 1.031;
+            if (var < 0) return 0.970;
+        }
+    } else if (syst == 2) { // b-tagging light
+        if (nb == 0) {
+            if (var > 0) return 0.999;
+            if (var < 0) return 1.003;
+        }
+        if (nb == 1) {
+            if (var > 0) return 1.000;
+            if (var < 0) return 1.000;
+        }
+        if (nb == 2) {
+            if (var > 0) return 1.003;
+            if (var < 0) return 0.992;
+        }
+    } else if (syst == 3) { //quenching
+        if (nb == 0) {
+            if (var > 0) return 1.066;
+            if (var < 0) return 1.;
+        }
+        if (nb == 1) {
+            if (var > 0) return 0.977;
+            if (var < 0) return 1.;
+        }
+        if (nb == 2) {
+            if (var > 0) return 0.893;
+            if (var < 0) return 1.;
+        }
+    } else if (syst == 4) { // JEC
+        if (nb == 0) {
+            if (var > 0) return 1.007;
+            if (var < 0) return 0.993;
+        }
+        if (nb == 1) {
+            if (var > 0) return 0.998;
+            if (var < 0) return 1.001;
+        }
+        if (nb == 2) {
+            if (var > 0) return 0.988;
+            if (var < 0) return 1.014;
+        }
+    } else if (syst == 5) { // JER
+        if (nb == 0) {
+            if (var > 0) return 1.021;
+            if (var < 0) return 0.978;
+        }
+        if (nb == 1) {
+            if (var > 0) return 0.991;
+            if (var < 0) return 1.009;
+        }
+        if (nb == 2) {
+            if (var > 0) return 0.965;
+            if (var < 0) return 1.038;
+        }
+    }
+
+    //std::cout << "something went wrong in the systWgtFunction!!! nb: " << nb << " syst: " << syst << " var: " << var << std::endl;
+    return 1.;
+
+}
 
 float zptWeight(float zpt, int updn=0){
     // old one with pp MC if (updn == 0) return 1.;
@@ -5381,7 +5488,7 @@ float getAvgDistance(float llpt, float absdphi, float abslleta, float abssumeta1
 
     std::vector< float > distances;
 
-    for(int in = 0; in != v_neighbors.size(); ++in){
+    for(unsigned int in = 0; in != v_neighbors.size(); ++in){
         float tmp_distance = 0.;
         tmp_distance += std::pow( (    llpt       - std::get<0>(v_neighbors[in]) - 62.19)/35.190, 2);
         tmp_distance += std::pow( ( absdphi       - std::get<1>(v_neighbors[in]) - 1.813)/0.8999, 2);

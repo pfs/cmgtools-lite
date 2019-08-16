@@ -160,7 +160,7 @@ def compareCombBackgrounds():
 
     sf = 'ncollWgt*trigSF[0]*lepSF[0]*lepSF[1]*lepIsoSF[0]*lepIsoSF[1]'
 
-    for flav in ['ee', 'mm', 'em']:
+    for flav in ['em', 'ee', 'mm', 'sf']:
         targetdir = basedir+'/combinatorialBackground/{date}{pf}-{flav}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav )
 
         enable    = [flav]
@@ -169,10 +169,10 @@ def compareCombBackgrounds():
         fittodata = []
         scalethem = {}
 
-        extraopts = ' --maxRatioRange 0. 2. --fixRatioRange --plotmode=nostack --showRatio --ratioNums W,data_comb,ttbarSS --ratioDen data_comb '#--preFitData bdt '
+        extraopts = ' --maxRatioRange 0. 2. --fixRatioRange --plotmode=nostack --showRatio --ratioNums W,data_comb,ttbarSS,data_mixed_comb --ratioDen data_comb '#--preFitData bdt '
         extraopts += ' -W {sfs} '.format(sfs=sf)
 
-        makeplots = ['bdtrarity', 'sphericity']
+        makeplots = ['bdtrarity', 'calsphericity', 'l1pt', 'l2pt', 'calllpt', 'dphi']
         showratio = True
         runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
 
@@ -550,7 +550,7 @@ def makeZplots():
 
     sf = 'ncollWgt*trigSF[0]*lepSF[0]*lepSF[1]*lepIsoSF[0]*lepIsoSF[1]'
 
-    for iflav,flav in enumerate(['ee']):
+    for iflav,flav in enumerate(['ee', 'mm']):
         targetdir = basedir+'/dy_plots/{date}{pf}-{flav}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav )
 
         enable    = ['flav'+flav, 'onZ']
@@ -563,13 +563,110 @@ def makeZplots():
 
         extraopts += ' -W {sf} '.format(sf=sf)
 
-        makeplots = ['nleptons', 'l1iso02', 'l2iso02', 'dyllpt', 'dyleppt', 'dyl1pt', 'dyl2pt', 'dysphericity', 'dydphi', 'dyllm', 'lepiso02', 'l1d0', 'l2d0']
+        makeplots = ['nleptons', 'l1iso02', 'l2iso02', 'dyllpt', 'dyleppt', 'dyl1pt', 'dyl2pt', 'dysphericity', 'dydphi', 'dyllm', 'dyllmcal', 'lepiso02', 'l1d0', 'l2d0', 'dyl1ptcal', 'dyl2ptcal']
         showratio = True
 
         unblinded = 1618.5 - (0. if 'ee' in flav else 30.103)
         unblinded = unblinded*1e-9
 
         runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts, newlumi=unblinded)
+
+def makeJetTable(inputdir):
+    
+
+    tableDir = {}
+
+    for _file in os.listdir(inputdir):
+        if not 'card.txt' in _file: continue
+
+        region = _file.split('.')[0]
+        tableDir[region] = {}
+
+        f = open(inputdir+'/'+_file,'r')
+        for line in f.readlines():
+            if 'observation' in line: 
+                tableDir[region]['obs'] = int(float(line.split()[1]))
+            if 'process' in line and 'ttbar' in line:
+                tableDir[region]['proc'] = line.split()[1:]
+            if line.startswith('rate'):
+                tableDir[region]['vals'] = line.split()[1:]
+
+    line_obs = 'data ' 
+    line_tt  = '\\ttbar ' 
+    line_zg  = 'DY ' 
+    line_tw  = 'tW ' 
+    line_vv  = 'VV ' 
+    line_co  = 'comb. ' 
+
+    for ch in ['ee' ,'mm', 'em']:
+        for nb in ['0b' ,'1b', '2b']:
+            line_obs  += ' & \\textbf{{{o}}} '.format(o=tableDir[ch+'_'+nb]['obs'])
+            
+            ## ttbar
+            tt_ind = tableDir[ch+'_'+nb]['proc'].index('ttbar') if 'ttbar' in tableDir[ch+'_'+nb]['proc'] else -1
+            tt_val = float(tableDir[ch+'_'+nb]['vals'][tt_ind]) if tt_ind > -1 else 0.
+            line_tt   += ' & {v:.1f} $\\pm$ {e:.1f} '.format(v=tt_val,e=0.3*tt_val)
+
+            ## dy
+            zg_ind = tableDir[ch+'_'+nb]['proc'].index('zg') if 'zg' in tableDir[ch+'_'+nb]['proc'] else -1
+            zg_val = float(tableDir[ch+'_'+nb]['vals'][zg_ind]) if zg_ind > -1 else 0.
+            line_zg   += ' & {v:.1f} $\\pm$ {e:.1f} '.format(v=zg_val,e=0.3*zg_val)
+
+            ## vv
+            vv_ind = tableDir[ch+'_'+nb]['proc'].index('VV') if 'VV' in tableDir[ch+'_'+nb]['proc'] else -1
+            vv_val = float(tableDir[ch+'_'+nb]['vals'][vv_ind]) if vv_ind > -1 else 0.
+            line_vv   += ' & {v:.1f} $\\pm$ {e:.1f} '.format(v=vv_val,e=0.3*vv_val)
+
+            ## tw
+            tw_ind = tableDir[ch+'_'+nb]['proc'].index('tW') if 'tW' in tableDir[ch+'_'+nb]['proc'] else -1
+            tw_val = float(tableDir[ch+'_'+nb]['vals'][tw_ind]) if tw_ind > -1 else 0.
+            line_tw   += ' & {v:.1f} $\\pm$ {e:.1f} '.format(v=tw_val,e=0.3*tw_val)
+
+            ## comb
+            co_ind = tableDir[ch+'_'+nb]['proc'].index('data_comb') if 'data_comb' in tableDir[ch+'_'+nb]['proc'] else -1
+            co_val = float(tableDir[ch+'_'+nb]['vals'][co_ind]) if co_ind > -1 else 0.
+            line_co   += ' & {v:.1f} $\\pm$ {e:.1f} '.format(v=co_val,e=0.3*co_val)
+
+    line_obs += '\\\\ \\hline \\hline'
+    line_tt  += '\\\\ \\hline'
+    line_zg  += '\\\\'
+    line_tw  += '\\\\' 
+    line_vv  += '\\\\' 
+    line_co  += '\\\\' 
+
+    tabletex = '''
+\\begin{{table}}[!htb]
+\\centering
+\\small
+\\topcaption{{
+    The number of expected background and signal events and the observed event yields in the different
+    channels of $ee$, $\\mu\\mu$, and $e\\mu$, prior to the fit.
+    \\label{{tab:yieldsJet}}}}
+    \\begin{{tabular}}{{lccc|ccc|ccc}}
+Process        & $ee$ 0b    & $ee$ 1b   & $ee$ 2b   & $\\mu\\mu$ 0b   & $\\mu\\mu$ 1b  & $\\mu\\mu$ 2b  & $e\\mu$ 0b    & $e\\mu$  1b    & $e\\mu$  2b   \\\\ \\hline \\hline
+                                                                                                                                                                         
+{line_co}
+{line_zg}
+{line_tw}
+{line_vv}
+{line_tt}
+{line_obs}
+\\end{{tabular}}
+
+\\end{{table}}'''.format(line_obs=line_obs,line_tt=line_tt,line_zg=line_zg,line_co=line_co,line_tw=line_tw,line_vv=line_vv)
+
+    print tabletex
+
+##Combinatorial  & 6.89 $\pm$ 1.38   & 0.83 $\pm$ 0.48  & 0.83 $\pm$ 0.48  & 5.51 $\pm$ 1.23   & 0.28 $\pm$ 0.28  & 0.28 $\pm$ 0.28  & 16.81 $\pm$ 2.15 & 0.00 $\pm$ 0.00   & 0.00 $\pm$ 0.00  \\
+##Z/$\gamma^{*}$ & 199.04 $\pm$ 2.59 & 6.70 $\pm$ 0.48  & 6.70 $\pm$ 0.48  & 443.12 $\pm$ 3.78 & 14.26 $\pm$ 0.68 & 14.26 $\pm$ 0.68 & 21.91 $\pm$ 0.19 & 0.71 $\pm$ 0.03   & 0.71 $\pm$ 0.03  \\
+##$\cPqt\PW$     & 0.35 $\pm$ 0.00   & 0.33 $\pm$ 0.00  & 0.33 $\pm$ 0.00  & 0.83 $\pm$ 0.01   & 0.64 $\pm$ 0.01  & 0.64 $\pm$ 0.01  & 1.47 $\pm$ 0.01  & 1.25 $\pm$ 0.01   & 1.25 $\pm$ 0.01  \\
+##VV             & 0.75 $\pm$ 0.00   & 0.00 $\pm$ 0.00  & 0.00 $\pm$ 0.00  & 1.53 $\pm$ 0.01   & 0.00 $\pm$ 0.00  & 0.00 $\pm$ 0.00  & 2.33 $\pm$ 0.01  & 0.01 $\pm$ 0.00   & 0.01 $\pm$ 0.00  \\
+##\ttbar signal  & 1.42 $\pm$ 0.03   & 2.78 $\pm$ 0.04  & 2.78 $\pm$ 0.04  & 4.27 $\pm$ 0.06   & 6.37 $\pm$ 0.08  & 6.37 $\pm$ 0.08  & 6.81 $\pm$ 0.07  & 11.55 $\pm$ 0.10  & 11.55 $\pm$ 0.10 \\ \hline \hline
+##Total          & 208.45 $\pm$ 2.94 & 10.64 $\pm$ 0.68 & 10.64 $\pm$ 0.68 & 455.26 $\pm$ 3.98 & 21.56 $\pm$ 0.74 & 21.56 $\pm$ 0.74 & 49.33 $\pm$ 2.16 & 13.51 $\pm$ 0.10  & 13.51 $\pm$ 0.10 \\
+
+    ##print tableDir
+
+        
 
 def makeJetAnalysis():
     print '=========================================='
@@ -589,59 +686,65 @@ def makeJetAnalysis():
 
     sf = 'ncollWgt*trigSF[0]*lepSF[0]*lepSF[1]*lepIsoSF[0]*lepIsoSF[1]'
 
-    regions = ['0b_ee', '1b_ee', '2b_ee',
-               '0b_mm', '1b_mm', '2b_mm',
-               '0b_em', '1b_em', '2b_em']
-## old ========================================
-## old  the overall scaling is 0.0322374207729
-## old THIS IS THE SCALING PER BIN IN nbjets FOR  mm
-## old bincenter 0.0: scaling is 443.286/456.153 = 0.972
-## old bincenter 1.0: scaling is 13.668/1.184 = 11.545
-## old bincenter 2.0: scaling is 0.400/0.049 = 8.126
-## old bincenter 3.0: scaling is 0.032/0.000 = -1.000
-## old 
-## new ========================================
-## new  the overall scaling is 0.0249785192128
-## new THIS IS THE SCALING PER BIN IN nbjets FOR  mm
-## new bincenter 0.0: scaling is 317.954/313.643 = 1.014
-## new bincenter 1.0: scaling is 9.384/13.270 = 0.707
-## new bincenter 2.0: scaling is 0.367/0.698 = 0.526
-## new bincenter 3.0: scaling is 0.025/0.119 = 0.210
-## old ========================================
-## old  the overall scaling is 0.0337666630852
-## old THIS IS THE SCALING PER BIN IN nbjets FOR  ee
-## old bincenter 0.0: scaling is 199.122/205.087 = 0.971
-## old bincenter 1.0: scaling is 6.551/0.646 = 10.134
-## old bincenter 2.0: scaling is 0.075/0.014 = 5.238
-## old bincenter 3.0: scaling is -0.000/0.000 = -1.000
-## 
-## new  the overall scaling is 0.02036707889
-## new THIS IS THE SCALING PER BIN IN nbjets FOR  ee
-## new bincenter 0.0: scaling is 107.906/108.894 = 0.991
-## new bincenter 1.0: scaling is 6.242/5.255 = 1.188
-## new bincenter 2.0: scaling is 0.191/0.161 = 1.187
-## new bincenter 3.0: scaling is -0.001/0.029 = -0.017
+    regions = ['ee_0b', 'ee_1b', 'ee_2b',
+               'mm_0b', 'mm_1b', 'mm_2b',
+               'em_0b', 'em_1b', 'em_2b']
 
 ## old ========================================
-## old  the overall scaling is 0.0627764709195
+## old  the overall scaling is 0.0249785192128
+## old THIS IS THE SCALING PER BIN IN nbjets FOR  mm
+## old bincenter 0.0: scaling is 317.954/313.643 = 1.014
+## old bincenter 1.0: scaling is 9.384/13.270 = 0.707
+## old bincenter 2.0: scaling is 0.367/0.698 = 0.526
+## old bincenter 3.0: scaling is 0.025/0.119 = 0.210
+## old
+## old  the overall scaling is 0.02036707889
+## old THIS IS THE SCALING PER BIN IN nbjets FOR  ee
+## old bincenter 0.0: scaling is 107.906/108.894 = 0.991
+## old bincenter 1.0: scaling is 6.242/5.255 = 1.188
+## old bincenter 2.0: scaling is 0.191/0.161 = 1.187
+## old bincenter 3.0: scaling is -0.001/0.029 = -0.017
+
+## old ========================================
+## old  the overall scaling is 0.0531295623779
 ## old THIS IS THE SCALING PER BIN IN nbjets FOR  em
-## old bincenter 0.0: scaling is 27.828/20.202 = 1.377
-## old bincenter 1.0: scaling is 0.858/0.083 = 10.400
-## old bincenter 2.0: scaling is 0.025/0.000 = -1.000
-## old bincenter 3.0: scaling is 0.002/0.000 = -1.000
+## old bincenter 0.0: scaling is 16.893/12.183 = 1.387
+## old bincenter 1.0: scaling is 0.499/0.791 = 0.630
+## old bincenter 2.0: scaling is 0.019/0.044 = 0.445
+## old bincenter 3.0: scaling is 0.001/0.000 = -1.000
+## old
+## old    zscaling ={'0b_ee': 0.991, '1b_ee': 1.188, '2b_ee': 1.187,
+## old               '0b_mm': 1.014, '1b_mm': 0.707, '2b_mm': 0.526,
+## old               '0b_em': 1.387, '1b_em': 0.630, '2b_em': 0.445 }
+
+
 ## new ========================================
-## new  the overall scaling is 0.0531295623779
+## new  the overall scaling is 0.0247697555145
+## new THIS IS THE SCALING PER BIN IN nbjets FOR  mm
+## new bincenter 0.0: scaling is 319.333/318.796 = 1.002
+## new bincenter 1.0: scaling is 6.063/6.545 = 0.926
+## new bincenter 2.0: scaling is 0.110/0.188 = 0.581
+## new bincenter 3.0: scaling is 0.025/0.000 = -1.000
+## new 
+## new ========================================
+## new  the overall scaling is 0.0208736504539
+## new THIS IS THE SCALING PER BIN IN nbjets FOR  ee
+## new bincenter 0.0: scaling is 112.815/112.372 = 1.004
+## new bincenter 1.0: scaling is 1.800/2.186 = 0.823
+## new bincenter 2.0: scaling is -0.009/0.036 = -0.253
+## new bincenter 3.0: scaling is -0.000/0.010 = -0.022
+## new 
+## new  the overall scaling is 0.0563943786955
 ## new THIS IS THE SCALING PER BIN IN nbjets FOR  em
-## new bincenter 0.0: scaling is 16.893/12.183 = 1.387
-## new bincenter 1.0: scaling is 0.499/0.791 = 0.630
-## new bincenter 2.0: scaling is 0.019/0.044 = 0.445
+## new bincenter 0.0: scaling is 18.009/12.837 = 1.403
+## new bincenter 1.0: scaling is 0.342/0.164 = 2.084
+## new bincenter 2.0: scaling is 0.006/0.000 = -1.000
 ## new bincenter 3.0: scaling is 0.001/0.000 = -1.000
-    ## old zscaling ={'0b_ee': 0.971, '1b_ee': 10.31, '2b_ee': 5.238,
-    ## old            '0b_mm': 0.972, '1b_mm': 11.55, '2b_mm': 8.126,
-    ## old            '0b_em': 1.377, '1b_em': 10.40, '2b_em': 0.000 }
-    zscaling ={'0b_ee': 0.991, '1b_ee': 1.188, '2b_ee': 1.187,
-               '0b_mm': 1.014, '1b_mm': 0.707, '2b_mm': 0.526,
-               '0b_em': 1.387, '1b_em': 0.630, '2b_em': 0.445 }
+
+
+    zscaling ={'ee_0b': 1.004, 'ee_1b': 0.823, 'ee_2b': 0.000,
+               'mm_0b': 1.002, 'mm_1b': 0.926, 'mm_2b': 0.581,
+               'em_0b': 1.403, 'em_1b': 2.084, 'em_2b': 0.000 }
 
 
     for iflav,flav in enumerate(regions):
@@ -657,14 +760,14 @@ def makeJetAnalysis():
 
         extraopts += ' -W {sfs} '.format(sfs=sf)
 
-        makeplots = [flav]
+        makeplots = [flav+'_bdt', flav+'_sphericity']
         showratio = True
 
-        ##runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts, newlumi=1618.5/446.9*lumi if 'onZ' in flav else 0.)
+        runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts, newlumi=1618.5/446.9*lumi if 'onZ' in flav else 0.)
 
         cmd_cards_base = 'python makeShapeCards.py --s2v -f -j 6 -v 3 -l {lumi} -P {tdir} {mca} {cuts} '.format(lumi=lumi if not 'onZ' in flav else 1618.5/446.9*lumi,tdir=trees,mca=fmca,cuts=fcut)
         for fitVar in fitVars:
-            outdirCards = 'hin-ttbar/datacards_{date}_{pf}/{fitVarName}/'.format(date=date, pf=postfix,fitVarName=fitVar[0])
+            outdirCards = 'hin-ttbar/datacards_{date}_{pf}_jetAnalysis/{fitVarName}/'.format(date=date, pf=postfix,fitVarName=fitVar[0])
 
             cmd_cards  = cmd_cards_base + ' -W {sfs} '.format(sfs=sf)
             cmd_cards += ' --od {od} '                  .format(od=outdirCards)
@@ -678,6 +781,8 @@ def makeJetAnalysis():
             print '==========================================='
             print cmd_cards
             os.system(cmd_cards)
+
+    makeJetTable(outdirCards)
 
             ## if flav == regions[-1]:
             ##     print 'running combine cards'
@@ -737,7 +842,8 @@ def makeCards():
 
     nbinsForFit = 10
     fitVars = [('bdt'         , 'bdtrarity                      {n},0.,1.'.format(n=nbinsForFit)), 
-               ('sphericity'  , '\'llpt/(lep_pt[0]+lep_pt[1])\' {n},0.,1.'.format(n=nbinsForFit)),
+               #('sphericity'  , '\'llpt/(lep_pt[0]+lep_pt[1])\' {n},0.,1.'.format(n=nbinsForFit)),
+               ('sphericity'  , '\'pt_2(lep_calpt[0],lep_phi[0],lep_calpt[1],lep_phi[1])/(lep_calpt[0]+lep_calpt[1])\' {n},0.,1.'.format(n=nbinsForFit)),
               ]
 
     regions = ['ee', 'mm', 'em']#, 'leponZee', 'leponZmm']
@@ -937,7 +1043,8 @@ if __name__ == '__main__':
         basedir = '/eos/user/p/psilva/www/HIN-19-001'
     
     ## this is pp MC treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim27Apr/'
-    treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim13August/' ## rereco data and mixed, official MC
+    ## this is with old eleID and stuff treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim21June/' ## rereco data and mixed, official MC
+    treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim13August/' ## newest on 07/08/2019
 
     if opts.date:
         date = opts.date

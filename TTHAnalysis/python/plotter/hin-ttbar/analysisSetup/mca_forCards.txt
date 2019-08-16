@@ -5,8 +5,26 @@ ttbar+       : TTJets_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8  : 69*(2
 
 incl_theory  : + ; IncludeMca="hin-ttbar/analysisSetup/mcaIncludes/mca_signal_theory_withpdfs.txt"
 
-zg     : DYJetsToLL_M-10to50_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8 : 1506*(208**2)  : lep_charge[0]*lep_charge[1]<0 ; AddWeight="zptWeight(llpt\,1)", FillColor=ROOT.kOrange+6, Label="Z/\#gamma"
-zg     : DYJetsToLL_MLL-50_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8   : 2010*(208**2)  : lep_charge[0]*lep_charge[1]<0 ; AddWeight="zptWeight(llpt\,1)", FillColor=ROOT.kOrange+6, Label="Z/\#gamma"
+## experimental nb systematics for the signal
+ttbar_btagB_Up : TTJets_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="systWgt(nbjet_sel\,1\,1)" , FillColor=633, Label="ttbar btagB Up", SkipMe=True
+ttbar_btagB_Dn : TTJets_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="systWgt(nbjet_sel\,1\,-1)", FillColor=633, Label="ttbar btagB Dn", SkipMe=True
+
+ttbar_btagL_Up : TTJets_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="systWgt(nbjet_sel\,2\,1)" , FillColor=633, Label="ttbar btagL Up", SkipMe=True
+ttbar_btagL_Dn : TTJets_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="systWgt(nbjet_sel\,2\,-1)", FillColor=633, Label="ttbar btagL Dn", SkipMe=True
+
+ttbar_quen_Up  : TTJets_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="systWgt(nbjet_sel\,3\,1)" , FillColor=633, Label="ttbar quen Up", SkipMe=True
+ttbar_quen_Dn  : TTJets_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="systWgt(nbjet_sel\,3\,-1)", FillColor=633, Label="ttbar quen Dn", SkipMe=True
+
+ttbar_jec_Up   : TTJets_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="systWgt(nbjet_sel\,4\,1)" , FillColor=633, Label="ttbar jec Up", SkipMe=True
+ttbar_jec_Dn   : TTJets_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="systWgt(nbjet_sel\,4\,-1)", FillColor=633, Label="ttbar jec Dn", SkipMe=True
+
+ttbar_jer_Up   : TTJets_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="systWgt(nbjet_sel\,5\,1)" , FillColor=633, Label="ttbar jer Up", SkipMe=True
+ttbar_jer_Dn   : TTJets_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8 : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="systWgt(nbjet_sel\,5\,-1)", FillColor=633, Label="ttbar jer Dn", SkipMe=True
+
+
+## non signal processes
+zg     : DYJetsToLL_M-10to50_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8 : 1506*(208**2)  : lep_charge[0]*lep_charge[1]<0 ; AddWeight="zptWeight(llpt\,1)", FillColor=ROOT.kAzure+6, Label="Z/\#gamma"
+zg     : DYJetsToLL_MLL-50_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8   : 2010*(208**2)  : lep_charge[0]*lep_charge[1]<0 ; AddWeight="zptWeight(llpt\,1)", FillColor=ROOT.kAzure+6, Label="Z/\#gamma"
 
 zg_ptZ_Up : DYJetsToLL_M-10to50_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8 : 1506*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="zptWeight(llpt\,1)", Label="Z/\#gamma (Z-p_{T} Up)", SkipMe=True
 zg_ptZ_Up : DYJetsToLL_MLL-50_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8   : 2010*(208**2) : lep_charge[0]*lep_charge[1]<0 ; AddWeight="zptWeight(llpt\,1)", Label="Z/\#gamma (Z-p_{T} Up)", SkipMe=True
@@ -19,7 +37,9 @@ tW           : ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5_HydjetDrumMB_5p02TeV-p
 ##VV           : WZTo3LNU_NNPDF30_TuneCP5_5p20TeV-powheg                                         : 1.77*(208**2)  : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kAzure-5, Label="VV"
 VV           : ZZTo4L_HydjetDrumMB_5p02TeV_powheg_pythia8                       : 0.441*(208**2) : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kAzure-5, Label="VV"
 
-data_comb    : SkimElectrons_04Apr2019-v1+SkimMuons_04Apr2019-v1  : lep_charge[0]*lep_charge[1]>0 ; FillColor=17, Label="comb. (data)", AddWeight="446./1618."
+## data_comb    : SkimElectrons_04Apr2019-v1+SkimMuons_04Apr2019-v1  : lep_charge[0]*lep_charge[1]>0 ; FillColor=17, Label="comb. (data)", AddWeight="446./1618."
+data_comb     : Combinatorial_Electrons+Combinatorial_Muons      : (lep_charge[0]*lep_charge[1]>0)&&mixrank==0 ; FillColor=ROOT.kOrange  , Label="comb. (data\, pair1)", AddWeight="weightMixed(lep_pdgId[0]\,lep_pdgId[1]\,mixrank)"
+data_comb_alt : Combinatorial_Electrons+Combinatorial_Muons      : (lep_charge[0]*lep_charge[1]>0)&&mixrank==4 ; FillColor=ROOT.kOrange-7, Label="comb. (data\, pair5)", AddWeight="weightMixed(lep_pdgId[0]\,lep_pdgId[1]\,mixrank)", SkipMe=True
 #wjets : WJetsToLNu_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8 : 21159*(208**2)*0.5 : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kAzure+1, Label="W (MC)"
 
 data         : SkimElectrons_04Apr2019-v1+SkimMuons_04Apr2019-v1  : lep_charge[0]*lep_charge[1]<0 ; 

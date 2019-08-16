@@ -1,12 +1,24 @@
-0b_em : llpt/(lep_pt[0]+lep_pt[1])  : 3,0.,1.    ; XTitle='0b sphericity (e#mu)'
-0b_mm : llpt/(lep_pt[0]+lep_pt[1])  : 3,0.,1.    ; XTitle='0b sphericity (#mu#mu)'
-0b_ee : llpt/(lep_pt[0]+lep_pt[1])  : 3,0.,1.    ; XTitle='0b sphericity (ee)'
+em_0b_sphericity : llpt/(lep_pt[0]+lep_pt[1])  : 3,0.,1.    ; XTitle='0b sphericity (e#mu)'
+mm_0b_sphericity : llpt/(lep_pt[0]+lep_pt[1])  : 3,0.,1.    ; XTitle='0b sphericity (#mu#mu)'
+ee_0b_sphericity : llpt/(lep_pt[0]+lep_pt[1])  : 3,0.,1.    ; XTitle='0b sphericity (ee)'
+   
+em_1b_sphericity : llpt/(lep_pt[0]+lep_pt[1])  : 3,0.,1.    ; XTitle='1b sphericity (e#mu)'
+mm_1b_sphericity : llpt/(lep_pt[0]+lep_pt[1])  : 3,0.,1.    ; XTitle='1b sphericity (#mu#mu)'
+ee_1b_sphericity : llpt/(lep_pt[0]+lep_pt[1])  : 3,0.,1.    ; XTitle='1b sphericity (ee)'
+   
+em_2b_sphericity : llpt/(lep_pt[0]+lep_pt[1])  : 1,0.,1.    ; XTitle='2b sphericity (e#mu)'
+mm_2b_sphericity : llpt/(lep_pt[0]+lep_pt[1])  : 1,0.,1.    ; XTitle='2b sphericity (#mu#mu)'
+ee_2b_sphericity : llpt/(lep_pt[0]+lep_pt[1])  : 1,0.,1.    ; XTitle='2b sphericity (ee)'
 
-1b_em : llpt/(lep_pt[0]+lep_pt[1])  : 3,0.,1.    ; XTitle='1b sphericity (e#mu)'
-1b_mm : llpt/(lep_pt[0]+lep_pt[1])  : 3,0.,1.    ; XTitle='1b sphericity (#mu#mu)'
-1b_ee : llpt/(lep_pt[0]+lep_pt[1])  : 3,0.,1.    ; XTitle='1b sphericity (ee)'
-
-2b_em : llpt/(lep_pt[0]+lep_pt[1])  : 1,0.,1.    ; XTitle='2b sphericity (e#mu)'
-2b_mm : llpt/(lep_pt[0]+lep_pt[1])  : 1,0.,1.    ; XTitle='2b sphericity (#mu#mu)'
-2b_ee : llpt/(lep_pt[0]+lep_pt[1])  : 1,0.,1.    ; XTitle='2b sphericity (ee)'
+em_0b_bdt : bdtrarity  : 3,0.,1.    ; XTitle='0b bdt (e#mu)'
+mm_0b_bdt : bdtrarity  : 3,0.,1.    ; XTitle='0b bdt (#mu#mu)'
+ee_0b_bdt : bdtrarity  : 3,0.,1.    ; XTitle='0b bdt (ee)'
+   
+em_1b_bdt : bdtrarity  : 3,0.,1.    ; XTitle='1b bdt (e#mu)'
+mm_1b_bdt : bdtrarity  : 3,0.,1.    ; XTitle='1b bdt (#mu#mu)'
+ee_1b_bdt : bdtrarity  : 3,0.,1.    ; XTitle='1b bdt (ee)'
+   
+em_2b_bdt : bdtrarity  : 1,0.,1.    ; XTitle='2b bdt (e#mu)'
+mm_2b_bdt : bdtrarity  : 1,0.,1.    ; XTitle='2b bdt (#mu#mu)'
+ee_2b_bdt : bdtrarity  : 1,0.,1.    ; XTitle='2b bdt (ee)'
 

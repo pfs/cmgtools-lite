@@ -934,10 +934,10 @@ if __name__ == '__main__':
     if user == 'mdunser':
         basedir = '/afs/cern.ch/user/m/mdunser/www/private/heavyIons/plots/'
     elif user == 'psilva':
-        basedir = 'PbPb2018'
+        basedir = '/eos/user/p/psilva/www/HIN-19-001'
     
     ## this is pp MC treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim27Apr/'
-    treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim21June/' ## rereco data and mixed, official MC
+    treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim13August/' ## rereco data and mixed, official MC
 
     if opts.date:
         date = opts.date

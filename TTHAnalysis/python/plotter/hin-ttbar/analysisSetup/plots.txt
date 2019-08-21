@@ -1,12 +1,13 @@
-distance5    : getAvgDistance(llpt,abs(dphi),abs(lleta),abs(lep_eta[0]+lep_eta[1]),lep_pt[0],5)    : 10,1.,4.; XTitle="d_{5}"
-distance100  : getAvgDistance(llpt,abs(dphi),abs(lleta),abs(lep_eta[0]+lep_eta[1]),lep_pt[0],100)  : 10,1.,4.; XTitle="d_{100}"
+#distance5    : getAvgDistance(llpt,abs(dphi),abs(lleta),abs(lep_eta[0]+lep_eta[1]),lep_pt[0],5)    : 10,1.,4.; XTitle="d_{5}"
+#distance100  : getAvgDistance(llpt,abs(dphi),abs(lleta),abs(lep_eta[0]+lep_eta[1]),lep_pt[0],100)  : 10,1.,4.; XTitle="d_{100}"
 
 #distance1    : getAvgDistance(llpt,abs(dphi),abs(lleta),abs(lep_eta[0]+lep_eta[1]),lep_pt[0],1)    : 10,0.,5.; XTitle="d_{1}"
 #distance10   : getAvgDistance(llpt,abs(dphi),abs(lleta),abs(lep_eta[0]+lep_eta[1]),lep_pt[0],10)   : 10,0.,5.; XTitle="d_{10}"
 #distance200  : getAvgDistance(llpt,abs(dphi),abs(lleta),abs(lep_eta[0]+lep_eta[1]),lep_pt[0],200)  : 10,0.,5.; XTitle="d_{200}"
 #distance500  : getAvgDistance(llpt,abs(dphi),abs(lleta),abs(lep_eta[0]+lep_eta[1]),lep_pt[0],500)  : 10,0.,5.; XTitle="d_{500}"
 
-nbjets   : nbjet_sel : 4,-0.5,3.5 ; XTitle='n_{b-tagged}', Logy=True, Legend='TR'
+nbjets    : nbjet_sel : 4,-0.5,3.5 ; XTitle='n_{b-tagged}', Logy=True, Legend='TR'
+nbjets_ML : nbjet>0 && bjet_csvV2[0]<0.9 ? nbjet_sel-1 : nbjet_sel           : 4,-0.5,3.5 ; XTitle='n_{b-tagged} (M-L)', Logy=True, Legend='TR'
 ##njets    : Sum$(bjet_drSafe > 0.5)                      : 8,-0.5,7.5 ; XTitle='n_{jets}', Logy=True, Legend='TR'
 
 ## nbjets   : Sum$(bjet_drSafe > 0.5 && bjet_csvv2 > 0.92) : 4,-0.5,3.5 ; XTitle='n_{b-tagged}', Logy=True, Legend='TR'
@@ -37,8 +38,10 @@ flavor : abs(lep_pdgId[0]*lep_pdgId[1]) : 70,100,170 ; XTitle='abs(id1*id2)'
 mll       : llm                                                 : 10,0.,200.  ; XTitle='m_{ll}'
 mtll      : mt_2(lep_pt[0],lep_phi[0],lep_pt[1],lep_phi[1])     : 10,0.,150.  ; XTitle='m_{T} (ll)'
 bdt       : bdt                                                 : 10,-1.,1.   ; XTitle='bdt discr.'
+bdtfine   : bdt                                                 : 50,-1.,1.   ; XTitle='bdt discr.'
 bdtrarity : bdtrarity                                           : 10,0.,1.    ; XTitle='bdt discr. (rarity)', Legend="TL"
-fisher2   : fisher2                                             : 10,-1.,1.   ; XTitle='fisher discriminant'
+flatbdt   : bdtcdfinv(bdt)                                      : 10,0.,1.    ; XTitle='BDT', Legend="TL"
+##fisher2   : fisher2                                             : 10,-1.,1.   ; XTitle='fisher discriminant'
 l1pt      : lep_calpt[0]                                           : 10,20.,120. ; XTitle='p_{T}^{l1}'
 l2pt      : lep_calpt[1]                                           : 10,20.,120. ; XTitle='p_{T}^{l2}'
 l1eta     : lep_eta[0]                                          : 10,-2.5,2.5 ; XTitle='#eta^{l1}'
@@ -59,6 +62,17 @@ llrap     : abs(rapidity_2(lep_pt[0],lep_eta[0],lep_phi[0],lep_pt[1],lep_eta[1],
 apt       : apt                                                 : 10,0.,1.    ; XTitle='A_{pT}'
 sumabseta : abs(lep_eta[0])+abs(lep_eta[1])                     : 10,0.,5.    ; XTitle='|#eta_{l1}|+|#eta_{l2}|'
 prodeta   : lep_eta[0]*lep_eta[1]                               : 10,-5.,5.   ; XTitle='#eta(l1)*#eta(l2)'
+
+b1_pt     : bjet_pt[0]                                          : 10,30,300   ; XTitle='Transverse momentum [GeV]'
+b2_pt     : bjet_pt[1]                                          : 10,30,300   ; XTitle='Transverse momentum [GeV]'
+b_ht      : bjet_pt[0]+bjet_pt[1]                               : 10,30,300   ; XTitle='H_{T} [GeV]'
+b_htlep   : lep_calpt[1]+lep_calpt[1]+bjet_pt[0]+bjet_pt[1]     : 10,30,300   ; XTitle='H_{T}^{lep} [GeV]'
+b_deta    : abs(bjet_eta[0]-bjet_eta[1])                        : 10,0,5      ; XTitle='#Delta#eta'
+b1_eta    : abs(bjet_eta[0])                                    : 10,0,2.0    ; XTitle='Pseudo-rapidity'
+b2_eta    : abs(bjet_eta[1])                                    : 10,0,2.0    ; XTitle='Pseudo-rapidity'
+njets     : nbjet                                               : 10,0,10     ; XTitle='Jet multiplicity'
+b1_csv    : bjet_csvv2[0]                                       : 10,0,1      ; XTitle='CSVv2'
+b2_csv    : bjet_csvv2[1]                                       : 10,0,1      ; XTitle='CSVv2'
 
 dyllpt       : llpt                                              : 25,0.,150.  ; XTitle='p_{T}^{ll}'
 dyllm        : llm                                               : 25,70.,120. ; XTitle='m_{ll}'

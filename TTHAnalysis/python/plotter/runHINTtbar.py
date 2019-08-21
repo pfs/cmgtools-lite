@@ -978,20 +978,15 @@ def simplePlot():
     friends   = ''
 
     fmca          = 'hin-ttbar/analysisSetup/mca.txt'
-    fmca_forCards = 'hin-ttbar/analysisSetup/mca_forCards.txt'
     fcut          = 'hin-ttbar/analysisSetup/cuts.txt'
-    fplots        = 'hin-ttbar/analysisSetup/plots.txt'
+    fplots        = 'hin-ttbar/analysisSetup/plots_results.txt'
     fsysts        = 'hin-ttbar/analysisSetup/systs.txt'
 
-    nbinsForFit = 10
-    fitVars = [('bdt'         , 'bdtrarity                      {n},0.,1.'.format(n=nbinsForFit)), 
-               ('acoplanarity', '\'(1.-abs(dphi)/TMath::Pi())\' {n},0.,1.'.format(n=nbinsForFit)),
-               ('sphericity'  , '\'llpt/(lep_pt[0]+lep_pt[1])\' {n},0.,1.'.format(n=nbinsForFit)),
-               ('distance5'   , '\'getAvgDistance(llpt,abs(dphi),abs(lleta),abs(lep_eta[0]+lep_eta[1]),lep_pt[0],5)\' {n},1.,4.'.format(n=nbinsForFit)),
-              ]
+    makeplots = ['l1pt', 'l2pt', 'l1eta', 'l2eta', 'acoplan', 'mll', 'mtll',  'l1d0', 'l2d0', 
+                 'l1dz', 'l2dz', 'l1sip2d', 'l2sip2d', 'njets', 'jetpt', 'jeteta', 'jetbtag', 
+                 'jetmass', 'centrality', 'bdt', 'bdtrarity', 'j1btag', 'j2btag']
 
-    eff_e = 0.75
-    eff_m = 0.90
+    sf = 'ncollWgt*trigSF[0]*lepSF[0]*lepSF[1]*lepIsoSF[0]*lepIsoSF[1]'
 
     for iflav,flav in enumerate(['em', 'ee', 'mm']):
         targetdir = basedir+'/simple_plots/{date}{pf}-{flav}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav )
@@ -1003,9 +998,7 @@ def simplePlot():
         scalethem = {}
 
         extraopts = ' --maxRatioRange 0. 2. --fixRatioRange --legendColumns 2 --showIndivSigs ' #--plotmode=norm '#--preFitData bdt '
-        effscale  = eff_m**2 if flav == 'mm' else eff_e*eff_m if flav == 'em' else eff_e**2
-        extraopts += ' -W {eff} '.format(eff=effscale)
-        makeplots = []
+        extraopts += ' -W {eff} '.format(eff=sf)
         showratio = True
         runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
 

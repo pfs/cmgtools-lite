@@ -232,7 +232,7 @@ def plotJetVariables(replot):
 
         makeplots = jetvars
         showratio = True
-        if (replot): runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts, newlumi=1618.5/446.9*lumi if 'onZ' in mass else 0.)
+        if (replot): runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts, newlumi=1618.5/446.9*lumi if 'onZ' in mass and not 'em' in flav else 0.)
 
     yields = {}
 
@@ -340,13 +340,13 @@ def plotJetVariables(replot):
 
         ## now on to the plotting
         ## have to reset the fill colors?
-        tmp_zconstructed.SetFillColor(ROOT.kOrange+6)
+        tmp_zconstructed.SetFillColor(ROOT.kAzure+6)
         tmp_zconstructed.SetFillStyle(1001)
         tmp_sig         .SetFillColor(633)
         tmp_sig         .SetLineColor(633)
         tmp_tw          .SetFillColor(ROOT.kTeal+9)
         tmp_vv          .SetFillColor(ROOT.kAzure-5)
-        tmp_comb        .SetFillColor(17)
+        tmp_comb        .SetFillColor(ROOT.kOrange)
 
         ## more plotting. this is really boring to code...
         leg = ROOT.TLegend(0.5,0.80,0.95,0.95)
@@ -705,8 +705,9 @@ def makeJetAnalysis():
     fsysts = 'hin-ttbar/analysisSetup/systs.txt'
 
     nbinsForFit = 3
-    ## fitVars = [ ('sphericity'  , '\'llpt/(lep_pt[0]+lep_pt[1])\' {n},0.,1.'.format(n=nbinsForFit)) ]
-    fitVars = [('bdt'         , '\'bdtrarity\'                      {n},0.,1.'.format(n=nbinsForFit))]
+    fitVars = []
+    fitVars.append( ('sphericity'  , '\'llpt/(lep_pt[0]+lep_pt[1])\' {n},0.,1.'.format(n=nbinsForFit)) )
+    #fitVars.append( ('bdt'         , '\'bdtrarity\'                      {n},0.,1.'.format(n=nbinsForFit)) )
 
     sf = 'ncollWgt*trigSF[0]*lepSF[0]*lepSF[1]*lepIsoSF[0]*lepIsoSF[1]'
 
@@ -714,64 +715,16 @@ def makeJetAnalysis():
                'mm_0b', 'mm_1b', 'mm_2b',
                'em_0b', 'em_1b', 'em_2b']
 
-## old ========================================
-## old  the overall scaling is 0.0249785192128
-## old THIS IS THE SCALING PER BIN IN nbjets FOR  mm
-## old bincenter 0.0: scaling is 317.954/313.643 = 1.014
-## old bincenter 1.0: scaling is 9.384/13.270 = 0.707
-## old bincenter 2.0: scaling is 0.367/0.698 = 0.526
-## old bincenter 3.0: scaling is 0.025/0.119 = 0.210
-## old
-## old  the overall scaling is 0.02036707889
-## old THIS IS THE SCALING PER BIN IN nbjets FOR  ee
-## old bincenter 0.0: scaling is 107.906/108.894 = 0.991
-## old bincenter 1.0: scaling is 6.242/5.255 = 1.188
-## old bincenter 2.0: scaling is 0.191/0.161 = 1.187
-## old bincenter 3.0: scaling is -0.001/0.029 = -0.017
-
-## old ========================================
-## old  the overall scaling is 0.0531295623779
-## old THIS IS THE SCALING PER BIN IN nbjets FOR  em
-## old bincenter 0.0: scaling is 16.893/12.183 = 1.387
-## old bincenter 1.0: scaling is 0.499/0.791 = 0.630
-## old bincenter 2.0: scaling is 0.019/0.044 = 0.445
-## old bincenter 3.0: scaling is 0.001/0.000 = -1.000
-## old
-## old    zscaling ={'0b_ee': 0.991, '1b_ee': 1.188, '2b_ee': 1.187,
-## old               '0b_mm': 1.014, '1b_mm': 0.707, '2b_mm': 0.526,
-## old               '0b_em': 1.387, '1b_em': 0.630, '2b_em': 0.445 }
-
-
-## new ========================================
-## new  the overall scaling is 0.0247697555145
-## new THIS IS THE SCALING PER BIN IN nbjets FOR  mm
-## new bincenter 0.0: scaling is 319.333/318.796 = 1.002
-## new bincenter 1.0: scaling is 6.063/6.545 = 0.926
-## new bincenter 2.0: scaling is 0.110/0.188 = 0.581
-## new bincenter 3.0: scaling is 0.025/0.000 = -1.000
-## new 
-## new ========================================
-## new  the overall scaling is 0.0208736504539
-## new THIS IS THE SCALING PER BIN IN nbjets FOR  ee
-## new bincenter 0.0: scaling is 112.815/112.372 = 1.004
-## new bincenter 1.0: scaling is 1.800/2.186 = 0.823
-## new bincenter 2.0: scaling is -0.009/0.036 = -0.253
-## new bincenter 3.0: scaling is -0.000/0.010 = -0.022
-## new 
-## new  the overall scaling is 0.0563943786955
-## new THIS IS THE SCALING PER BIN IN nbjets FOR  em
-## new bincenter 0.0: scaling is 18.009/12.837 = 1.403
-## new bincenter 1.0: scaling is 0.342/0.164 = 2.084
-## new bincenter 2.0: scaling is 0.006/0.000 = -1.000
-## new bincenter 3.0: scaling is 0.001/0.000 = -1.000
-
-
-    zscaling ={'ee_0b': 1.004, 'ee_1b': 0.823, 'ee_2b': 0.000,
-               'mm_0b': 1.002, 'mm_1b': 0.926, 'mm_2b': 0.581,
-               'em_0b': 1.403, 'em_1b': 2.084, 'em_2b': 0.000 }
+    ## with elpt 25 zscaling ={'ee_0b': 0.983, 'ee_1b': 1.160, 'ee_2b': 1.207,
+    ## with elpt 25            'mm_0b': 0.979, 'mm_1b': 1.147, 'mm_2b': 1.380,
+    ## with elpt 25            'em_0b': 1.101, 'em_1b': 1.548, 'em_2b': 2.196 }
+    zscaling ={'ee_0b': 0.975, 'ee_1b': 1.268, 'ee_2b': 1.495,
+               'mm_0b': 0.980, 'mm_1b': 1.145, 'mm_2b': 1.312,
+               'em_0b': 1.089, 'em_1b': 1.331, 'em_2b': 2.339 }
 
 
     for iflav,flav in enumerate(regions):
+
         targetdir = basedir+'/card_inputs_jetanalysis/{date}{pf}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav )
 
         enable    = flav.split('_')
@@ -799,7 +752,9 @@ def makeJetAnalysis():
             cmd_cards += ' '.join([' -E ^'+i+' ' for i in flav.split('_')])
             cmd_cards += ' --scale-process zg {f:.3f} '.format(f=zscaling[flav])
 
-            cmd_cards += ' {fitVar} {systs} '.format(fitVar=fitVar[1].replace(str(nbinsForFit),'1') if '2b' in flav else fitVar[1], systs=fsysts)
+            systfile = fsysts if not '2b' in flav else 'hin-ttbar/analysisSetup/systs2b.txt'
+
+            cmd_cards += ' {fitVar} {systs} '.format(fitVar=fitVar[1].replace(str(nbinsForFit),'1') if '2b' in flav else fitVar[1], systs=systfile)
 
             print 'running the cards with command'
             print '==========================================='
@@ -851,6 +806,54 @@ def makeJetAnalysis():
 
             ##     print '=========================================='
             ##     print 'that should be all for now... need to find a way to also do the numbers automatically...'
+
+def checkSphericity():
+    print '=========================================='
+    print 'checking sphericity < 0.1 events'
+    print '=========================================='
+    trees     = treedir
+    friends   = ''
+
+    fmca   = 'hin-ttbar/analysisSetup/mca_forCards.txt'
+    fcut   = 'hin-ttbar/analysisSetup/cuts.txt'
+    fplots = 'hin-ttbar/analysisSetup/plots.txt'
+    fsysts = 'hin-ttbar/analysisSetup/systs.txt'
+
+    flavors = ['mm']#'ee', 'mm', 'em', ]
+
+    sf = 'ncollWgt*trigSF[0]*lepSF[0]*lepSF[1]*lepIsoSF[0]*lepIsoSF[1]'
+
+
+    makeplots = ['l1pt' 'l2pt', 'l1eta', 'l2eta', 'lepeta', 'dphi', 'dphifine', 'acoplanfine']
+
+    for iflav,flav in enumerate(flavors):
+        for cen in ['centralityLo', 'centralityHi']:
+            targetdir = basedir+'/low_sphericity_events/{date}{pf}-{flav}-{cen}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav, cen=cen )
+
+            enable    = [flav, cen]
+            disable   = []
+            processes = []
+            fittodata = []
+            scalethem = {}
+
+            extraopts = ' --maxRatioRange 0. 2. --fixRatioRange --legendColumns 2 --showIndivSigs ' #--plotmode=norm '#--preFitData bdt '
+
+            extraopts += ' -W {sfs} -I coplan0p01 '.format(sfs=sf)
+
+            ## if 'onZ' in flav:
+            ##     makeplots = [flav+'mll']
+            ## else:
+            ##     makeplots = [flav+x[0] for x in fitVars]
+
+            showratio = True
+
+            fs_lumi = 446.931*1e-9
+            if 'onZ' in flav and not 'em' in flav:
+                fs_lumi = fs_lumi*1618.5/446.9
+            if 'mm' in flav:
+                fs_lumi = fs_lumi - 30.103*1e-9
+
+            runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts, newlumi=fs_lumi)
 
 def makeCards():
     print '=========================================='
@@ -1046,6 +1049,7 @@ if __name__ == '__main__':
     parser.add_option('--dyPlots'    , action='store_true' , default=False , help='make plots for onZ ee/mm')
     parser.add_option('--jetAnalysis'    , action='store_true' , default=False , help='make the jet analysis datacards')
     parser.add_option('--dyReweighting'    , action='store_true' , default=False , help='make Z-pT reweighting test plots')
+    parser.add_option('--checkSphericity'    , action='store_true' , default=False , help='check low sphericity events')
     (opts, args) = parser.parse_args()
 
 ## LUMI=1618.466*(1e-6)
@@ -1101,3 +1105,6 @@ if __name__ == '__main__':
     if opts.jetAnalysis:
         print 'making the cards for the jet based analysis'
         makeJetAnalysis()
+    if opts.checkSphericity:
+        print 'chekcing low sphericity events'
+        checkSphericity()

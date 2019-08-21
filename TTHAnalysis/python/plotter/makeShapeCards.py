@@ -422,7 +422,7 @@ for name in systsEnv.keys():
                 mca._projection.scaleSystTemplate(name,nominal,alternate)
             alternate.SetName("%s_%sUp" % (nominal.GetName(),name))
             if mode == "alternateShapeOnly":
-                alternate.Scale(nominal.Integral()/alternate.Integral())
+                if (alternate.Integral()): alternate.Scale(nominal.Integral()/alternate.Integral())
             mirror = nominal.Clone("%s_%sDown" % (nominal.GetName(),name))
             for b in xrange(1,nominal.GetNbinsX()+1):
                 y0 = nominal.GetBinContent(b)

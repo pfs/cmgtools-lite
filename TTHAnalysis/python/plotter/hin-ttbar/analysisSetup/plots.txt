@@ -45,7 +45,9 @@ l1eta     : lep_eta[0]                                          : 10,-2.5,2.5 ; 
 l2eta     : lep_eta[1]                                          : 10,-2.5,2.5 ; XTitle='#eta^{l2}'
 lepeta    : lep_eta                                             : 10,-2.5,2.5 ; XTitle='both lepton etas'
 dphi      : abs(dphi)                                           : 10,0.,3.142 ; XTitle='#Delta #phi_{ll}'
+dphifine      : abs(dphi)                                           : 50,0.,3.142 ; XTitle='#Delta #phi_{ll} fine' 
 acoplan   : 1.-abs(dphi)/TMath::Pi()                            : 10,0.,1.    ; XTitle='1.-|#Delta#phi(ll)|/#pi'
+acoplanfine   : 1.-abs(dphi)/TMath::Pi()                            : 100,0.,1.    ; XTitle='1.-|#Delta#phi(ll)|/#pi'
 lldr      : deltaR(lep_eta[0],lep_phi[0],lep_eta[1],lep_phi[1]) : 10,0.,5.    ; XTitle='#DeltaR_{ll}', Legend="TL"
 lldeta    : abs(lep_eta[0]-lep_eta[1])                          : 10,0.,5.    ; XTitle='#Delta#eta(ll)'
 llpt      : llpt                                                : 10,0.,150.  ; XTitle='p_{T}^{ll}'

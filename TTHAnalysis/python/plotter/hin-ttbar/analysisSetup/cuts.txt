@@ -8,7 +8,11 @@ m2iso02   : iso02(lep_pdgId[1],lep_pt[1],lep_isofull20[1],lep_rho[1]) < -0.06 ||
 hem1 : lep_pdgId[0] == 13 || lep_eta[0] >= -1.39 || lep_phi[0] < -1.6 || lep_phi[0] > -0.9
 hem2 : lep_pdgId[1] == 13 || lep_eta[1] >= -1.39 || lep_phi[1] < -1.6 || lep_phi[1] > -0.9
 
-sph0p1 : pt_2(lep_calpt[0],lep_phi[0],lep_calpt[1],lep_phi[1])/(lep_calpt[0]+lep_calpt[1]) > 0.1
+#sph0p1      : pt_2(lep_calpt[0],lep_phi[0],lep_calpt[1],lep_phi[1])/(lep_calpt[0]+lep_calpt[1]) > 0.1
+acoplan0p01 : 1.-abs(dphi)/3.14159265 > 0.01
+
+#el1pt25 : lep_calpt[0] > 25. || abs(lep_pdgId[0]) == 13
+#el2pt25 : lep_calpt[1] > 25. || abs(lep_pdgId[1]) == 13
 
 
 ## these three are for the plotting of leptonic variables
@@ -16,6 +20,7 @@ sph0p1 : pt_2(lep_calpt[0],lep_phi[0],lep_calpt[1],lep_phi[1])/(lep_calpt[0]+lep
 em        : abs(lep_pdgId[0]*lep_pdgId[1]) == 143  && llm > 20.                     ; Disable=True
 ee        : abs(lep_pdgId[0]*lep_pdgId[1]) == 121  && llm > 20. && abs(llm-91.)>15. ; Disable=True
 mm        : abs(lep_pdgId[0]*lep_pdgId[1]) == 169  && llm > 20. && abs(llm-91.)>15. ; Disable=True
+
 sf        : (abs(lep_pdgId[0]*lep_pdgId[1]) == 169 || abs(lep_pdgId[0]*lep_pdgId[1]) == 121 ) && llm > 20. && abs(llm-91.)>15. ; Disable=True
 
 leponZee  : abs(lep_pdgId[0]*lep_pdgId[1]) == 121               && abs(llm-91.)<15. ; Disable=True
@@ -23,9 +28,6 @@ leponZmm  : abs(lep_pdgId[0]*lep_pdgId[1]) == 169               && abs(llm-91.)<
 
 blind : !(lep_pdgId[0]*lep_pdgId[1] == 143 && lep_charge[0]*lep_charge[1] < 0 && abs(llm-91.)<15. && run >=326887) ; Disable=True
 
-##0b : Sum$(deltaR(lep_eta[0],lep_phi[0],bjet_eta,bjet_phi)>0.3 && deltaR(lep_eta[1],lep_phi[1],bjet_eta,bjet_phi)>0.3 && bjet_csvv2 > 0.92) == 0 ; Disable=True
-##1b : Sum$(deltaR(lep_eta[0],lep_phi[0],bjet_eta,bjet_phi)>0.3 && deltaR(lep_eta[1],lep_phi[1],bjet_eta,bjet_phi)>0.3 && bjet_csvv2 > 0.92) == 1 ; Disable=True
-##2b : Sum$(deltaR(lep_eta[0],lep_phi[0],bjet_eta,bjet_phi)>0.3 && deltaR(lep_eta[1],lep_phi[1],bjet_eta,bjet_phi)>0.3 && bjet_csvv2 > 0.92) == 2 ; Disable=True
 0b : nbjet_sel == 0 ; Disable=True
 1b : nbjet_sel == 1 ; Disable=True
 2b : nbjet_sel == 2 ; Disable=True
@@ -45,11 +47,3 @@ offZ   : abs(llm-91.)>15.                      ; Disable=True
 
 centralityLo : cenbin<30 ; Disable=True
 centralityHi : cenbin>30 ; Disable=True
-
-
-## old isolation variables and cuts
-## l1iso03   : !isData || iso03(lep_pdgId[0],lep_pt[0],lep_isofull[0],lep_isofull30[0],lep_rho[0]) < 0.12
-## e1iso03   : !isData || iso03(lep_pdgId[0],lep_pt[0],lep_isofull[0],lep_isofull30[0],lep_rho[0]) < 0.00 || lep_pdgId[0] == 13
-## l2iso03   : !isData || iso03(lep_pdgId[1],lep_pt[1],lep_isofull[1],lep_isofull30[1],lep_rho[1]) < 0.12
-## e2iso03   : !isData || iso03(lep_pdgId[1],lep_pt[1],lep_isofull[1],lep_isofull30[1],lep_rho[1]) < 0.00 || lep_pdgId[1] == 13
-

@@ -12,16 +12,16 @@ data_comb_alt  : data_comb  : .* : data_comb_alt : alternateShapeOnly
 
 ## z-pT reweighting
 ## ==========================================
-ptZ    : zg    : .* : ptZ    : templates
+ptZ    : zg    : .* : ptZ    : templatesShapeOnly
 
 ## ttbar signal theory uncertainties
 ## ==========================================
-ptTop  : ttbar : .* : ptTop  : templates
-mTop   : ttbar : .* : mTop   : templates
-muF    : ttbar : .* : muF    : templates
-muR    : ttbar : .* : muR    : templates
-muRmuF : ttbar : .* : muRmuF : templates
-##alphaS : ttbar : .* : alphaS : templates
+ptTop  : ttbar : .* : ptTop  : templatesShapeOnly
+mTop   : ttbar : .* : mTop   : templatesShapeOnly
+muF    : ttbar : .* : muF    : templatesShapeOnly
+muR    : ttbar : .* : muR    : templatesShapeOnly
+muRmuF : ttbar : .* : muRmuF : templatesShapeOnly
+##alphaS : ttbar : .* : alphaS : templatesShapeOnly
 
 
 ## ttbar singal experimental nbjet uncertainties
@@ -34,51 +34,51 @@ JER       : ttbar : .* : jer   : templates
 
 ## a whole bunch of pdf uncertainties. so far only on ttbar
 ## ==========================================================
-pdf1   : ttbar : .* : pdf1   : templates
-pdf2   : ttbar : .* : pdf2   : templates
-pdf3   : ttbar : .* : pdf3   : templates
-pdf4   : ttbar : .* : pdf4   : templates
-pdf5   : ttbar : .* : pdf5   : templates
-pdf6   : ttbar : .* : pdf6   : templates
-pdf7   : ttbar : .* : pdf7   : templates
-pdf8   : ttbar : .* : pdf8   : templates
-pdf9   : ttbar : .* : pdf9   : templates
-pdf10  : ttbar : .* : pdf10  : templates
-pdf11  : ttbar : .* : pdf11  : templates
-pdf12  : ttbar : .* : pdf12  : templates
-pdf13  : ttbar : .* : pdf13  : templates
-pdf14  : ttbar : .* : pdf14  : templates
-pdf15  : ttbar : .* : pdf15  : templates
-pdf16  : ttbar : .* : pdf16  : templates
-pdf17  : ttbar : .* : pdf17  : templates
-pdf18  : ttbar : .* : pdf18  : templates
-pdf19  : ttbar : .* : pdf19  : templates
-pdf20  : ttbar : .* : pdf20  : templates
-pdf21  : ttbar : .* : pdf21  : templates
-pdf22  : ttbar : .* : pdf22  : templates
-pdf23  : ttbar : .* : pdf23  : templates
-pdf24  : ttbar : .* : pdf24  : templates
-pdf25  : ttbar : .* : pdf25  : templates
-pdf26  : ttbar : .* : pdf26  : templates
-pdf27  : ttbar : .* : pdf27  : templates
-pdf28  : ttbar : .* : pdf28  : templates
-pdf29  : ttbar : .* : pdf29  : templates
-pdf30  : ttbar : .* : pdf30  : templates
-pdf31  : ttbar : .* : pdf31  : templates
-pdf32  : ttbar : .* : pdf32  : templates
-pdf33  : ttbar : .* : pdf33  : templates
-pdf34  : ttbar : .* : pdf34  : templates
-pdf35  : ttbar : .* : pdf35  : templates
-pdf36  : ttbar : .* : pdf36  : templates
-pdf37  : ttbar : .* : pdf37  : templates
-pdf38  : ttbar : .* : pdf38  : templates
-pdf39  : ttbar : .* : pdf39  : templates
-pdf40  : ttbar : .* : pdf40  : templates
-pdf41  : ttbar : .* : pdf41  : templates
-pdf42  : ttbar : .* : pdf42  : templates
-pdf43  : ttbar : .* : pdf43  : templates
-pdf44  : ttbar : .* : pdf44  : templates
-pdf45  : ttbar : .* : pdf45  : templates
-pdf46  : ttbar : .* : pdf46  : templates
-pdf47  : ttbar : .* : pdf47  : templates
-pdf48  : ttbar : .* : pdf48  : templates
+pdf1   : ttbar : .* : pdf1   : templatesShapeOnly
+pdf2   : ttbar : .* : pdf2   : templatesShapeOnly
+pdf3   : ttbar : .* : pdf3   : templatesShapeOnly
+pdf4   : ttbar : .* : pdf4   : templatesShapeOnly
+pdf5   : ttbar : .* : pdf5   : templatesShapeOnly
+pdf6   : ttbar : .* : pdf6   : templatesShapeOnly
+pdf7   : ttbar : .* : pdf7   : templatesShapeOnly
+pdf8   : ttbar : .* : pdf8   : templatesShapeOnly
+pdf9   : ttbar : .* : pdf9   : templatesShapeOnly
+pdf10  : ttbar : .* : pdf10  : templatesShapeOnly
+pdf11  : ttbar : .* : pdf11  : templatesShapeOnly
+pdf12  : ttbar : .* : pdf12  : templatesShapeOnly
+pdf13  : ttbar : .* : pdf13  : templatesShapeOnly
+pdf14  : ttbar : .* : pdf14  : templatesShapeOnly
+pdf15  : ttbar : .* : pdf15  : templatesShapeOnly
+pdf16  : ttbar : .* : pdf16  : templatesShapeOnly
+pdf17  : ttbar : .* : pdf17  : templatesShapeOnly
+pdf18  : ttbar : .* : pdf18  : templatesShapeOnly
+pdf19  : ttbar : .* : pdf19  : templatesShapeOnly
+pdf20  : ttbar : .* : pdf20  : templatesShapeOnly
+pdf21  : ttbar : .* : pdf21  : templatesShapeOnly
+pdf22  : ttbar : .* : pdf22  : templatesShapeOnly
+pdf23  : ttbar : .* : pdf23  : templatesShapeOnly
+pdf24  : ttbar : .* : pdf24  : templatesShapeOnly
+pdf25  : ttbar : .* : pdf25  : templatesShapeOnly
+pdf26  : ttbar : .* : pdf26  : templatesShapeOnly
+pdf27  : ttbar : .* : pdf27  : templatesShapeOnly
+pdf28  : ttbar : .* : pdf28  : templatesShapeOnly
+pdf29  : ttbar : .* : pdf29  : templatesShapeOnly
+pdf30  : ttbar : .* : pdf30  : templatesShapeOnly
+pdf31  : ttbar : .* : pdf31  : templatesShapeOnly
+pdf32  : ttbar : .* : pdf32  : templatesShapeOnly
+pdf33  : ttbar : .* : pdf33  : templatesShapeOnly
+pdf34  : ttbar : .* : pdf34  : templatesShapeOnly
+pdf35  : ttbar : .* : pdf35  : templatesShapeOnly
+pdf36  : ttbar : .* : pdf36  : templatesShapeOnly
+pdf37  : ttbar : .* : pdf37  : templatesShapeOnly
+pdf38  : ttbar : .* : pdf38  : templatesShapeOnly
+pdf39  : ttbar : .* : pdf39  : templatesShapeOnly
+pdf40  : ttbar : .* : pdf40  : templatesShapeOnly
+pdf41  : ttbar : .* : pdf41  : templatesShapeOnly
+pdf42  : ttbar : .* : pdf42  : templatesShapeOnly
+pdf43  : ttbar : .* : pdf43  : templatesShapeOnly
+pdf44  : ttbar : .* : pdf44  : templatesShapeOnly
+pdf45  : ttbar : .* : pdf45  : templatesShapeOnly
+pdf46  : ttbar : .* : pdf46  : templatesShapeOnly
+pdf47  : ttbar : .* : pdf47  : templatesShapeOnly
+pdf48  : ttbar : .* : pdf48  : templatesShapeOnly

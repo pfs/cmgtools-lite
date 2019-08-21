@@ -37,25 +37,25 @@ float weightW(int id1, int id2){
 
 float weightMixed(int id1, int id2, int mixrank){
     if      (abs(id1*id2) == 121) {
-        if (mixrank == 0) return ( 3.58)/24167.;
-        if (mixrank == 1) return ( 3.58)/25126.;
-        if (mixrank == 2) return ( 3.58)/25836.;
-        if (mixrank == 3) return ( 3.58)/26604.;
-        if (mixrank == 4) return ( 3.58)/27205.;
+        if (mixrank == 0) return (6.06-0.13)/26417.;
+        if (mixrank == 1) return (6.06-0.13)/25126.;
+        if (mixrank == 2) return (6.06-0.13)/25836.;
+        if (mixrank == 3) return (6.06-0.13)/26604.;
+        if (mixrank == 4) return (6.06-0.13)/30659.;
     }
     else if (abs(id1*id2) == 143) {
-        if (mixrank == 0) return (10.75-0.82)/170.;
-        if (mixrank == 1) return (10.75-0.82)/136.;
-        if (mixrank == 2) return (10.75-0.82)/138.;
-        if (mixrank == 3) return (10.75-0.82)/139.;
-        if (mixrank == 4) return (10.75-0.82)/139.;
+        if (mixrank == 0) return (10.2-0.82)/136.;
+        if (mixrank == 1) return (10.2-0.82)/136.;
+        if (mixrank == 2) return (10.2-0.82)/138.;
+        if (mixrank == 3) return (10.2-0.82)/139.;
+        if (mixrank == 4) return (10.2-0.82)/153.;
     }
     else if (abs(id1*id2) == 169) {
-        if (mixrank == 0) return ( 0.28)/75833.;
-        if (mixrank == 1) return ( 0.28)/77721.;
-        if (mixrank == 2) return ( 0.28)/79937.;
-        if (mixrank == 3) return ( 0.28)/81063.;
-        if (mixrank == 4) return ( 0.28)/81362.;
+        if (mixrank == 0) return (3.31-0.68)/72562.;
+        if (mixrank == 1) return (3.31-0.68)/77721.;
+        if (mixrank == 2) return (3.31-0.68)/79937.;
+        if (mixrank == 3) return (3.31-0.68)/81063.;
+        if (mixrank == 4) return (3.31-0.68)/79543.;
     }
     return -999.;
 }

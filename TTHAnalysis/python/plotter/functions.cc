@@ -27,6 +27,7 @@ TString CMSSW_BASE = gSystem->ExpandPathName("${CMSSW_BASE}");
 //
 
 TF1 * zptFunc = NULL;
+TF1 * bdtcdfinvFunc = NULL;
 
 float weightW(int id1, int id2){
     if      (abs(id1*id2) == 121) return ( 3.58-0.00)/ 945.66;
@@ -146,6 +147,15 @@ float zptWeight(float zpt, int updn=0){
     return zpt >= 45. ? zptFunc->Eval(45.) : zptFunc->Eval(zpt);
     
 }
+
+float bdtcdfinv(float bdt) {
+
+  if(!bdtcdfinvFunc) bdtcdfinvFunc=new TF1("bdtcdfinv",
+                                           "0.364366+0.356660*x+0.091563*pow(x,2)+0.089546*pow(x,3)-0.074305*pow(x,4)+0.066103*pow(x,5)+0.128357*pow(x,6)",-1,1);
+  return max(min(1.,bdtcdfinvFunc->Eval(bdt)),0.);
+}
+
+
 
 float iso02(int pdgId, float pt, float iso02, float lep_rho){
     float ue(-1000.);

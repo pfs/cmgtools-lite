@@ -1,0 +1,6 @@
+# vim: syntax=sh
+* ; TreeName="treeProducerHIN"
+
+ttbar_PbPb         : TTJets_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8  : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 ;               FillColor=1,  Label="PbPb", AddWeight="weight*ncollWgt*trigSF[0]*lepSF[0]*lepSF[1]*lepIsoSF[0]*lepIsoSF[1]"
+ttbar_PbPb_cen     : TTJets_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8  : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 && cenbin<30  ; FillColor=2,  Label="PbPb (0-30)", AddWeight="weight*ncollWgt*trigSF[0]*lepSF[0]*lepSF[1]*lepIsoSF[0]*lepIsoSF[1]"
+ttbar_PbPb_periph  : TTJets_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8  : 69*(208**2) : lep_charge[0]*lep_charge[1]<0 && cenbin>=30 ; FillColor=3,  Label="PbPb (30-100)", AddWeight="weight*ncollWgt*trigSF[0]*lepSF[0]*lepSF[1]*lepIsoSF[0]*lepIsoSF[1]"

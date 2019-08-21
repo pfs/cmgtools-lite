@@ -176,6 +176,30 @@ def compareCombBackgrounds():
         showratio = True
         runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
 
+def doBFindingControlPlots():
+    print '=========================================='
+    print 'plotting b-finding control variables'
+    print '=========================================='
+    trees     = treedir
+    friends   = ''
+
+    fmca   = 'hin-ttbar/analysisSetup/mca_bfinding.txt'
+    fplots = 'hin-ttbar/analysisSetup/plots_bfinding.txt'
+    fcut   = 'hin-ttbar/analysisSetup/cuts.txt'
+    targetdir = basedir+'/bfinding/{date}/'.format(date=date)
+
+    enable    = []
+    disable   = []
+    processes = ['ttbar_PbPb','ttbar_PbPb_cen','ttbar_PbPb_periph']
+    fittodata = []
+    scalethem = {}
+
+    extraopts = '--maxRatioRange 0. 2. --fixRatioRange --plotmode=norm --showRatio --ratioNums %s --ratioDen %s'%(','.join(processes[1:]),processes[0])
+    makeplots = []
+    showratio = True
+    runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts, newlumi=1618.5/446.9*lumi)
+
+
 def plotJetVariables(replot):
     print '=========================================='
     print 'plotting jet variables with DY from data'
@@ -1037,7 +1061,7 @@ if __name__ == '__main__':
     if user == 'mdunser':
         basedir = '/afs/cern.ch/user/m/mdunser/www/private/heavyIons/plots/'
     elif user == 'psilva':
-        basedir = 'PbPb2018'
+        basedir = '/eos/user/p/psilva/www/HIN-19-001'
     
     ## this is pp MC treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim27Apr/'
     ## this is with old eleID and stuff treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim21June/' ## rereco data and mixed, official MC
@@ -1054,7 +1078,8 @@ if __name__ == '__main__':
         compareCombBackgrounds()
     if opts.jetvars:
         print 'plotting jet related variables'
-        plotJetVariables(opts.replot)
+        #plotJetVariables(opts.replot)
+        doBFindingControlPlots()
     if opts.compareSignals:
         print 'plotting jet related variables'
         compareSignals()

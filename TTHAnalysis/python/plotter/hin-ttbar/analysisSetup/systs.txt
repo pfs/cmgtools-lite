@@ -32,6 +32,11 @@ quenching : ttbar : .* : quen  : templates
 JEC       : ttbar : .* : jec   : templates
 JER       : ttbar : .* : jer   : templates
 
+## lepton scale factors (ttbar and DY)
+## ==========================================
+lepSF     : ttbar|zg : .* : lepSF    : templates
+lepIsoSF  : ttbar|zg : .* : lepIsoSF : templates
+
 ## a whole bunch of pdf uncertainties. so far only on ttbar
 ## ==========================================================
 pdf1   : ttbar : .* : pdf1   : templatesShapeOnly

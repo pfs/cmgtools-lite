@@ -587,7 +587,7 @@ def makeZplots():
 
         extraopts += ' -W {sf} '.format(sf=sf)
 
-        makeplots = ['nleptons', 'l1iso02', 'l2iso02', 'dyllpt', 'dyleppt', 'dyl1pt', 'dyl2pt', 'dysphericity', 'dydphi', 'dyllm', 'dyllmcal', 'lepiso02', 'l1d0', 'l2d0', 'dyl1ptcal', 'dyl2ptcal']
+        makeplots = ['dyacoplanarity', 'l1iso02', 'l2iso02', 'dyllpt', 'dyleppt', 'dyl1pt', 'dyl2pt', 'dysphericity', 'dydphi', 'dyllm', 'dyllmcal', 'lepiso02', 'l1d0', 'l2d0', 'dyl1ptcal', 'dyl2ptcal']
         showratio = True
 
         unblinded = 1618.5 - (0. if 'ee' in flav else 30.103)
@@ -706,8 +706,9 @@ def makeJetAnalysis():
 
     nbinsForFit = 3
     fitVars = []
-    fitVars.append( ('sphericity'  , '\'llpt/(lep_pt[0]+lep_pt[1])\' {n},0.,1.'.format(n=nbinsForFit)) )
+    #fitVars.append( ('sphericity'  , '\'llpt/(lep_pt[0]+lep_pt[1])\' {n},0.,1.'.format(n=nbinsForFit)) )
     #fitVars.append( ('bdt'         , '\'bdtrarity\'                      {n},0.,1.'.format(n=nbinsForFit)) )
+    fitVars.append( ('bdtcomb'       , '\'bdtcdfinv(bdt)\'                 {n},0.,1.'.format(n=nbinsForFit)) )
 
     sf = 'ncollWgt*trigSF[0]*lepSF[0]*lepSF[1]*lepIsoSF[0]*lepIsoSF[1]'
 
@@ -718,9 +719,12 @@ def makeJetAnalysis():
     ## with elpt 25 zscaling ={'ee_0b': 0.983, 'ee_1b': 1.160, 'ee_2b': 1.207,
     ## with elpt 25            'mm_0b': 0.979, 'mm_1b': 1.147, 'mm_2b': 1.380,
     ## with elpt 25            'em_0b': 1.101, 'em_1b': 1.548, 'em_2b': 2.196 }
-    zscaling ={'ee_0b': 0.975, 'ee_1b': 1.268, 'ee_2b': 1.495,
-               'mm_0b': 0.980, 'mm_1b': 1.145, 'mm_2b': 1.312,
-               'em_0b': 1.089, 'em_1b': 1.331, 'em_2b': 2.339 }
+    ## with both pT 20 zscaling ={'ee_0b': 0.975, 'ee_1b': 1.268, 'ee_2b': 1.495,
+    ## with both pT 20            'mm_0b': 0.980, 'mm_1b': 1.145, 'mm_2b': 1.312,
+    ## with both pT 20            'em_0b': 1.089, 'em_1b': 1.331, 'em_2b': 2.339 }
+    zscaling ={'ee_0b': 0.978, 'ee_1b': 1.232, 'ee_2b': 1.238,
+               'mm_0b': 0.979, 'mm_1b': 1.149, 'mm_2b': 1.453,
+               'em_0b': 1.231, 'em_1b': 1.650, 'em_2b': 1.390 }
 
 
     for iflav,flav in enumerate(regions):
@@ -737,7 +741,7 @@ def makeJetAnalysis():
 
         extraopts += ' -W {sfs} '.format(sfs=sf)
 
-        makeplots = [flav+'_bdt', flav+'_sphericity']
+        makeplots = [flav+'_bdtcomb'] #[flav+'_bdt', flav+'_sphericity', flav+'_bdtcomb']
         showratio = True
 
         runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts, newlumi=1618.5/446.9*lumi if 'onZ' in flav else 0.)
@@ -1078,8 +1082,8 @@ if __name__ == '__main__':
         compareCombBackgrounds()
     if opts.jetvars:
         print 'plotting jet related variables'
-        #plotJetVariables(opts.replot)
-        doBFindingControlPlots()
+        plotJetVariables(opts.replot)
+        #doBFindingControlPlots()
     if opts.compareSignals:
         print 'plotting jet related variables'
         compareSignals()

@@ -29,6 +29,11 @@ TString CMSSW_BASE = gSystem->ExpandPathName("${CMSSW_BASE}");
 TF1 * zptFunc = NULL;
 TF1 * bdtcdfinvFunc = NULL;
 
+float sfVariation(float sf1, float sf1unc, float sf2, float sf2unc, int var){
+    // var should be either 1 or -1
+    return (sf1 + var*sf1unc) * (sf2 + var*sf2unc) /sf1 /sf2;
+}
+
 float weightW(int id1, int id2){
     if      (abs(id1*id2) == 121) return ( 3.58-0.00)/ 945.66;
     else if (abs(id1*id2) == 143) return (10.75-0.82)/7240.57;
@@ -38,25 +43,25 @@ float weightW(int id1, int id2){
 
 float weightMixed(int id1, int id2, int mixrank){
     if      (abs(id1*id2) == 121) {
-        if (mixrank == 0) return (6.06-0.13)/26417.;
+        if (mixrank == 0) return (3.31-0.09)/23223.; //(6.06-0.13)/26417.;
         if (mixrank == 1) return (6.06-0.13)/25126.;
         if (mixrank == 2) return (6.06-0.13)/25836.;
         if (mixrank == 3) return (6.06-0.13)/26604.;
-        if (mixrank == 4) return (6.06-0.13)/30659.;
+        if (mixrank == 4) return (3.31-0.09)/26722.; //(6.06-0.13)/30659.;
     }
     else if (abs(id1*id2) == 143) {
-        if (mixrank == 0) return (10.2-0.82)/136.;
+        if (mixrank == 0) return (4.69-0.49)/64.; //(10.2-0.82)/136.;
         if (mixrank == 1) return (10.2-0.82)/136.;
         if (mixrank == 2) return (10.2-0.82)/138.;
         if (mixrank == 3) return (10.2-0.82)/139.;
-        if (mixrank == 4) return (10.2-0.82)/153.;
+        if (mixrank == 4) return (4.69-0.49)/59.; //(10.2-0.82)/153.;
     }
     else if (abs(id1*id2) == 169) {
-        if (mixrank == 0) return (3.31-0.68)/72562.;
+        if (mixrank == 0) return (0.83-0.29)/61903.; //(3.31-0.68)/72562.;
         if (mixrank == 1) return (3.31-0.68)/77721.;
         if (mixrank == 2) return (3.31-0.68)/79937.;
         if (mixrank == 3) return (3.31-0.68)/81063.;
-        if (mixrank == 4) return (3.31-0.68)/79543.;
+        if (mixrank == 4) return (0.83-0.29)/66604.; //(3.31-0.68)/79543.;
     }
     return -999.;
 }

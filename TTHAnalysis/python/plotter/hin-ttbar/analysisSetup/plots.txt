@@ -82,7 +82,8 @@ dyl1pt       : lep_pt[0]                                         : 25,20.,120. ;
 dyl2pt       : lep_pt[1]                                         : 25,20.,120. ; XTitle='p_{T}^{l2}'
 dyl1ptcal       : lep_calpt[0]                                   : 25,20.,120. ; XTitle='p_{T}^{l1} cal.'
 dyl2ptcal       : lep_calpt[1]                                   : 25,20.,120. ; XTitle='p_{T}^{l2} cal.'
-dysphericity : llpt/(lep_pt[0]+lep_pt[1])                        : 25,0.,1.    ; XTitle='sphericity'
+dysphericity   : llpt/(lep_pt[0]+lep_pt[1])                      : 25,0.,1.    ; XTitle='sphericity'
+dyacoplanarity : 1.-abs(dphi)/TMath::Pi()                        : 100,0.,1.    ; XTitle='1.-|#Delta#phi(ll)|/#pi'
 dydphi       : abs(dphi)                                         : 25,0.,3.142 ; XTitle='#Delta #phi_{ll}'
 
 leponZmmmll : llm : 30, 76., 106. ; XTitle='m_{#mu#mu}'

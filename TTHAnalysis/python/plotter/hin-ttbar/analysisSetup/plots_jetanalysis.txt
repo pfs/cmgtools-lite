@@ -22,3 +22,16 @@ em_2b_bdt : bdtrarity  : 1,0.,1.    ; XTitle='2b bdt (e#mu)'
 mm_2b_bdt : bdtrarity  : 1,0.,1.    ; XTitle='2b bdt (#mu#mu)'
 ee_2b_bdt : bdtrarity  : 1,0.,1.    ; XTitle='2b bdt (ee)'
 
+
+em_0b_bdtcomb : bdtcdfinv(bdt)  : 3,0.,1.    ; XTitle='0b bdt comb (e#mu)'
+mm_0b_bdtcomb : bdtcdfinv(bdt)  : 3,0.,1.    ; XTitle='0b bdt comb (#mu#mu)'
+ee_0b_bdtcomb : bdtcdfinv(bdt)  : 3,0.,1.    ; XTitle='0b bdt comb (ee)'
+   
+em_1b_bdtcomb : bdtcdfinv(bdt)  : 3,0.,1.    ; XTitle='1b bdt comb (e#mu)'
+mm_1b_bdtcomb : bdtcdfinv(bdt)  : 3,0.,1.    ; XTitle='1b bdt comb (#mu#mu)'
+ee_1b_bdtcomb : bdtcdfinv(bdt)  : 3,0.,1.    ; XTitle='1b bdt comb (ee)'
+   
+em_2b_bdtcomb : bdtcdfinv(bdt)  : 1,0.,1.    ; XTitle='2b bdt comb (e#mu)'
+mm_2b_bdtcomb : bdtcdfinv(bdt)  : 1,0.,1.    ; XTitle='2b bdt comb (#mu#mu)'
+ee_2b_bdtcomb : bdtcdfinv(bdt)  : 1,0.,1.    ; XTitle='2b bdt comb (ee)'
+

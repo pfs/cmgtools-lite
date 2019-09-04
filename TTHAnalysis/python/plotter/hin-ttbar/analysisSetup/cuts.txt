@@ -5,8 +5,8 @@ m1iso02   : iso02(lep_pdgId[0],lep_pt[0],lep_isofull20[0],lep_rho[0]) < -0.06 ||
 l2iso02   : iso02(lep_pdgId[1],lep_pt[1],lep_isofull20[1],lep_rho[1]) <  0.08
 m2iso02   : iso02(lep_pdgId[1],lep_pt[1],lep_isofull20[1],lep_rho[1]) < -0.06 || lep_pdgId[1] == 13
 
-hem1 : lep_pdgId[0] == 13 || lep_eta[0] >= -1.39 || lep_phi[0] < -1.6 || lep_phi[0] > -0.9
-hem2 : lep_pdgId[1] == 13 || lep_eta[1] >= -1.39 || lep_phi[1] < -1.6 || lep_phi[1] > -0.9
+hem1 : lep_pdgId[0] == 13 || lep_eta[0] >= -1.39 || lep_phi[0] < -1.57 || lep_phi[0] > -0.87
+hem2 : lep_pdgId[1] == 13 || lep_eta[1] >= -1.39 || lep_phi[1] < -1.57 || lep_phi[1] > -0.87
 
 #sph0p1      : pt_2(lep_calpt[0],lep_phi[0],lep_calpt[1],lep_phi[1])/(lep_calpt[0]+lep_calpt[1]) > 0.1
 acoplan0p01 : 1.-abs(dphi)/3.14159265 > 0.01

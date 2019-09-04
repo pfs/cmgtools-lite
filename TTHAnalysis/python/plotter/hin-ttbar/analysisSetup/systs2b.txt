@@ -4,10 +4,10 @@ lumi           : ttbar|zg|tW|VV : .* : 1.05
 
 ## lnNs for the backgrounds
 ## ==========================================
-zg_lnN         : zg         : .* : 1.30
+zg_lnN         : zg         : .* : 1.10
 tW_lnN         : tW         : .* : 1.30
 VV_lnN         : VV         : .* : 1.30
-data_comb_lnN  : data_comb  : .* : 1.30
+data_comb_lnN  : data_comb  : .* : 1.20
 data_comb_alt  : data_comb  : .* : data_comb_alt : alternateShapeOnly
 
 ## ttbar singal experimental nbjet uncertainties
@@ -17,3 +17,11 @@ btagUDSG  : ttbar : .* : btagL : templates
 quenching : ttbar : .* : quen  : templates
 JEC       : ttbar : .* : jec   : templates
 JER       : ttbar : .* : jer   : templates
+
+## lepton scale factors (ttbar and DY)
+## ==========================================
+elSF     : ttbar|zg : .* : elSF    : templates
+elIsoSF  : ttbar|zg : .* : elIsoSF : templates
+muSF     : ttbar|zg : .* : muSF    : templates
+muIsoSF  : ttbar|zg : .* : muIsoSF : templates
+

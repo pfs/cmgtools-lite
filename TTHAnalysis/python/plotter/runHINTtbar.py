@@ -197,7 +197,7 @@ def doBFindingControlPlots():
     extraopts = '--maxRatioRange 0. 2. --fixRatioRange --plotmode=norm --showRatio --ratioNums %s --ratioDen %s'%(','.join(processes[1:]),processes[0])
     makeplots = []
     showratio = True
-    runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts, newlumi=1618.5/446.9*lumi)
+    runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts, newlumi=fulllumi)
 
 
 def plotJetVariables(replot):
@@ -232,7 +232,10 @@ def plotJetVariables(replot):
 
         makeplots = jetvars
         showratio = True
-        if (replot): runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts, newlumi=1618.5/446.9*lumi if 'onZ' in mass and not 'em' in flav else 0.)
+        thislumi  = fulllumi if 'onZ' in mass and not 'em' in flav else 0.
+        if 'mm' in flav and 'onZ' in mass:
+            thislumi = thislumi-lumidiffmu
+        if (replot): runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts, newlumi=thislumi)
 
     yields = {}
 
@@ -402,7 +405,7 @@ def plotJetVariables(replot):
         lat = ROOT.TLatex()
         lat.SetNDC(); lat.SetTextFont(42); lat.SetTextSize(0.03)
         lat.DrawLatex(0.18, 0.97, '#font[61]{CMS} #font[52]{Preliminary}')
-        lat.DrawLatex(0.68, 0.97, '446.9 #mub^{-1} (5.02 TeV)')
+        lat.DrawLatex(0.68, 0.97, '{l:.1f} #mub^{{-1}} (5.02 TeV)'.format(l=lumi))
 
         ## FIRST!!! to the ratio:
         tmp_ratio = tmp_data.Clone('ratio'); tmp_ratio.SetTitle('')
@@ -587,11 +590,11 @@ def makeZplots():
 
         extraopts += ' -W {sf} '.format(sf=sf)
 
-        makeplots = ['dyacoplanarity', 'l1iso02', 'l2iso02', 'dyllpt', 'dyleppt', 'dyl1pt', 'dyl2pt', 'dysphericity', 'dydphi', 'dyllm', 'dyllmcal', 'lepiso02', 'l1d0', 'l2d0', 'dyl1ptcal', 'dyl2ptcal']
+        makeplots = ['dyacoplanarity', 'dyllpt', 'dyleppt', 'dyl1pt', 'dyl2pt', 'dysphericity', 'dydphi', 'dyllm', 'dyllmcal', 'dyl1ptcal', 'dyl2ptcal', 'dyllmnocal', 'dyl1eta', 'dyl2eta', 'dylepeta']
         showratio = True
 
-        unblinded = 1618.5 - (0. if 'ee' in flav else 30.103)
-        unblinded = unblinded*1e-9
+        unblinded = fulllumi - (0. if 'ee' in flav else lumidiffmu)
+        #unblinded = unblinded*1e-9
 
         runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts, newlumi=unblinded)
 
@@ -722,9 +725,9 @@ def makeJetAnalysis():
     ## with both pT 20 zscaling ={'ee_0b': 0.975, 'ee_1b': 1.268, 'ee_2b': 1.495,
     ## with both pT 20            'mm_0b': 0.980, 'mm_1b': 1.145, 'mm_2b': 1.312,
     ## with both pT 20            'em_0b': 1.089, 'em_1b': 1.331, 'em_2b': 2.339 }
-    zscaling ={'ee_0b': 0.978, 'ee_1b': 1.232, 'ee_2b': 1.238,
-               'mm_0b': 0.979, 'mm_1b': 1.149, 'mm_2b': 1.453,
-               'em_0b': 1.231, 'em_1b': 1.650, 'em_2b': 1.390 }
+    zscaling ={'ee_0b': 0.967, 'ee_1b': 1.433, 'ee_2b': 1.118,
+               'mm_0b': 0.982, 'mm_1b': 1.129, 'mm_2b': 1.375,
+               'em_0b': 1.108, 'em_1b': 1.597, 'em_2b': 1.237 }
 
 
     for iflav,flav in enumerate(regions):
@@ -744,9 +747,9 @@ def makeJetAnalysis():
         makeplots = [flav+'_bdtcomb'] #[flav+'_bdt', flav+'_sphericity', flav+'_bdtcomb']
         showratio = True
 
-        runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts, newlumi=1618.5/446.9*lumi if 'onZ' in flav else 0.)
+        runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts, newlumi=fulllumi if 'onZ' in flav else 0.)
 
-        cmd_cards_base = 'python makeShapeCards.py --s2v -f -j 6 -v 3 -l {lumi} -P {tdir} {mca} {cuts} '.format(lumi=lumi if not 'onZ' in flav else 1618.5/446.9*lumi,tdir=trees,mca=fmca,cuts=fcut)
+        cmd_cards_base = 'python makeShapeCards.py --s2v -f -j 6 -v 3 -l {lumi} -P {tdir} {mca} {cuts} '.format(lumi=lumi if not 'onZ' in flav else fulllumi,tdir=trees,mca=fmca,cuts=fcut)
         for fitVar in fitVars:
             outdirCards = 'hin-ttbar/datacards_{date}_{pf}_jetAnalysis/{fitVarName}/'.format(date=date, pf=postfix,fitVarName=fitVar[0])
 
@@ -851,11 +854,11 @@ def checkSphericity():
 
             showratio = True
 
-            fs_lumi = 446.931*1e-9
+            fs_lumi = lumi
             if 'onZ' in flav and not 'em' in flav:
-                fs_lumi = fs_lumi*1618.5/446.9
+                fs_lumi = fulllumi
             if 'mm' in flav:
-                fs_lumi = fs_lumi - 30.103*1e-9
+                fs_lumi = fs_lumi - lumidiffmu
 
             runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts, newlumi=fs_lumi)
 
@@ -872,9 +875,10 @@ def makeCards():
     fsysts = 'hin-ttbar/analysisSetup/systs.txt'
 
     nbinsForFit = 10
-    fitVars = [('bdt'         , 'bdtrarity                      {n},0.,1.'.format(n=nbinsForFit)), 
-               #('sphericity'  , '\'llpt/(lep_pt[0]+lep_pt[1])\' {n},0.,1.'.format(n=nbinsForFit)),
-               ('sphericity'  , '\'pt_2(lep_calpt[0],lep_phi[0],lep_calpt[1],lep_phi[1])/(lep_calpt[0]+lep_calpt[1])\' {n},0.,1.'.format(n=nbinsForFit)),
+    fitVars = [## ('bdt'         , 'bdtrarity                      {n},0.,1.'.format(n=nbinsForFit)), 
+               ## #('sphericity'  , '\'llpt/(lep_pt[0]+lep_pt[1])\' {n},0.,1.'.format(n=nbinsForFit)),
+               ## ('sphericity'  , '\'pt_2(lep_calpt[0],lep_phi[0],lep_calpt[1],lep_phi[1])/(lep_calpt[0]+lep_calpt[1])\' {n},0.,1.'.format(n=nbinsForFit)),
+               ('bdtcomb'  , '\'bdtcdfinv(bdt)\' {n},0.,1.'.format(n=nbinsForFit)),
               ]
 
     regions = ['ee', 'mm', 'em']#, 'leponZee', 'leponZmm']
@@ -901,11 +905,11 @@ def makeCards():
 
         showratio = True
 
-        fs_lumi = 446.931*1e-9
+        fs_lumi = lumi
         if 'onZ' in flav:
-            fs_lumi = fs_lumi*1618.5/446.9
+            fs_lumi = fulllumi
         if 'mm' in flav:
-            fs_lumi = fs_lumi - 30.103*1e-9
+            fs_lumi = lumi - lumidiffmu
 
         runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts, newlumi=fs_lumi)
 
@@ -1058,7 +1062,9 @@ if __name__ == '__main__':
     global date, postfix, lumi, date, basedir, treedir
     postfix = opts.postfix
     #lumi = 1618.466*1e-9 if not opts.lumi else opts.lumi
-    lumi = 446.931*1e-9 if not opts.lumi else float(opts.lumi)
+    fulllumi = 1751.83*1e-9
+    lumidiffmu = 32.5*1e-9
+    lumi = 457.99*1e-9 if not opts.lumi else float(opts.lumi)
     date = datetime.date.today().isoformat()
 
     user = os.environ['USER']
@@ -1069,7 +1075,8 @@ if __name__ == '__main__':
     
     ## this is pp MC treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim27Apr/'
     ## this is with old eleID and stuff treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim21June/' ## rereco data and mixed, official MC
-    treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim13August/' ## newest on 07/08/2019
+    #treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim13August/' ## newest on 07/08/2019
+    treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim02Sep_loose/' ## newest on 03/09/2019
 
     if opts.date:
         date = opts.date

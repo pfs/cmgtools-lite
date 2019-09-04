@@ -6,6 +6,10 @@ embdt        : bdtrarity                   : 10,0.,1.    ; XTitle='bdt discr. (e
 mmbdt        : bdtrarity                   : 10,0.,1.    ; XTitle='bdt discr. (#mu#mu)'
 eebdt        : bdtrarity                   : 10,0.,1.    ; XTitle='bdt discr. (ee)'
 
+embdtcomb    : bdtcdfinv(bdt)              : 10,0.,1.    ; XTitle='bdt discr. (e#mu)'
+mmbdtcomb    : bdtcdfinv(bdt)              : 10,0.,1.    ; XTitle='bdt discr. (#mu#mu)'
+eebdtcomb    : bdtcdfinv(bdt)              : 10,0.,1.    ; XTitle='bdt discr. (ee)'
+
 leponZeemll  : mass_2(lep_calpt[0],lep_eta[0],lep_phi[0],0.,lep_calpt[1],lep_eta[1],lep_phi[1],0.)                         : 30,76.,106. ; XTitle='m_{ee}'
 leponZmmmll  : mass_2(lep_calpt[0],lep_eta[0],lep_phi[0],0.,lep_calpt[1],lep_eta[1],lep_phi[1],0.)                         : 30,76.,106. ; XTitle='m_{#mu#mu}'
 

@@ -239,6 +239,8 @@ def plotJetVariables(replot):
 
     yields = {}
 
+    zscaling = {} 
+
     for flav,var in itertools.product(['mm', 'ee', 'em'],jetvars):
         targetdir = basedir+'/jetPlots/{date}{pf}/'.format(date=date, pf=('-'+postfix if postfix else ''))
 
@@ -303,10 +305,14 @@ def plotJetVariables(replot):
             print ' the overall scaling is', tmp_scale_ratio
             print 'THIS IS THE SCALING PER BIN IN', var, 'FOR ', flav
             for ibin in range(1,tmp_zconstructed.GetXaxis().GetNbins()+1):
-                print 'bincenter {a:.1f}: scaling is {b:.3f}/{c:.3f} = {d:.3f}'.format(a=tmp_zconstructed.GetXaxis().GetBinCenter(ibin), 
+                t_binc = int(tmp_zconstructed.GetXaxis().GetBinCenter(ibin))
+                t_scale = tmp_zconstructed.GetBinContent(ibin)/tmp_zg.GetBinContent(ibin) if tmp_zg.GetBinContent(ibin) else -1.
+                print 'bincenter {a:.1f}: scaling is {b:.3f}/{c:.3f} = {d:.3f}'.format(a=t_binc,
                                                                                        b=tmp_zconstructed.GetBinContent(ibin), 
                                                                                        c=tmp_zg.GetBinContent(ibin), 
-                                                                                       d=tmp_zconstructed.GetBinContent(ibin)/tmp_zg.GetBinContent(ibin) if tmp_zg.GetBinContent(ibin) else -1.)
+                                                                                       d=t_scale)
+                if ibin <= 3:
+                    zscaling[flav+'_'+str(t_binc)+'b'] = float('{a:.3f}'.format(a=t_scale))
 
         else:
             tmp_zconstructed = em_zconstructed.Clone('zg_constructed'); tmp_zconstructed.SetTitle('Z/#gamma (data #mu#mu)')
@@ -326,10 +332,14 @@ def plotJetVariables(replot):
             print ' the overall scaling is', tmp_scale_ratio
             print 'THIS IS THE SCALING PER BIN IN', var, 'FOR ', flav
             for ibin in range(1,tmp_zconstructed.GetXaxis().GetNbins()+1):
-                print 'bincenter {a:.1f}: scaling is {b:.3f}/{c:.3f} = {d:.3f}'.format(a=tmp_zconstructed.GetXaxis().GetBinCenter(ibin), 
+                t_binc = int(tmp_zconstructed.GetXaxis().GetBinCenter(ibin))
+                t_scale = tmp_zconstructed.GetBinContent(ibin)/tmp_zg.GetBinContent(ibin) if tmp_zg.GetBinContent(ibin) else -1.
+                print 'bincenter {a:.1f}: scaling is {b:.3f}/{c:.3f} = {d:.3f}'.format(a=t_binc, 
                                                                                        b=tmp_zconstructed.GetBinContent(ibin), 
                                                                                        c=tmp_zg.GetBinContent(ibin), 
-                                                                                       d=tmp_zconstructed.GetBinContent(ibin)/tmp_zg.GetBinContent(ibin) if tmp_zg.GetBinContent(ibin) else -1.)
+                                                                                       d=t_scale)
+                if ibin <= 3:
+                    zscaling[flav+'_'+str(t_binc)+'b'] = float('{a:.3f}'.format(a=t_scale))
 
         ## putting all backgrounds into a list for sorting
         backgrounds = []
@@ -451,6 +461,15 @@ def plotJetVariables(replot):
             f.write('\ndata: {integral:.0f} \n'.format(integral=tmp_data.Integral()))
 
         os.system(' cp ~mdunser/public/index.php '+targetdir)
+
+    print 'this is zscaling', zscaling, '. writing it to a file'
+    t_f = open('zjetscaling.data', 'w')
+    for k,v in zscaling.items():
+        t_f.write('{k} = {v} \n'.format(k=k, v=v)) #zscaling = '+ str(zscaling)+' \n')
+    t_f.close()
+
+    print 'done'
+    
 
 
 def compareSignals():
@@ -725,9 +744,14 @@ def makeJetAnalysis():
     ## with both pT 20 zscaling ={'ee_0b': 0.975, 'ee_1b': 1.268, 'ee_2b': 1.495,
     ## with both pT 20            'mm_0b': 0.980, 'mm_1b': 1.145, 'mm_2b': 1.312,
     ## with both pT 20            'em_0b': 1.089, 'em_1b': 1.331, 'em_2b': 2.339 }
-    zscaling ={'ee_0b': 0.967, 'ee_1b': 1.433, 'ee_2b': 1.118,
-               'mm_0b': 0.982, 'mm_1b': 1.129, 'mm_2b': 1.375,
-               'em_0b': 1.108, 'em_1b': 1.597, 'em_2b': 1.237 }
+    ## replaced by the read from the file zscaling ={'ee_0b': 0.967, 'ee_1b': 1.433, 'ee_2b': 1.118,
+    ## replaced by the read from the file            'mm_0b': 0.982, 'mm_1b': 1.129, 'mm_2b': 1.375,
+    ## replaced by the read from the file            'em_0b': 1.108, 'em_1b': 1.597, 'em_2b': 1.237 }
+
+    zscaling = {}
+    t_f = open('zjetscaling.data', 'r')
+    for line in t_f.readlines():
+        zscaling[line.split()[0]] = float(line.split()[-1])
 
 
     for iflav,flav in enumerate(regions):

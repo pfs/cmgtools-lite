@@ -900,9 +900,9 @@ def makeCards():
 
     nbinsForFit = 10
     fitVars = [## ('bdt'         , 'bdtrarity                      {n},0.,1.'.format(n=nbinsForFit)), 
-               ## #('sphericity'  , '\'llpt/(lep_pt[0]+lep_pt[1])\' {n},0.,1.'.format(n=nbinsForFit)),
+               ('sphericity'  , '\'llpt/(lep_pt[0]+lep_pt[1])\' {n},0.,1.'.format(n=nbinsForFit)),
                ## ('sphericity'  , '\'pt_2(lep_calpt[0],lep_phi[0],lep_calpt[1],lep_phi[1])/(lep_calpt[0]+lep_calpt[1])\' {n},0.,1.'.format(n=nbinsForFit)),
-               ('bdtcomb'  , '\'bdtcdfinv(bdt)\' {n},0.,1.'.format(n=nbinsForFit)),
+               ## ('bdtcomb'  , '\'bdtcdfinv(bdt)\' {n},0.,1.'.format(n=nbinsForFit)),
               ]
 
     regions = ['ee', 'mm', 'em']#, 'leponZee', 'leponZmm']
@@ -1086,9 +1086,10 @@ if __name__ == '__main__':
     global date, postfix, lumi, date, basedir, treedir
     postfix = opts.postfix
     #lumi = 1618.466*1e-9 if not opts.lumi else opts.lumi
+    blindedlumi = 457.99*1e-9
     fulllumi = 1751.83*1e-9
     lumidiffmu = 32.5*1e-9
-    lumi = 457.99*1e-9 if not opts.lumi else float(opts.lumi)
+    lumi = fulllumi if not opts.lumi else float(opts.lumi)
     date = datetime.date.today().isoformat()
 
     user = os.environ['USER']
@@ -1100,7 +1101,8 @@ if __name__ == '__main__':
     ## this is pp MC treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim27Apr/'
     ## this is with old eleID and stuff treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim21June/' ## rereco data and mixed, official MC
     #treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim13August/' ## newest on 07/08/2019
-    treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim02Sep_loose/' ## newest on 03/09/2019
+    #treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim02Sep_loose/' ## newest on 03/09/2019
+    treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skimsFinal/' ## newest. unblinded
 
     if opts.date:
         date = opts.date

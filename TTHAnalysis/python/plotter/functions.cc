@@ -47,25 +47,31 @@ float weightW(int id1, int id2){
 
 float weightMixed(int id1, int id2, int mixrank){
     if      (abs(id1*id2) == 121) {
-        if (mixrank == 0) return (3.31-0.12)/23165.;
-        if (mixrank == 1) return (3.31-0.12)/25126.;
-        if (mixrank == 2) return (3.31-0.12)/25836.;
-        if (mixrank == 3) return (3.31-0.12)/26604.;
-        if (mixrank == 4) return (3.31-0.12)/26253.;
+        // blinded if (mixrank == 0) return (3.31-0.12)/23165.;
+        // blinded if (mixrank == 1) return (3.31-0.12)/25126.;
+        // blinded if (mixrank == 2) return (3.31-0.12)/25836.;
+        // blinded if (mixrank == 3) return (3.31-0.12)/26604.;
+        // blinded if (mixrank == 4) return (3.31-0.12)/26253.;
+        if (mixrank == 0) return (12.-0.46)/25809.;
+        if (mixrank == 4) return (12.-0.46)/28126.;
     }
     else if (abs(id1*id2) == 143) {
-        if (mixrank == 0) return (7.72-0.89)/106.;
-        if (mixrank == 1) return (7.72-0.89)/136.;
-        if (mixrank == 2) return (7.72-0.89)/138.;
-        if (mixrank == 3) return (7.72-0.89)/139.;
-        if (mixrank == 4) return (7.72-0.89)/97.;
+        // blinded if (mixrank == 0) return (7.72-0.89)/106.;
+        // blinded if (mixrank == 1) return (7.72-0.89)/136.;
+        // blinded if (mixrank == 2) return (7.72-0.89)/138.;
+        // blinded if (mixrank == 3) return (7.72-0.89)/139.;
+        // blinded if (mixrank == 4) return (7.72-0.89)/97.;
+        if (mixrank == 0) return (28.-3.43)/518.;
+        if (mixrank == 4) return (28.-3.43)/508.;
     }
     else if (abs(id1*id2) == 169) {
-        if (mixrank == 0) return (3.31-0.78)/72709.;
-        if (mixrank == 1) return (3.31-0.78)/77721.;
-        if (mixrank == 2) return (3.31-0.78)/79937.;
-        if (mixrank == 3) return (3.31-0.78)/81063.;
-        if (mixrank == 4) return (3.31-0.78)/79988.;
+        // blinded if (mixrank == 0) return (3.31-0.78)/72709.;
+        // blinded if (mixrank == 1) return (3.31-0.78)/77721.;
+        // blinded if (mixrank == 2) return (3.31-0.78)/79937.;
+        // blinded if (mixrank == 3) return (3.31-0.78)/81063.;
+        // blinded if (mixrank == 4) return (3.31-0.78)/79988.;
+        if (mixrank == 0) return (12.-2.99)/83185.;
+        if (mixrank == 4) return (12.-2.99)/89913.;
     }
     return -999.;
 }

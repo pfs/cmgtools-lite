@@ -1,7 +1,7 @@
 # vim: syntax=sh
 * ; TreeName="treeProducerHIN"
 
-data_comb       : SkimElectrons_04Apr2019-v1+SkimMuons_04Apr2019-v1 : lep_charge[0]*lep_charge[1]>0 ; FillColor=17            , Label="comb. ss (data)", AddWeight="446./1618."
+data_comb       : SkimElectrons_04Apr2019-v1+SkimMuons_04Apr2019-v1 : lep_charge[0]*lep_charge[1]>0 ; FillColor=17            , Label="comb. ss (data)", AddWeight="1." ##446./1618."
 
 data_mixed_comb1 : Combinatorial_Electrons+Combinatorial_Muons      : (lep_charge[0]*lep_charge[1]<0)&&mixrank==0 ; FillColor=ROOT.kOrange  , Label="mixed pair 1", AddWeight="weightMixed(lep_pdgId[0]\,lep_pdgId[1]\,mixrank)"
 data_mixed_comb5 : Combinatorial_Electrons+Combinatorial_Muons      : (lep_charge[0]*lep_charge[1]<0)&&mixrank==4 ; FillColor=ROOT.kOrange-7, Label="mixed alt."  , AddWeight="weightMixed(lep_pdgId[0]\,lep_pdgId[1]\,mixrank)"

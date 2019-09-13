@@ -16,7 +16,7 @@ VV     : WZTo3LNU_NNPDF30_TuneCP5_HydjetDrumMB_5p02TeV-powheg                   
 VV     : ZZTo2L2Nu_HydjetDrumMB_5p02TeV_powheg_pythia8                                      : 0.441*(208**2) : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kAzure-5, NormSystematic=0.3, Label="VV"
 
 #data_comb : SkimElectrons_04Apr2019-v1+SkimMuons_04Apr2019-v1          : lep_charge[0]*lep_charge[1]>0 ; AddWeight="446./1618.", FillColor=17             , NormSystematic=0.5, Label="comb. (data)"
-data_comb     : Combinatorial_Electrons+Combinatorial_Muons      : (lep_charge[0]*lep_charge[1]<0)&&mixrank==0 ; FillColor=ROOT.kOrange  , Label="non-prompt", NormSystematic=0.3, AddWeight="weightMixed(lep_pdgId[0]\,lep_pdgId[1]\,mixrank)"
+data_comb     : Combinatorial_Electrons+Combinatorial_Muons      : (lep_charge[0]*lep_charge[1]<0)&&mixrank==0 ; FillColor=ROOT.kOrange  , Label="non-prompt", NormSystematic=0.3, AddWeight="weightMixed(lep_pdgId[0]\,lep_pdgId[1]\,mixrank\,nbjet_sel)"
 # wjets : WJetsToLNu_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8 : 21159*(208**2)*0.5 : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kAzure+1, NormSystematic=0.5, Label="W (MC)", SkipMe=True
 
 data : SkimElectrons_04Apr2019-v1+SkimMuons_04Apr2019-v1 : lep_charge[0]*lep_charge[1]<0

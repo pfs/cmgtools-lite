@@ -45,15 +45,16 @@ float weightW(int id1, int id2){
     return -999.;
 }
 
-float weightMixed(int id1, int id2, int mixrank){
+float weightMixed(int id1, int id2, int mixrank, int nb = -1){
+    float scalefactor = 1.;
     if      (abs(id1*id2) == 121) {
         // blinded if (mixrank == 0) return (3.31-0.12)/23165.;
         // blinded if (mixrank == 1) return (3.31-0.12)/25126.;
         // blinded if (mixrank == 2) return (3.31-0.12)/25836.;
         // blinded if (mixrank == 3) return (3.31-0.12)/26604.;
         // blinded if (mixrank == 4) return (3.31-0.12)/26253.;
-        if (mixrank == 0) return (12.-0.46)/25809.;
-        if (mixrank == 4) return (12.-0.46)/28126.;
+        if (mixrank == 0) scalefactor = (19.-0.56)/32478.;
+        if (mixrank == 4) scalefactor = (19.-0.56)/35367.;
     }
     else if (abs(id1*id2) == 143) {
         // blinded if (mixrank == 0) return (7.72-0.89)/106.;
@@ -61,8 +62,8 @@ float weightMixed(int id1, int id2, int mixrank){
         // blinded if (mixrank == 2) return (7.72-0.89)/138.;
         // blinded if (mixrank == 3) return (7.72-0.89)/139.;
         // blinded if (mixrank == 4) return (7.72-0.89)/97.;
-        if (mixrank == 0) return (28.-3.43)/518.;
-        if (mixrank == 4) return (28.-3.43)/508.;
+        if (mixrank == 0) scalefactor = (26.-3.20)/495.;
+        if (mixrank == 4) scalefactor = (26.-3.20)/487.;
     }
     else if (abs(id1*id2) == 169) {
         // blinded if (mixrank == 0) return (3.31-0.78)/72709.;
@@ -70,10 +71,17 @@ float weightMixed(int id1, int id2, int mixrank){
         // blinded if (mixrank == 2) return (3.31-0.78)/79937.;
         // blinded if (mixrank == 3) return (3.31-0.78)/81063.;
         // blinded if (mixrank == 4) return (3.31-0.78)/79988.;
-        if (mixrank == 0) return (12.-2.99)/83185.;
-        if (mixrank == 4) return (12.-2.99)/89913.;
+        if (mixrank == 0) scalefactor = (11.-2.53)/76531.;
+        if (mixrank == 4) scalefactor = (11.-2.53)/82481.;
     }
-    return -999.;
+
+    if (nb > -0.5){
+        if (nb == 0) scalefactor *= 1.0671;
+        if (nb == 1) scalefactor *= 0.8558;
+        if (nb == 2) scalefactor *= 0.0000;
+    }
+
+    return scalefactor;
 }
 
 float systWgt(int nb, int syst, int var){

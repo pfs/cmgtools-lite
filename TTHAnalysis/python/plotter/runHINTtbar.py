@@ -301,6 +301,10 @@ def plotJetVariables(replot):
             if flav == 'mm':
                 em_zconstructed = copy.deepcopy(tmp_zconstructed.Clone('em_zconstructed'))
 
+            #marc
+            tmp_zconstructed.Scale(1./tmp_zconstructed.Integral())
+            tmp_zg          .Scale(1./tmp_zg          .Integral())
+
             print '========================================'
             print ' the overall scaling is', tmp_scale_ratio
             print 'THIS IS THE SCALING PER BIN IN', var, 'FOR ', flav
@@ -327,6 +331,11 @@ def plotJetVariables(replot):
             else:
                 tmp_scale_ratio = -1.
             tmp_zconstructed.Scale(tmp_scale_ratio)
+
+            #marc
+            tmp_zconstructed.Scale(1./tmp_zconstructed.Integral())
+            tmp_zg          .Scale(1./tmp_zg          .Integral())
+
 
             print '========================================'
             print ' the overall scaling is', tmp_scale_ratio
@@ -748,6 +757,20 @@ def makeJetAnalysis():
     ## replaced by the read from the file            'mm_0b': 0.982, 'mm_1b': 1.129, 'mm_2b': 1.375,
     ## replaced by the read from the file            'em_0b': 1.108, 'em_1b': 1.597, 'em_2b': 1.237 }
 
+    ## get the scaling for the mixed combinatorial from the nbjets file
+    combscaling = {}
+    combscale_f = ROOT.TFile('combinatorialrescaling.root','read')
+    h_ssda = combscale_f.Get('nbjets_data_comb')
+    h_mix1 = combscale_f.Get('nbjets_data_mixed_comb1')
+    h_mix5 = combscale_f.Get('nbjets_data_mixed_comb5')
+    h_sstt = combscale_f.Get('nbjets_ttbarSS')
+    for ibin in range(1,4):
+        combscaling[str(ibin-1)+'b'] = max(0., (h_ssda.GetBinContent(ibin)-h_sstt.GetBinContent(ibin)) / h_mix1.GetBinContent(ibin) )
+
+    print 'this is combscaling', combscaling
+    combscale_f.Close()
+    
+
     zscaling = {}
     t_f = open('zjetscaling.data', 'r')
     for line in t_f.readlines():
@@ -762,7 +785,7 @@ def makeJetAnalysis():
         disable   = []
         processes = []
         fittodata = []
-        scalethem = {'zg': zscaling[flav]}
+        scalethem = {'zg': zscaling[flav]}#, 'data_comb': combscaling[flav.split('_')[1]]}
 
         extraopts = ' --maxRatioRange 0. 2. --fixRatioRange --legendColumns 2 --showIndivSigs ' #--plotmode=norm '#--preFitData bdt '
 
@@ -781,7 +804,7 @@ def makeJetAnalysis():
             cmd_cards += ' --od {od} '                  .format(od=outdirCards)
             cmd_cards += ' -o {flav} '                  .format(flav=flav)
             cmd_cards += ' '.join([' -E ^'+i+' ' for i in flav.split('_')])
-            cmd_cards += ' --scale-process zg {f:.3f} '.format(f=zscaling[flav])
+            cmd_cards += ' --scale-process zg {f:.3f} '       .format(f=zscaling[flav])
 
             systfile = fsysts if not '2b' in flav else 'hin-ttbar/analysisSetup/systs2b.txt'
 
@@ -900,9 +923,9 @@ def makeCards():
 
     nbinsForFit = 10
     fitVars = [## ('bdt'         , 'bdtrarity                      {n},0.,1.'.format(n=nbinsForFit)), 
-               ('sphericity'  , '\'llpt/(lep_pt[0]+lep_pt[1])\' {n},0.,1.'.format(n=nbinsForFit)),
+               ## ('sphericity'  , '\'llpt/(lep_pt[0]+lep_pt[1])\' {n},0.,1.'.format(n=nbinsForFit)),
                ## ('sphericity'  , '\'pt_2(lep_calpt[0],lep_phi[0],lep_calpt[1],lep_phi[1])/(lep_calpt[0]+lep_calpt[1])\' {n},0.,1.'.format(n=nbinsForFit)),
-               ## ('bdtcomb'  , '\'bdtcdfinv(bdt)\' {n},0.,1.'.format(n=nbinsForFit)),
+               ('bdtcomb'  , '\'bdtcdfinv(bdt)\' {n},0.,1.'.format(n=nbinsForFit)),
               ]
 
     regions = ['ee', 'mm', 'em']#, 'leponZee', 'leponZmm']

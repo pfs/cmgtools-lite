@@ -7,9 +7,44 @@ mcStack=[('zg'        , 'Z/#gamma^{*}'         , ROOT.kAzure+6) ,
          ('VV'        , 'VV'                   , ROOT.kAzure-5) ,
          ('ttbar'     , 't#bar{t} signal' , 633)           , ]
 
-yranges={'ee0b': [0., 450.], 'mm0b': [0., 1200.], 'em0b': [0., 55.],
+yranges={'ee0b': [0., 450.], 'mm0b': [0., 1300.], 'em0b': [0., 55.],
          'ee1b': [0.,  45.], 'mm1b': [0.,  170.], 'em1b': [0., 21.],
          'ee2b': [0.,  12.], 'mm2b': [0.,   32.], 'em2b': [0., 12.]}
+
+
+valsAndErrors = {}
+
+
+def printTable(vae):
+
+    for k,v in vae.items():
+        if not 'obs' in k:
+            vae[k] = '{a:.1f}'.format(a=v)
+        else:
+            vae[k] = '{a:.0f}'.format(a=v)
+    tabletex = '''
+\\begin{{table}}[!htb]
+\\centering
+\\small
+\\topcaption{{
+    The number of expected background and signal events and the observed event yields in the different
+    channels of $ee$, $\\mu\\mu$, and $e\\mu$, prior to the fit.
+    \\label{{tab:yieldsJet}}}}
+    \\begin{{tabular}}{{lccc|ccc|ccc}}
+Process        & $ee$ 0b    & $ee$ 1b   & $ee$ 2b   & $\\mu\\mu$ 0b   & $\\mu\\mu$ 1b  & $\\mu\\mu$ 2b  & $e\\mu$ 0b    & $e\\mu$  1b    & $e\\mu$  2b   \\\\ \\hline \\hline
+
+Z/\\gamma^{{*}} & {zg_ee0b} \\pm {zg_ee0b_e} & {zg_ee1b} \\pm {zg_ee1b_e} & {zg_ee2b} \\pm {zg_ee2b_e} & {zg_mm0b} \\pm {zg_mm0b_e} & {zg_mm1b} \\pm {zg_mm1b_e} & {zg_mm2b} \\pm {zg_mm2b_e} & {zg_em0b} \\pm {zg_em0b_e} & {zg_em1b} \\pm {zg_em1b_e} & {zg_em2b} \\pm {zg_em2b_e}  \\\\
+Nonprompt & {data_comb_ee0b} \\pm {data_comb_ee0b_e} & {data_comb_ee1b} \\pm {data_comb_ee1b_e} & {data_comb_ee2b} \\pm {data_comb_ee2b_e} & {data_comb_mm0b} \\pm {data_comb_mm0b_e} & {data_comb_mm1b} \\pm {data_comb_mm1b_e} & {data_comb_mm2b} \\pm {data_comb_mm2b_e} & {data_comb_em0b} \\pm {data_comb_em0b_e} & {data_comb_em1b} \\pm {data_comb_em1b_e} & {data_comb_em2b} \\pm {data_comb_em2b_e}  \\\\
+tW & {tW_ee0b} \\pm {tW_ee0b_e} & {tW_ee1b} \\pm {tW_ee1b_e} & {tW_ee2b} \\pm {tW_ee2b_e} & {tW_mm0b} \\pm {tW_mm0b_e} & {tW_mm1b} \\pm {tW_mm1b_e} & {tW_mm2b} \\pm {tW_mm2b_e} & {tW_em0b} \\pm {tW_em0b_e} & {tW_em1b} \\pm {tW_em1b_e} & {tW_em2b} \\pm {tW_em2b_e}  \\\\
+VV & {VV_ee0b} \\pm {VV_ee0b_e} & {VV_ee1b} \\pm {VV_ee1b_e} & {VV_ee2b} \\pm {VV_ee2b_e} & {VV_mm0b} \\pm {VV_mm0b_e} & {VV_mm1b} \\pm {VV_mm1b_e} & {VV_mm2b} \\pm {VV_mm2b_e} & {VV_em0b} \\pm {VV_em0b_e} & {VV_em1b} \\pm {VV_em1b_e} & {VV_em2b} \\pm {VV_em2b_e}  \\\\
+Total background & {total_background_ee0b} \\pm {total_background_ee0b_e} & {total_background_ee1b} \\pm {total_background_ee1b_e} & {total_background_ee2b} \\pm {total_background_ee2b_e} & {total_background_mm0b} \\pm {total_background_mm0b_e} & {total_background_mm1b} \\pm {total_background_mm1b_e} & {total_background_mm2b} \\pm {total_background_mm2b_e} & {total_background_em0b} \\pm {total_background_em0b_e} & {total_background_em1b} \\pm {total_background_em1b_e} & {total_background_em2b} \\pm {total_background_em2b_e}  \\\\
+\\ttbar signal & {ttbar_ee0b} \\pm {ttbar_ee0b_e} & {ttbar_ee1b} \\pm {ttbar_ee1b_e} & {ttbar_ee2b} \\pm {ttbar_ee2b_e} & {ttbar_mm0b} \\pm {ttbar_mm0b_e} & {ttbar_mm1b} \\pm {ttbar_mm1b_e} & {ttbar_mm2b} \\pm {ttbar_mm2b_e} & {ttbar_em0b} \\pm {ttbar_em0b_e} & {ttbar_em1b} \\pm {ttbar_em1b_e} & {ttbar_em2b} \\pm {ttbar_em2b_e}  \\\\
+Observed (data) & {obs_ee0b} & {obs_ee1b} & {obs_ee2b} & {obs_mm0b} & {obs_mm1b} & {obs_mm2b} & {obs_em0b} & {obs_em1b} & {obs_em2b}   \\\\
+
+\\end{{tabular}}
+
+\\end{{table}}'''.format(**vae)
+    print tabletex
 
 def convertGraph(inGraph):
     outGraph = inGraph.Clone(inGraph.GetName()+'_converted')
@@ -78,6 +113,8 @@ def compareFitResult(plotsPrefit,plotsPostfit,plotName,xtitle,extraTxt=[]):
     print '== at plotName', plotName, '==='
     print '=================='
 
+    channel = plotName.split('_')[-1]
+
     marginL = 0.12
     marginR = 0.03
     
@@ -100,8 +137,8 @@ def compareFitResult(plotsPrefit,plotsPostfit,plotName,xtitle,extraTxt=[]):
     frame=convertHisto(frame,plotName)
     frame.Reset('ICE')
     frame.GetYaxis().SetTitle('Events')
-    frame.GetYaxis().SetTitleOffset(0.90)
-    frame.GetYaxis().SetNdivisions(5)
+    frame.GetYaxis().SetTitleOffset(0.95)
+    frame.GetYaxis().SetNdivisions(505)
     frame.GetYaxis().SetTitleSize(0.06)
     frame.GetYaxis().SetLabelSize(0.06)
     frame.GetXaxis().SetTitleSize(0)
@@ -130,6 +167,12 @@ def compareFitResult(plotsPrefit,plotsPostfit,plotName,xtitle,extraTxt=[]):
             stack.Add(newHisto)
             leg.AddEntry(newHisto,title,'f')
 
+            error = ROOT.Double()
+            integral = newHisto.IntegralAndError(1,newHisto.GetNbinsX()+1,error)
+            valsAndErrors[proc+'_'+channel]      = integral
+            valsAndErrors[proc+'_'+channel+'_e'] = error
+            
+
             ratios.append( newHisto.Clone(proc+'_2prefit') )
             ratios[-1].SetDirectory(0)
             ratios[-1].Divide( newHisto )
@@ -138,9 +181,16 @@ def compareFitResult(plotsPrefit,plotsPostfit,plotName,xtitle,extraTxt=[]):
             ratios[-1].SetLineColor(ci)
             ratios[-1].SetLineWidth(3)
         except:
-            print 'did not find ', proc, 'in channel', plotName
+            valsAndErrors[proc+'_'+channel]      = 0.
+            valsAndErrors[proc+'_'+channel+'_e'] = 0.
+            print 'did not find ', proc, 'in channel', plotName.split('/')[-1]
 
     stack.Draw('histsame')
+
+    error = ROOT.Double()
+    integral = plotsPostfit['total_background'].IntegralAndError(1, plotsPostfit['total_background'].GetNbinsX()+1, error)
+    valsAndErrors['total_background_'+channel]      = integral
+    valsAndErrors['total_background_'+channel+'_e'] = error
 
     totalUnc=ROOT.TGraphErrors(plotsPostfit['total'])
     totalUnc.SetFillStyle(3444)
@@ -151,9 +201,14 @@ def compareFitResult(plotsPrefit,plotsPostfit,plotName,xtitle,extraTxt=[]):
     totalUncNew.Draw('e2')
 
     plotsPostfit['data'].SetMarkerStyle(20)
+    integral = 0.
     for i in range(plotsPostfit['data'].GetN()):
         plotsPostfit['data'].SetPointEXhigh(i,0)
         plotsPostfit['data'].SetPointEXlow(i,0)
+        tmp_x, tmp_y = ROOT.Double(), ROOT.Double()
+        plotsPostfit['data'].GetPoint(i, tmp_x, tmp_y)
+        integral += tmp_y
+    valsAndErrors['obs_'+channel] = integral
     #plotsPostfit['data'].Draw('PZ')
     dataGraphNew = convertGraph(plotsPostfit['data'])
     dataGraphNew.Draw('PZ')
@@ -227,10 +282,14 @@ def compareFitResult(plotsPrefit,plotsPostfit,plotName,xtitle,extraTxt=[]):
     frame3.GetYaxis().SetTitleOffset(0.45)
     frame3.GetYaxis().SetTitleSize(0.13)
     frame3.GetYaxis().SetLabelSize(0.15)
+    frame3.GetYaxis().SetNdivisions(5)
     frame3.GetXaxis().SetTitleSize(0.15)
     frame3.GetXaxis().SetLabelSize(0.13)
     frame3.GetXaxis().SetTitle(xtitle)
-    frame3.GetXaxis().SetNdivisions(505)
+    if frame3.GetNbinsX() > 1:
+        frame3.GetXaxis().SetNdivisions(505)
+    else:
+        frame3.GetXaxis().SetNdivisions(3)
     frame3.GetYaxis().SetRangeUser(0., 2.)
     frame3.Draw()
 
@@ -317,5 +376,7 @@ if __name__ == "__main__":
 
 
     doPostFitPlot(url)
+
+    printTable(valsAndErrors)
 
     #sys.exit()

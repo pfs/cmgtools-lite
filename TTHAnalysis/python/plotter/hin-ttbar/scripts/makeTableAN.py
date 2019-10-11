@@ -5,7 +5,7 @@ import ROOT, os, sys
 ##        python makeTableAN.py ~/www/private/heavyIons/plots/card_inputs/2019-06-26-mixedWithSFs/ sphericity
 
 def translate(name):
-    if 'non-pro' in name: return 'comb'
+    if 'nonpro' in name: return 'comb'
     if 'gamma' in name: return 'zg'
     else: return name
 
@@ -36,16 +36,17 @@ for chan in ['ee', 'mm', 'em']:
         else:
             val[chan+ 'DATA'] = line.split()[-1]
 
-print val
+for k,v in  val.items():
+    print k, v
     
 tabletex += '''
-Non-prompt    & {eecomb} & {mmcomb} & {emcomb} \\\\
+Nonprompt    & {eecomb} & {mmcomb} & {emcomb} \\\\
 Z/$\\gamma^{{*}}$   & {eezg} & {mmzg} & {emzg} \\\\
 $\\cPqt\\PW$       & {eetW} & {mmtW} & {emtW} \\\\
 VV               & {eeVV} & {mmVV} & {emVV} \\\\ \\hline \\hline
 Total bkg        & {eeBACKGROUND} & {mmBACKGROUND} & {emBACKGROUND} \\\\
 \\ttbar signal    & {eeSIGNAL} & {mmSIGNAL} & {emSIGNAL} \\\\ \\hline \\hline
-Observed data    & {eeDATA}                     & {mmDATA}                     & {emDATA}                      \\\\ \\hline \\hline'''.format(**val)
+Observed (data)    & {eeDATA}                     & {mmDATA}                     & {emDATA}                      \\\\ \\hline \\hline'''.format(**val)
 
 tabletex += '''
 

@@ -12,7 +12,7 @@ data_comb_alt  : data_comb  : .* : data_comb_alt : alternateShapeOnly
 
 ## z-pT reweighting
 ## ==========================================
-ptZ    : zg    : .* : ptZ    : templatesShapeOnly
+ptZ    : zg    : ee.*|mm.* : ptZ    : templatesShapeOnly
 
 ## ttbar signal theory uncertainties
 ## ==========================================

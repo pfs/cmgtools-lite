@@ -573,20 +573,26 @@ def dyReweighting():
     fplots        = 'hin-ttbar/analysisSetup/plots.txt'
     fsysts        = 'hin-ttbar/analysisSetup/systs.txt'
 
-    for iflav,flav in enumerate(['mm', 'ee']):
-        targetdir = basedir+'/zptReweighting/{date}{pf}-{flav}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav )
+    sf = 'ncollWgt*trigSF[0]*lepSF[0]*lepSF[1]*lepIsoSF[0]*lepIsoSF[1]'
+
+
+    for (iflav,flav),centrality in itertools.product(enumerate(['mm', 'ee']), ['inclusive', 'centralityLo', 'centralityHi']):
+        targetdir = basedir+'/zptReweighting/{date}{pf}-{c}-{flav}/'.format(c=centrality,date=date, pf=('-'+postfix if postfix else ''), flav=flav )
 
         enable    = ['flav'+flav, 'onZ']
+        if not 'inclusive' in centrality:
+            enable.append(centrality)
+
         disable   = []
-        processes = ['data', 'zg', 'zg_ptZ_Up']
+        processes = ['data', 'zg_raw', 'zg_ptZ_On', 'zg_ptZ_Up', 'zg_ptZ_Dn']
         fittodata = []
         scalethem = {}
 
-        extraopts = ' --maxRatioRange 0.5 1.5 --fixRatioRange --legendColumns 2 --plotmode=norm --ratioDen data --ratioNums data,zg,zg_ptZ_Up '#--preFitData bdt '
+        extraopts = ' --maxRatioRange 0.5 1.5 --fixRatioRange --legendColumns 2 --plotmode=norm --ratioDen data --ratioNums data,zg_raw,zg_ptZ_On,zg_ptZ_Up,zg_ptZ_Dn '
 
-        extraopts += ' -W 1. '
+        extraopts += ' -W {sf} '.format(sf=sf)
 
-        makeplots = ['dyllpt', 'dyleppt', 'dyl1pt', 'dyl2pt', 'dysphericity', 'dydphi', 'dyllm']
+        makeplots = ['dyllpt']#, 'dyllptraw', 'dyllptnocal', 'dyleppt', 'dyl1pt', 'dyl2pt', 'dysphericity', 'dydphi', 'dyllm']
         showratio = True
         runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
 
@@ -737,7 +743,7 @@ def makeJetAnalysis():
 
     nbinsForFit = 3
     fitVars = []
-    #fitVars.append( ('sphericity'  , '\'llpt/(lep_pt[0]+lep_pt[1])\' {n},0.,1.'.format(n=nbinsForFit)) )
+    fitVars.append( ('sphericity'  , '\'llpt/(lep_pt[0]+lep_pt[1])\' {n},0.,1.'.format(n=nbinsForFit)) )
     #fitVars.append( ('bdt'         , '\'bdtrarity\'                      {n},0.,1.'.format(n=nbinsForFit)) )
     fitVars.append( ('bdtcomb'       , '\'bdtcdfinv(bdt)\'                 {n},0.,1.'.format(n=nbinsForFit)) )
 
@@ -785,13 +791,13 @@ def makeJetAnalysis():
         disable   = []
         processes = []
         fittodata = []
-        scalethem = {'zg': zscaling[flav]}#, 'data_comb': combscaling[flav.split('_')[1]]}
+        scalethem = {}#'zg': zscaling[flav]}#, 'data_comb': combscaling[flav.split('_')[1]]}
 
         extraopts = ' --maxRatioRange 0. 2. --fixRatioRange --legendColumns 2 --showIndivSigs ' #--plotmode=norm '#--preFitData bdt '
 
         extraopts += ' -W {sfs} '.format(sfs=sf)
 
-        makeplots = [flav+'_bdtcomb'] #[flav+'_bdt', flav+'_sphericity', flav+'_bdtcomb']
+        makeplots = [flav+'_bdtcomb', flav+'_sphericity'] #[flav+'_bdt', flav+'_sphericity', flav+'_bdtcomb']
         showratio = True
 
         runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts, newlumi=fulllumi if 'onZ' in flav else 0.)
@@ -804,7 +810,7 @@ def makeJetAnalysis():
             cmd_cards += ' --od {od} '                  .format(od=outdirCards)
             cmd_cards += ' -o {flav} '                  .format(flav=flav)
             cmd_cards += ' '.join([' -E ^'+i+' ' for i in flav.split('_')])
-            cmd_cards += ' --scale-process zg {f:.3f} '       .format(f=zscaling[flav])
+            ## cmd_cards += ' --scale-process zg {f:.3f} '       .format(f=zscaling[flav])
 
             systfile = fsysts if not '2b' in flav else 'hin-ttbar/analysisSetup/systs2b.txt'
 
@@ -923,7 +929,7 @@ def makeCards():
 
     nbinsForFit = 10
     fitVars = [## ('bdt'         , 'bdtrarity                      {n},0.,1.'.format(n=nbinsForFit)), 
-               ## ('sphericity'  , '\'llpt/(lep_pt[0]+lep_pt[1])\' {n},0.,1.'.format(n=nbinsForFit)),
+               ('sphericity'  , '\'llpt/(lep_pt[0]+lep_pt[1])\' {n},0.,1.'.format(n=nbinsForFit)),
                ## ('sphericity'  , '\'pt_2(lep_calpt[0],lep_phi[0],lep_calpt[1],lep_phi[1])/(lep_calpt[0]+lep_calpt[1])\' {n},0.,1.'.format(n=nbinsForFit)),
                ('bdtcomb'  , '\'bdtcdfinv(bdt)\' {n},0.,1.'.format(n=nbinsForFit)),
               ]
@@ -985,7 +991,7 @@ def makeCards():
                 cmd_combinecards = 'combineCards.py '
                 for r in regions:
                     cmd_combinecards += ' {f}={p}/{f}.card.txt '.format(p=outdirCards, f=r)
-                f_card_allFlavors = '{p}/allFlavors.card.txt'.format(p=outdirCards)
+                f_card_allFlavors = '{p}/combinedCard.txt'.format(p=outdirCards)
                 cmd_combinecards += ' > '+f_card_allFlavors
                 print 'combining cards with this command:'
                 print '===================================='
@@ -996,8 +1002,10 @@ def makeCards():
                 os.system('cp {f} {f}.tmp'.format(f=f_card_allFlavors))
 
                 with open(f_card_allFlavors, 'a') as tmp_file:
-                    tmp_file.write('theory      group = muR muF muRmuF ') # alphaS + ' '.join('pdf'+str(x) for x in range(1,101)) +'\n')
+                    tmp_file.write('* autoMCStats 0 1 1 \n') # alphaS + ' '.join('pdf'+str(x) for x in range(1,101)) +'\n')
+                    tmp_file.write('theory      group = muR muF muRmuF \n') # alphaS + ' '.join('pdf'+str(x) for x in range(1,101)) +'\n')
                     tmp_file.write('ptModel     group = ptTop ptZ \n')  
+                    tmp_file.write('pdfs        group = {pdf} \n'.format(pdf=' '.join('pdf'+str(x) for x in range(1,49)) )  )
                     tmp_file.write('topMass     group = mTop \n')  
                     tmp_file.write('luminosity  group = lumi \n')  
                     tmp_file.write('bkg         group = VV_lnN data_comb_lnN tW_lnN zg_lnN \n')  
@@ -1048,6 +1056,36 @@ def makeCards():
             ## print resTot
             ## print resStat
 
+def jetFlavor():
+    print '=========================================='
+    print 'running some jet flavor plots'
+    print '=========================================='
+    trees     = treedir
+    friends   = ''
+
+    fmca          = 'hin-ttbar/analysisSetup/mca.txt'
+    fcut          = 'hin-ttbar/analysisSetup/cuts.txt'
+    fplots        = 'hin-ttbar/analysisSetup/plots_results.txt'
+    fsysts        = 'hin-ttbar/analysisSetup/systs.txt'
+
+    makeplots = ['ptvsjetflavor1', 'ptvsjetflavor2', 'ptvscsvjet1', 'ptvscsvjet2']
+
+    sf = 'ncollWgt*trigSF[0]*lepSF[0]*lepSF[1]*lepIsoSF[0]*lepIsoSF[1]'
+
+    for iflav,flav in enumerate(['em']):#, 'ee', 'mm']):
+        targetdir = basedir+'/jet_flavor/{date}{pf}-{flav}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav )
+
+        enable    = [flav]
+        disable   = []
+        processes = ['ttbar', 'zg', 'tW', 'VV']
+        fittodata = []
+        scalethem = {}
+
+        extraopts = ' --legendColumns 2 --plotmode=norm '#--preFitData bdt '
+        extraopts += ' -W {eff} '.format(eff=sf)
+        showratio = False
+        runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
+
 
 def simplePlot():
     print '=========================================='
@@ -1061,9 +1099,9 @@ def simplePlot():
     fplots        = 'hin-ttbar/analysisSetup/plots_results.txt'
     fsysts        = 'hin-ttbar/analysisSetup/systs.txt'
 
-    makeplots = ['l1pt', 'l2pt', 'l1eta', 'l2eta', 'acoplan', 'mll', 'mtll',  'l1d0', 'l2d0', 
-                 'l1dz', 'l2dz', 'l1sip2d', 'l2sip2d', 'njets', 'jetpt', 'jeteta', 'jetbtag', 
-                 'jetmass', 'centrality', 'bdt', 'bdtrarity', 'j1btag', 'j2btag']
+    makeplots = ['jetbtag']#'llpt', 'l1pt', 'l2pt', 'l1eta', 'l2eta', 'acoplan', 'mll', #'mtll',  'l1d0', 'l2d0', 
+                 #'l1dz', 'l2dz', 'l1sip2d', 'l2sip2d', 'njets', #'jetpt', 'jeteta', 'jetbtag', 
+                 #'jetmass', 'centrality', 'bdt', 'bdtrarity', 'j1btag', 'j2btag']
 
     sf = 'ncollWgt*trigSF[0]*lepSF[0]*lepSF[1]*lepIsoSF[0]*lepIsoSF[1]'
 
@@ -1098,6 +1136,7 @@ if __name__ == '__main__':
     parser.add_option('--jetAnalysis'    , action='store_true' , default=False , help='make the jet analysis datacards')
     parser.add_option('--dyReweighting'    , action='store_true' , default=False , help='make Z-pT reweighting test plots')
     parser.add_option('--checkSphericity'    , action='store_true' , default=False , help='check low sphericity events')
+    parser.add_option('--jetFlavor'    , action='store_true' , default=False , help='plots for jet flavor studies')
     (opts, args) = parser.parse_args()
 
 ## LUMI=1618.466*(1e-6)
@@ -1161,3 +1200,6 @@ if __name__ == '__main__':
     if opts.checkSphericity:
         print 'chekcing low sphericity events'
         checkSphericity()
+    if opts.jetFlavor:
+        print 'checking low sphericity events'
+        jetFlavor()

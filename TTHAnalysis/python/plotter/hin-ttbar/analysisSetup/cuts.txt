@@ -26,6 +26,8 @@ mm        : abs(lep_pdgId[0]*lep_pdgId[1]) == 169  && llm > 20. && abs(llm-91.)>
 
 sf        : (abs(lep_pdgId[0]*lep_pdgId[1]) == 169 || abs(lep_pdgId[0]*lep_pdgId[1]) == 121 ) && llm > 20. && abs(llm-91.)>15. ; Disable=True
 
+anyflavor : llm > 20. && (abs(lep_pdgId[0]*lep_pdgId[1]) == 169 || abs(llm-91.)>15. ) ; Disable=True
+
 leponZee  : abs(lep_pdgId[0]*lep_pdgId[1]) == 121               && abs(llm-91.)<15. ; Disable=True
 leponZmm  : abs(lep_pdgId[0]*lep_pdgId[1]) == 169               && abs(llm-91.)<15. ; Disable=True
 

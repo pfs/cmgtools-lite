@@ -140,7 +140,7 @@ def doPostFitPlot(url):
     xtitle='BDT' if 'bdtcomb' in url else 'Sphericity'
     if 'BDT' in xtitle:
         xtitle += ' bin'
-    for ch in inF.Get('shapes_fit_s').GetListOfKeys():
+    for ch in inF.Get('shapes_fit_s' if not options.prefit else 'shapes_prefit').GetListOfKeys():
         chName=ch.GetName()
 
         chTitle=chName.replace('mm','#mu#mu')
@@ -163,8 +163,9 @@ def doPostFitPlot(url):
             except:
                 pass
 
+        prePost = 'postfit_' if not options.prefit else 'prefit_'
         compareFitResult(plotsPostfit=plotsPostfit,plotsPrefit=plotsPrefit,
-                              plotName=options.outdir+'postfit_'+chName,
+                              plotName=options.outdir+prePost+chName,
                               xtitle=xtitle,extraTxt=[chTitle])
      
 def compareFitResult(plotsPrefit,plotsPostfit,plotName,xtitle,extraTxt=[]):
@@ -210,7 +211,10 @@ def compareFitResult(plotsPrefit,plotsPostfit,plotName,xtitle,extraTxt=[]):
     if options.inclusive and 'hericity' in xtitle:
         myyranges = yrangesInclusiveSphericity
 
-    frame.GetYaxis().SetRangeUser(myyranges[plotName.split('_')[-1]][0], myyranges[plotName.split('_')[-1]][1]) 
+    try:
+        frame.GetYaxis().SetRangeUser(myyranges[plotName.split('_')[-1]][0], myyranges[plotName.split('_')[-1]][1]) 
+    except:
+        frame.GetYaxis().SetRangeUser(0.,1.3*frame.GetMaximum())
     frame.Draw()
 
     leg = ROOT.TLegend(marginL+0.01,0.70,1,0.90)
@@ -290,7 +294,7 @@ def compareFitResult(plotsPrefit,plotsPostfit,plotName,xtitle,extraTxt=[]):
     tex.DrawLatex(marginL,0.93,'#bf{CMS} #it{preliminary}')
     #tex.DrawLatex(marginL,0.85,'#it{preliminary}')
     tex.SetTextAlign(ROOT.kHAlignRight+ROOT.kVAlignCenter)
-    tex.DrawLatex(1.-marginR-0.26,0.94,'1.752 nb^{-1}')# (#sqrt{s_{NN}}=5.02 TeV)')
+    tex.DrawLatex(1.-marginR-0.26,0.94,'1.7 nb^{-1}')# (#sqrt{s_{NN}}=5.02 TeV)')
     tex.SetTextSize(0.04)
     tex.DrawLatex(1.-marginR,0.93,'(#sqrt{s_{NN}}=5.02 TeV)')
     tex.SetTextAlign(ROOT.kHAlignLeft+ROOT.kVAlignCenter)
@@ -370,6 +374,7 @@ def compareFitResult(plotsPrefit,plotsPostfit,plotName,xtitle,extraTxt=[]):
     data2fitGrNew = convertGraph(data2fitGr, xtitle)
     data2fitGrNew.Draw('PZ')
 
+
     leg3 = ROOT.TLegend(0.15,0.85,0.8,0.95)
     leg3.SetNColumns(3)
     leg3.SetFillStyle(0)
@@ -377,7 +382,7 @@ def compareFitResult(plotsPrefit,plotsPostfit,plotName,xtitle,extraTxt=[]):
     leg3.SetTextSize(0.13)
     leg3.AddEntry(data2fitGr,'Data','ep')
     #leg3.AddEntry(relPreUncGr,'Prefit unc.','f')
-    leg3.AddEntry(relFitUncGr,'Postfit unc.','f')
+    leg3.AddEntry(relFitUncGr,'Postfit unc.' if not options.prefit else 'Prefit unc.','f')
     #leg3.Draw()
 
     #p3.RedrawAxis()
@@ -385,8 +390,9 @@ def compareFitResult(plotsPrefit,plotsPostfit,plotName,xtitle,extraTxt=[]):
     c.cd()
     c.Modified()
     c.Update()
+    prepost = '_postfit' if not options.prefit else '_prefit'
     for ext in ['png','pdf']:
-        c.SaveAs('%s.%s'%(plotName,ext))
+        c.SaveAs('{a}{b}.{e}'.format(a=plotName,b=prepost,e=ext))
 
     p1.Delete()
     #p2.Delete()
@@ -397,6 +403,7 @@ if __name__ == "__main__":
     parser = optparse.OptionParser(usage='usage: %prog [opts] ', version='%prog 1.0')
     parser.add_option('--outdir'   , type='string'       , default=''    , help='output directory where the postfit plots are saved.')
     parser.add_option('--inclusive', action='store_true' , default=False , help='do it for inclusive plots (i.e. non b-tagged)')
+    parser.add_option('--prefit', action='store_true' , default=False , help='make prefit distributions')
     (options, args) = parser.parse_args()
 
     url=sys.argv[1]

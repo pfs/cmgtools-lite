@@ -1,4 +1,4 @@
-import sys, os, optparse
+import sys, os, optparse, copy, math
 import ROOT
 
 
@@ -17,6 +17,7 @@ yranges={'ee0b': [0., 450.], 'mm0b': [0., 1300.], 'em0b': [0., 55.],
 
 yrangesInclusive           = {'ee': [0., 300.], 'mm': [0., 1000.], 'em': [0., 40.]}
 yrangesInclusiveSphericity = {'ee': [0., 250.], 'mm': [0.,  500.], 'em': [0., 27.]}
+yrangesNb = {'ee': [0.5, 10000.], 'mm': [0.5,  50000.], 'em': [0.5, 1000.]}
 
 valsAndErrors = {}
 
@@ -33,14 +34,18 @@ def printTable(vae):
             vae[k] = '{a:.1f}'.format(a=v)
         else:
             vae[k] = '{a:.0f}'.format(a=v)
+
+    vae['when' ] = 'after the fit' if not options.prefit else 'before the fit'
+    vae['when2'] = 'Postfit' if not options.prefit else ''
+
     tabletex = '''
 \\begin{{table}}[!htb]
 \\centering
 \\small
 \\topcaption{{
     The number of expected background and signal events and the observed event yields in the different
-    channels of $ee$, $\\mu\\mu$, and $e\\mu$, \\textbf{{after the fit}}.
-    \\label{{tab:yieldsJetPostfit}}}}
+    channels of $ee$, $\\mu\\mu$, and $e\\mu$, \\textbf{{{when}}}.
+    \\label{{tab:yieldsJet{when2}}}}}
     \\resizebox{{\\textwidth}}{{!}}{{
     \\begin{{tabular}}{{lccc|ccc|ccc}}
 Process        & $ee$ 0b    & $ee$ 1b   & $ee$ 2b   & $\\mu\\mu$ 0b   & $\\mu\\mu$ 1b  & $\\mu\\mu$ 2b  & $e\\mu$ 0b    & $e\\mu$  1b    & $e\\mu$  2b   \\\\ \\hline \\hline
@@ -48,10 +53,10 @@ Process        & $ee$ 0b    & $ee$ 1b   & $ee$ 2b   & $\\mu\\mu$ 0b   & $\\mu\\m
 Z/$\\gamma^{{*}}$ & {zg_ee0b} $\\pm$ {zg_ee0b_e} & {zg_ee1b} $\\pm$ {zg_ee1b_e} & {zg_ee2b} $\\pm$ {zg_ee2b_e} & {zg_mm0b} $\\pm$ {zg_mm0b_e} & {zg_mm1b} $\\pm$ {zg_mm1b_e} & {zg_mm2b} $\\pm$ {zg_mm2b_e} & {zg_em0b} $\\pm$ {zg_em0b_e} & {zg_em1b} $\\pm$ {zg_em1b_e} & {zg_em2b} $\\pm$ {zg_em2b_e}  \\\\
 Nonprompt & {data_comb_ee0b} $\\pm$ {data_comb_ee0b_e} & {data_comb_ee1b} $\\pm$ {data_comb_ee1b_e} & {data_comb_ee2b} $\\pm$ {data_comb_ee2b_e} & {data_comb_mm0b} $\\pm$ {data_comb_mm0b_e} & {data_comb_mm1b} $\\pm$ {data_comb_mm1b_e} & {data_comb_mm2b} $\\pm$ {data_comb_mm2b_e} & {data_comb_em0b} $\\pm$ {data_comb_em0b_e} & {data_comb_em1b} $\\pm$ {data_comb_em1b_e} & {data_comb_em2b} $\\pm$ {data_comb_em2b_e}  \\\\
 tW & {tW_ee0b} $\\pm$ {tW_ee0b_e} & {tW_ee1b} $\\pm$ {tW_ee1b_e} & {tW_ee2b} $\\pm$ {tW_ee2b_e} & {tW_mm0b} $\\pm$ {tW_mm0b_e} & {tW_mm1b} $\\pm$ {tW_mm1b_e} & {tW_mm2b} $\\pm$ {tW_mm2b_e} & {tW_em0b} $\\pm$ {tW_em0b_e} & {tW_em1b} $\\pm$ {tW_em1b_e} & {tW_em2b} $\\pm$ {tW_em2b_e}  \\\\
-VV & {VV_ee0b} $\\pm$ {VV_ee0b_e} & {VV_ee1b} $\\pm$ {VV_ee1b_e} & {VV_ee2b} $\\pm$ {VV_ee2b_e} & {VV_mm0b} $\\pm$ {VV_mm0b_e} & {VV_mm1b} $\\pm$ {VV_mm1b_e} & {VV_mm2b} $\\pm$ {VV_mm2b_e} & {VV_em0b} $\\pm$ {VV_em0b_e} & {VV_em1b} $\\pm$ {VV_em1b_e} & {VV_em2b} $\\pm$ {VV_em2b_e}  \\\\
+VV & {VV_ee0b} $\\pm$ {VV_ee0b_e} & {VV_ee1b} $\\pm$ {VV_ee1b_e} & {VV_ee2b} $\\pm$ {VV_ee2b_e} & {VV_mm0b} $\\pm$ {VV_mm0b_e} & {VV_mm1b} $\\pm$ {VV_mm1b_e} & {VV_mm2b} $\\pm$ {VV_mm2b_e} & {VV_em0b} $\\pm$ {VV_em0b_e} & {VV_em1b} $\\pm$ {VV_em1b_e} & {VV_em2b} $\\pm$ {VV_em2b_e}  \\\\ \\hline
 Total background & {total_background_ee0b} $\\pm$ {total_background_ee0b_e} & {total_background_ee1b} $\\pm$ {total_background_ee1b_e} & {total_background_ee2b} $\\pm$ {total_background_ee2b_e} & {total_background_mm0b} $\\pm$ {total_background_mm0b_e} & {total_background_mm1b} $\\pm$ {total_background_mm1b_e} & {total_background_mm2b} $\\pm$ {total_background_mm2b_e} & {total_background_em0b} $\\pm$ {total_background_em0b_e} & {total_background_em1b} $\\pm$ {total_background_em1b_e} & {total_background_em2b} $\\pm$ {total_background_em2b_e}  \\\\
-\\ttbar signal & {ttbar_ee0b} $\\pm$ {ttbar_ee0b_e} & {ttbar_ee1b} $\\pm$ {ttbar_ee1b_e} & {ttbar_ee2b} $\\pm$ {ttbar_ee2b_e} & {ttbar_mm0b} $\\pm$ {ttbar_mm0b_e} & {ttbar_mm1b} $\\pm$ {ttbar_mm1b_e} & {ttbar_mm2b} $\\pm$ {ttbar_mm2b_e} & {ttbar_em0b} $\\pm$ {ttbar_em0b_e} & {ttbar_em1b} $\\pm$ {ttbar_em1b_e} & {ttbar_em2b} $\\pm$ {ttbar_em2b_e}  \\\\
-Observed (data) & {obs_ee0b} & {obs_ee1b} & {obs_ee2b} & {obs_mm0b} & {obs_mm1b} & {obs_mm2b} & {obs_em0b} & {obs_em1b} & {obs_em2b}   \\\\
+\\ttbar signal & {ttbar_ee0b} $\\pm$ {ttbar_ee0b_e} & {ttbar_ee1b} $\\pm$ {ttbar_ee1b_e} & {ttbar_ee2b} $\\pm$ {ttbar_ee2b_e} & {ttbar_mm0b} $\\pm$ {ttbar_mm0b_e} & {ttbar_mm1b} $\\pm$ {ttbar_mm1b_e} & {ttbar_mm2b} $\\pm$ {ttbar_mm2b_e} & {ttbar_em0b} $\\pm$ {ttbar_em0b_e} & {ttbar_em1b} $\\pm$ {ttbar_em1b_e} & {ttbar_em2b} $\\pm$ {ttbar_em2b_e}  \\\\ \\hline
+Observed (data) & \\textbf{{{obs_ee0b}}} & \\textbf{{{obs_ee1b}}} & \\textbf{{{obs_ee2b}}} & \\textbf{{{obs_mm0b}}} & \\textbf{{{obs_mm1b}}} & \\textbf{{{obs_mm2b}}} & \\textbf{{{obs_em0b}}} & \\textbf{{{obs_em1b}}} & \\textbf{{{obs_em2b}}}   \\\\
 
 \\end{{tabular}} }}
 
@@ -68,11 +73,14 @@ def printTableInclusive(vae):
         else:
             vae[k] = '{a:.0f}'.format(a=v)
 
+    vae['when' ] = 'after the fit' if not options.prefit else 'before the fit'
+    vae['when2'] = 'Postfit' if not options.prefit else ''
+
     tabletex = '''\\begin{table}[!htb]
     \\centering
     \\topcaption{ The number of expected background and signal events and the observed event yields in the different
-    channels of $ee$, $\\mu\\mu$, and $e\\mu$, \\textbf{{after the fit}}.
-    \\label{tab:yieldsPostfit}}
+    channels of $ee$, $\\mu\\mu$, and $e\\mu$, \\textbf{{ {when} }}.
+    \\label{tab:yields{when2}}}
         \\begin{tabular}{lccc}
             Process        & $ee$  & $\\mu\\mu$ & $e\\mu$ \\\\ \\hline \\hline\n'''
         
@@ -130,6 +138,41 @@ def convertHisto(inHisto, plotName, xtitle):
     
     return outHisto
 
+def convertValsAndErrorsToHistos(ch, vae):
+
+    returnDict = {}
+
+    tmp_hist_total = ROOT.TH1F('total', 'total', 3, -0.5, 2.5)
+
+    for proc in ['ttbar', 'total_background', 'VV', 'obs', 'tW', 'zg', 'data_comb']:
+        if not proc == 'obs':
+            tmp_hist = ROOT.TH1F(proc, proc, 3, -0.5, 2.5)
+            for ib in range(3):
+                tmp_hist.SetBinContent(ib+1, float(vae[proc+'_'+ch+str(ib)+'b']))
+                tmp_hist.SetBinError  (ib+1, float(vae[proc+'_'+ch+str(ib)+'b_e']))
+            if not proc == 'total_background':
+                tmp_hist_total.Add(tmp_hist)
+        else:
+            tmp_hist = ROOT.TGraphAsymmErrors(3)
+            tmp_hist.SetName('data')
+            tmp_hist_data = ROOT.TH1F(proc, proc, 3, -0.5, 2.5)
+            tmp_hist_data.Sumw2(0)
+            tmp_hist_data.SetBinErrorOption(ROOT.TH1.kPoisson)
+            for ib in range(3):
+                val = int(vae[proc+'_'+ch+str(ib)+'b'])
+                tmp_hist_data.SetBinContent(ib+1, val)
+            for ib in range(3):
+                val = int(vae[proc+'_'+ch+str(ib)+'b'])
+                tmp_hist.SetPoint(ib, ib, val)
+                tmp_hist.SetPointError(ib, 0., 0., tmp_hist_data.GetBinErrorLow(ib+1), tmp_hist_data.GetBinErrorUp(ib+1))
+
+        returnDict[proc if not proc == 'obs' else 'data'] = copy.deepcopy(tmp_hist)
+
+    returnDict['total'] = copy.deepcopy(tmp_hist_total)
+
+    return returnDict
+    
+
 def doPostFitPlot(url):
 
     ROOT.gStyle.SetOptTitle(0)
@@ -140,12 +183,13 @@ def doPostFitPlot(url):
     xtitle='BDT' if 'bdtcomb' in url else 'Sphericity'
     if 'BDT' in xtitle:
         xtitle += ' bin'
-    for ch in inF.Get('shapes_fit_s' if not options.prefit else 'shapes_prefit').GetListOfKeys():
+    for ich,ch in enumerate(inF.Get('shapes_fit_s' if not options.prefit else 'shapes_prefit').GetListOfKeys()):
         chName=ch.GetName()
 
         chTitle=chName.replace('mm','#mu#mu')
         chTitle=chTitle.replace('em','e#mu')
-        if url.find('_jetAnalysis')>0 : chTitle += '+b-tags'
+        chTitle=chTitle.replace('_',' ')
+        #if url.find('_jetAnalysis')>0 : chTitle += '+b-tags'
 
         chDir=ch.ReadObj()
         plotsPrefit={}
@@ -167,14 +211,24 @@ def doPostFitPlot(url):
         compareFitResult(plotsPostfit=plotsPostfit,plotsPrefit=plotsPrefit,
                               plotName=options.outdir+prePost+chName,
                               xtitle=xtitle,extraTxt=[chTitle])
+        # print 'this is plotsPostfit', plotsPostfit
      
 def compareFitResult(plotsPrefit,plotsPostfit,plotName,xtitle,extraTxt=[]):
 
+    if not options.inclusive:
+        channel = ''.join(plotName.split('_')[-2:])
+        channel = channel.replace('_','')
+    else:
+        channel = plotName.split('_')[-1]
+
+    if 'nbjets' in channel:
+        channel = channel[-2:]
+
+
     print '=================='
     print '== at plotName', plotName, '==='
+    print '== in channel ', channel, '==='
     print '=================='
-
-    channel = plotName.split('_')[-1]
 
     marginL = 0.12
     marginR = 0.03
@@ -186,6 +240,7 @@ def compareFitResult(plotsPrefit,plotsPostfit,plotName,xtitle,extraTxt=[]):
     c.SetRightMargin(0)
     c.SetBottomMargin(0)
 
+
     #data/MC
     p1 = ROOT.TPad("p1", "p1", 0., 0.26, 1., 1.)
     p1.SetTopMargin(0.10)
@@ -194,6 +249,8 @@ def compareFitResult(plotsPrefit,plotsPostfit,plotName,xtitle,extraTxt=[]):
     p1.SetBottomMargin(0.03)
     p1.Draw()
     p1.cd()
+    if 'b-tags' in xtitle:
+        p1.SetLogy()
     frame=plotsPostfit['total'].Clone('frame')
     frame=convertHisto(frame,plotName,xtitle)
     frame.Reset('ICE')
@@ -210,11 +267,16 @@ def compareFitResult(plotsPrefit,plotsPostfit,plotName,xtitle,extraTxt=[]):
         myyranges = yrangesInclusive
     if options.inclusive and 'hericity' in xtitle:
         myyranges = yrangesInclusiveSphericity
+    if 'nbjets' in plotName:
+        myyranges = yrangesNb
 
-    try:
-        frame.GetYaxis().SetRangeUser(myyranges[plotName.split('_')[-1]][0], myyranges[plotName.split('_')[-1]][1]) 
-    except:
-        frame.GetYaxis().SetRangeUser(0.,1.3*frame.GetMaximum())
+    print 'this is myranges', myyranges
+    print 'this is channel', channel
+
+    #try:
+    frame.GetYaxis().SetRangeUser(myyranges[channel][0], myyranges[channel][1]) 
+    #except:
+    #    pass#frame.GetYaxis().SetRangeUser(0.,1.3*frame.GetMaximum())
     frame.Draw()
 
     leg = ROOT.TLegend(marginL+0.01,0.70,1,0.90)
@@ -391,8 +453,9 @@ def compareFitResult(plotsPrefit,plotsPostfit,plotName,xtitle,extraTxt=[]):
     c.Modified()
     c.Update()
     prepost = '_postfit' if not options.prefit else '_prefit'
+    finalxtitle = xtitle.replace(' ','').replace('{','').replace('}','').replace('-','')
     for ext in ['png','pdf']:
-        c.SaveAs('{a}{b}.{e}'.format(a=plotName,b=prepost,e=ext))
+        c.SaveAs('{a}{b}_{c}.{e}'.format(a=plotName,b=prepost,e=ext,c=finalxtitle))
 
     p1.Delete()
     #p2.Delete()
@@ -421,6 +484,11 @@ if __name__ == "__main__":
     if options.inclusive:
         printTableInclusive(valsAndErrors)
     else:
+        for flav in ['em', 'mm', 'ee']:
+            tmp_histos = convertValsAndErrorsToHistos(flav, valsAndErrors)
+            compareFitResult(plotsPostfit=tmp_histos,plotsPrefit=tmp_histos,
+                                  plotName=options.outdir+'/nbjets_'+flav,
+                                  xtitle='n_{b-tags}')
         printTable(valsAndErrors)
 
     #sys.exit()

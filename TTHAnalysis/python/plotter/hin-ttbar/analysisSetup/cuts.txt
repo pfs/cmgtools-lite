@@ -11,8 +11,8 @@ hem2 : lep_pdgId[1] == 13 || lep_eta[1] >= -1.39 || lep_phi[1] < -1.57 || lep_ph
 #sph0p1      : pt_2(lep_calpt[0],lep_phi[0],lep_calpt[1],lep_phi[1])/(lep_calpt[0]+lep_calpt[1]) > 0.1
 acoplan0p01 : 1.-abs(dphi)/3.14159265 > 0.01
 
-#l1pt25 : lep_calpt[0] > 25.
-#l2pt25 : lep_calpt[1] > 25.
+l1pt20 : lep_calpt[0] > 20.
+l2pt20 : lep_calpt[1] > 20.
 
 el1pt25 : lep_calpt[0] > 25. || abs(lep_pdgId[0]) == 13
 el2pt25 : lep_calpt[1] > 25. || abs(lep_pdgId[1]) == 13
@@ -52,3 +52,5 @@ offZ   : abs(llm-91.)>15.                      ; Disable=True
 
 centralityLo : cenbin<30 ; Disable=True
 centralityHi : cenbin>30 ; Disable=True
+
+highBDT : bdtcdfinv(bdt)>0.5 ; Disable=True

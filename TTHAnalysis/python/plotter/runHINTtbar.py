@@ -929,9 +929,11 @@ def makeCards():
 
     nbinsForFit = 10
     fitVars = [## ('bdt'         , 'bdtrarity                      {n},0.,1.'.format(n=nbinsForFit)), 
-               ('sphericity'  , '\'llpt/(lep_pt[0]+lep_pt[1])\' {n},0.,1.'.format(n=nbinsForFit)),
-               ## ('sphericity'  , '\'pt_2(lep_calpt[0],lep_phi[0],lep_calpt[1],lep_phi[1])/(lep_calpt[0]+lep_calpt[1])\' {n},0.,1.'.format(n=nbinsForFit)),
-               ('bdtcomb'  , '\'bdtcdfinv(bdt)\' {n},0.,1.'.format(n=nbinsForFit)),
+               ## ('minmlb' , '\'min(mass_2(lep_pt[0],lep_eta[0],lep_phi[0],0.,bjet_pt[0],bjet_eta[0],bjet_phi[0],bjet_mass[0]),min(mass_2(lep_pt[1],lep_eta[1],lep_phi[1],0.,bjet_pt[1],bjet_eta[1],bjet_phi[1],bjet_mass[1]),min(mass_2(lep_pt[0],lep_eta[0],lep_phi[0],0.,bjet_pt[1],bjet_eta[1],bjet_phi[1],bjet_mass[1]),mass_2(lep_pt[1],lep_eta[1],lep_phi[1],0.,bjet_pt[0],bjet_eta[0],bjet_phi[0],bjet_mass[0]))))\' 15,0.,150.'),
+               #('sphericity'  , '\'llpt/(lep_pt[0]+lep_pt[1])\' {n},0.,1.'.format(n=nbinsForFit)),
+               ('sphericity'  , '\'pt_2(lep_calpt[0],lep_phi[0],lep_calpt[1],lep_phi[1])/(lep_calpt[0]+lep_calpt[1])\' {n},0.,1.'.format(n=nbinsForFit)),
+               #('bdtcomb'  , '\'bdtcdfinv(bdt)\' {n},0.,1.'.format(n=nbinsForFit)),
+               ('ptll'  , '\'llpt\' 15,0.,150.'),
               ]
 
     regions = ['ee', 'mm', 'em']#, 'leponZee', 'leponZmm']
@@ -941,7 +943,7 @@ def makeCards():
     for iflav,flav in enumerate(regions):
         targetdir = basedir+'/card_inputs/{date}{pf}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav )
 
-        enable    = [flav]
+        enable    = [flav, 'highBDT']
         disable   = []
         processes = []
         fittodata = []
@@ -973,6 +975,7 @@ def makeCards():
             cmd_cards  = cmd_cards_base + ' -W {sfs} '.format(sfs=sf)
             cmd_cards += ' --od {od} '                  .format(od=outdirCards)
             cmd_cards += ' -E ^{flav} -o {flav} '       .format(flav=flav)
+            cmd_cards += ' -E ^highBDT '
 
             ## use the fitvar for offZ and em, use mll for onZ
             if not 'onZ' in flav:
@@ -1068,16 +1071,20 @@ def jetFlavor():
     fplots        = 'hin-ttbar/analysisSetup/plots_results.txt'
     fsysts        = 'hin-ttbar/analysisSetup/systs.txt'
 
-    makeplots = ['ptvsjetflavor1', 'ptvsjetflavor2', 'ptvscsvjet1', 'ptvscsvjet2']
+    makeplots = ['jetptflavor999', 'jetcsvflavor999']#'jet1flavorpt30', 'jet2flavorpt30']#, 'jetpt', 'jetpt1', 'jetpt2', 'jetflavorpt30', 'jetflavor1', 'jetflavor2', 'jeteta', 'jetflavor', 'centrality']#'ptjet1vsptjet2', 'ptvsjetflavor1', 'ptvsjetflavor2', 'ptvscsvjet1', 'ptvscsvjet2']
 
     sf = 'ncollWgt*trigSF[0]*lepSF[0]*lepSF[1]*lepIsoSF[0]*lepIsoSF[1]'
 
-    for iflav,flav in enumerate(['em']):#, 'ee', 'mm']):
-        targetdir = basedir+'/jet_flavor/{date}{pf}-{flav}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav )
+    for (iflav,flav),centrality in itertools.product(enumerate(['anyflavor']), ['inclusive', 'centralityLo', 'centralityHi']):
+        targetdir = basedir+'/jet_studies/{date}{pf}-{c}-{flav}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav, c=centrality )
 
         enable    = [flav]
+
+        if not 'inclusive' in centrality:
+            enable.append(centrality)
+
         disable   = []
-        processes = ['ttbar', 'zg', 'tW', 'VV']
+        processes = ['ttbar', 'zg']#, 'tW', 'VV']
         fittodata = []
         scalethem = {}
 
@@ -1099,7 +1106,7 @@ def simplePlot():
     fplots        = 'hin-ttbar/analysisSetup/plots_results.txt'
     fsysts        = 'hin-ttbar/analysisSetup/systs.txt'
 
-    makeplots = ['jetbtag']#'llpt', 'l1pt', 'l2pt', 'l1eta', 'l2eta', 'acoplan', 'mll', #'mtll',  'l1d0', 'l2d0', 
+    makeplots = ['llpt','acoplan', 'minmlb', 'mlbl1b1', 'mlbl1b2', 'mlbl2b1', 'mlbl2b2']#'centrality']#'llpt', 'l1pt', 'l2pt', 'l1eta', 'l2eta', 'acoplan', 'mll', #'mtll',  'l1d0', 'l2d0', 
                  #'l1dz', 'l2dz', 'l1sip2d', 'l2sip2d', 'njets', #'jetpt', 'jeteta', 'jetbtag', 
                  #'jetmass', 'centrality', 'bdt', 'bdtrarity', 'j1btag', 'j2btag']
 
@@ -1108,7 +1115,7 @@ def simplePlot():
     for iflav,flav in enumerate(['em', 'ee', 'mm']):
         targetdir = basedir+'/simple_plots/{date}{pf}-{flav}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav )
 
-        enable    = [flav]
+        enable    = [flav, 'highBDT']
         disable   = []
         processes = []
         fittodata = []
@@ -1164,7 +1171,8 @@ if __name__ == '__main__':
     ## this is with old eleID and stuff treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim21June/' ## rereco data and mixed, official MC
     #treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim13August/' ## newest on 07/08/2019
     #treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim02Sep_loose/' ## newest on 03/09/2019
-    treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skimsFinal/' ## newest. unblinded
+    #treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skimsFinal/' ## newest. unblinded
+    treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim09Oct_loose/'
 
     if opts.date:
         date = opts.date

@@ -18,6 +18,7 @@ yranges={'ee0b': [0., 450.], 'mm0b': [0., 1300.], 'em0b': [0., 55.],
 yrangesInclusive           = {'ee': [0., 300.], 'mm': [0., 1000.], 'em': [0., 40.]}
 yrangesInclusiveSphericity = {'ee': [0., 250.], 'mm': [0.,  500.], 'em': [0., 27.]}
 yrangesNb = {'ee': [0.5, 10000.], 'mm': [0.5,  50000.], 'em': [0.5, 1000.]}
+yrangesSmall = {'ee': [0., 40.], 'mm': [0.,  55.], 'em': [0., 20.]}
 
 valsAndErrors = {}
 
@@ -179,10 +180,20 @@ def doPostFitPlot(url):
     ROOT.gStyle.SetOptStat(0)
     ROOT.gROOT.SetBatch(True)
 
+    plotNameAdd = ''
+
     inF = ROOT.TFile(url)
     xtitle='BDT' if 'bdtcomb' in url else 'Sphericity'
+    if 'ptll' in url: 
+        xtitle = 'p_{T}^{ll}'
+        plotNameAdd = 'ptll'
     if 'BDT' in xtitle:
         xtitle += ' bin'
+    if 'phericity' in url:
+        plotNameAdd = 'sphericity'
+
+    print 'this is xtitle', xtitle
+
     for ich,ch in enumerate(inF.Get('shapes_fit_s' if not options.prefit else 'shapes_prefit').GetListOfKeys()):
         chName=ch.GetName()
 
@@ -209,7 +220,7 @@ def doPostFitPlot(url):
 
         prePost = 'postfit_' if not options.prefit else 'prefit_'
         compareFitResult(plotsPostfit=plotsPostfit,plotsPrefit=plotsPrefit,
-                              plotName=options.outdir+prePost+chName,
+                              plotName=options.outdir+prePost+plotNameAdd+chName,
                               xtitle=xtitle,extraTxt=[chTitle])
         # print 'this is plotsPostfit', plotsPostfit
      
@@ -222,6 +233,10 @@ def compareFitResult(plotsPrefit,plotsPostfit,plotName,xtitle,extraTxt=[]):
         channel = plotName.split('_')[-1]
 
     if 'nbjets' in channel:
+        channel = channel[-2:]
+    if 'ptll' in channel:
+        channel = channel[-2:]
+    if 'phericity' in channel:
         channel = channel[-2:]
 
 
@@ -269,14 +284,18 @@ def compareFitResult(plotsPrefit,plotsPostfit,plotName,xtitle,extraTxt=[]):
         myyranges = yrangesInclusiveSphericity
     if 'nbjets' in plotName:
         myyranges = yrangesNb
+    if 'ptll' in plotName:
+        myyranges = yrangesSmall 
+    if 'phericity' in plotName:
+        myyranges = yrangesSmall 
 
     print 'this is myranges', myyranges
     print 'this is channel', channel
 
-    #try:
-    frame.GetYaxis().SetRangeUser(myyranges[channel][0], myyranges[channel][1]) 
-    #except:
-    #    pass#frame.GetYaxis().SetRangeUser(0.,1.3*frame.GetMaximum())
+    try:
+        frame.GetYaxis().SetRangeUser(myyranges[channel][0], myyranges[channel][1]) 
+    except:
+        pass#frame.GetYaxis().SetRangeUser(0.,1.3*frame.GetMaximum())
     frame.Draw()
 
     leg = ROOT.TLegend(marginL+0.01,0.70,1,0.90)
@@ -453,7 +472,7 @@ def compareFitResult(plotsPrefit,plotsPostfit,plotName,xtitle,extraTxt=[]):
     c.Modified()
     c.Update()
     prepost = '_postfit' if not options.prefit else '_prefit'
-    finalxtitle = xtitle.replace(' ','').replace('{','').replace('}','').replace('-','')
+    finalxtitle = xtitle.replace(' ','').replace('{','').replace('}','').replace('-','').replace('^','')
     for ext in ['png','pdf']:
         c.SaveAs('{a}{b}_{c}.{e}'.format(a=plotName,b=prepost,e=ext,c=finalxtitle))
 
@@ -488,7 +507,7 @@ if __name__ == "__main__":
             tmp_histos = convertValsAndErrorsToHistos(flav, valsAndErrors)
             compareFitResult(plotsPostfit=tmp_histos,plotsPrefit=tmp_histos,
                                   plotName=options.outdir+'/nbjets_'+flav,
-                                  xtitle='n_{b-tags}')
+                                  xtitle='n_{b-tags}',extraTxt=[flav.replace('m','#mu')])
         printTable(valsAndErrors)
 
     #sys.exit()

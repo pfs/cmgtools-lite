@@ -29,11 +29,21 @@ TString CMSSW_BASE = gSystem->ExpandPathName("${CMSSW_BASE}");
 TF1 * zptFunc = NULL;
 TF1 * bdtcdfinvFunc = NULL;
 
-int convertFlavor(int flavor){
+float ptFlavor(float pt, int jetflavor, int targetflavor){
+
+    int ajetflavor = abs(jetflavor);
+    if (ajetflavor != targetflavor) return -1.;
+    else return pt;
+
+    
+}
+
+int convertFlavor(int flavor, float pt =0., float ptcut = 30.){
 
     int aflav = abs(flavor);
-    if      (aflav  > 21) return 0;
-    else if (aflav == 21) return 1;
+    if (pt > 0. and pt < ptcut) return -2;
+    if      (aflav  > 21) return -1;
+    else if (aflav == 21) return 0;
     else { return aflav;}
 
     return -1;

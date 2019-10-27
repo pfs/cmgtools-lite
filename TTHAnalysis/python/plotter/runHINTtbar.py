@@ -1099,13 +1099,14 @@ def simplePlot():
     fplots        = 'hin-ttbar/analysisSetup/plots_results.txt'
     fsysts        = 'hin-ttbar/analysisSetup/systs.txt'
 
-    makeplots = ['jetbtag']#'llpt', 'l1pt', 'l2pt', 'l1eta', 'l2eta', 'acoplan', 'mll', #'mtll',  'l1d0', 'l2d0', 
+    makeplots = ['j1btag','j2btag']#'llpt', 'l1pt', 'l2pt', 'l1eta', 'l2eta', 'acoplan', 'mll', #'mtll',  'l1d0', 'l2d0', 
                  #'l1dz', 'l2dz', 'l1sip2d', 'l2sip2d', 'njets', #'jetpt', 'jeteta', 'jetbtag', 
                  #'jetmass', 'centrality', 'bdt', 'bdtrarity', 'j1btag', 'j2btag']
 
     sf = 'ncollWgt*trigSF[0]*lepSF[0]*lepSF[1]*lepIsoSF[0]*lepIsoSF[1]'
 
-    for iflav,flav in enumerate(['em', 'ee', 'mm']):
+    for iflav,flav in enumerate(['anyflavor','leponZll']) : #em', 'sf','leponZll']): # 'ee', 'mm']):
+        makeplots=['j1flav','j2flav'] #'j1btag','j2btag']
         targetdir = basedir+'/simple_plots/{date}{pf}-{flav}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav )
 
         enable    = [flav]
@@ -1164,7 +1165,8 @@ if __name__ == '__main__':
     ## this is with old eleID and stuff treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim21June/' ## rereco data and mixed, official MC
     #treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim13August/' ## newest on 07/08/2019
     #treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim02Sep_loose/' ## newest on 03/09/2019
-    treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skimsFinal/' ## newest. unblinded
+    #treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skimsFinal/' ## newest. unblinded
+    treedir = '/eos/cms/store/cmst3/group/hintt/PbPb2018_skim09Oct_loose/' ## newest. unblinded
 
     if opts.date:
         date = opts.date

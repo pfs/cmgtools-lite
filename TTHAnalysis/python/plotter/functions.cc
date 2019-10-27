@@ -39,6 +39,15 @@ int convertFlavor(int flavor){
     return -1;
 }
 
+
+int flavBin(int flavor,int nbjet, int min_nbjet){
+  if(nbjet<min_nbjet) return -1;
+  int aflav = abs(flavor);
+  if      (aflav==5) return 2;
+  else if (aflav==0) return 0;
+  return 1;
+}
+
 int ttChannel(bool lep_matched1, bool lep_taufeeddown1, bool lep_matched2, bool lep_taufeeddown2) {
     int code(-1);
     if( (lep_matched1 && !lep_taufeeddown1) && (lep_matched2 && !lep_taufeeddown2) ) code=0;

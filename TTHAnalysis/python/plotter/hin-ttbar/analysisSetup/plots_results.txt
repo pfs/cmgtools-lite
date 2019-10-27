@@ -41,3 +41,5 @@ bdt        : bdt                                             : 10,-1.,1.    ; XT
 bdtrarity  : bdtrarity                                       : 10,0.,1.     ; XTitle='bdt rarity'
 j1btag     : bjet_csvv2[0]                                   : 10,0.,1.     ; XTitle='CSVv2_{jet1}'
 j2btag     : bjet_csvv2[1]                                   : 10,0.,1.     ; XTitle='CSVv2_{jet2}'
+j1flav     : convertFlavor(bjet_flavor[0])         : 6,-0.5,5.5   ; XTitle='Jet 1 flavor'
+j2flav     : convertFlavor(bjet_flavor[1])         : 6,-0.5,5.5  ; XTitle='Jet 2 flavor'

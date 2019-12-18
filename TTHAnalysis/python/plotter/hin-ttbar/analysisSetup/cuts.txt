@@ -20,10 +20,10 @@ el2pt25 : lep_calpt[1] > 25. || abs(lep_pdgId[1]) == 13
 ml1pt25 : lep_calpt[0] > 20. || abs(lep_pdgId[0]) == 11
 ml2pt25 : lep_calpt[1] > 20. || abs(lep_pdgId[1]) == 11
 
-#atleast1j : nbjet>=1 && bjet_pt[0]>30. 
-#atleast2j : nbjet>=2 && bjet_pt[0]>30. && bjet_pt[1]>30
-#atleast1b : nbjet>=1 && bjet_pt[0]>30. && bjet_csvv2[0]>0.81
-atleast2b : nbjet>=2 && bjet_pt[0]>30. && bjet_csvv2[0]>0.81 && bjet_pt[1]>30 && bjet_csvv2[1]>0.81
+atleast1j : nbjet>=1 && bjet_pt[0]>30. ; Disable=True
+atleast2j : nbjet>=2 && bjet_pt[0]>30. && bjet_pt[1]>30; Disable=True
+atleast1b : nbjet>=1 && bjet_pt[0]>30. && bjet_csvv2[0]>0.81; Disable=True
+atleast2b : nbjet>=2 && bjet_pt[0]>30. && bjet_csvv2[0]>0.81 && bjet_pt[1]>30 && bjet_csvv2[1]>0.81; Disable=True
 
 ## these three are for the plotting of leptonic variables
 ## ======================================================
@@ -33,7 +33,7 @@ mm        : abs(lep_pdgId[0]*lep_pdgId[1]) == 169  && llm > 20. && abs(llm-91.)>
 
 sf        : (abs(lep_pdgId[0]*lep_pdgId[1]) == 169 || abs(lep_pdgId[0]*lep_pdgId[1]) == 121 ) && llm > 20. && abs(llm-91.)>15. ; Disable=True
 
-anyflavor : llm > 20. && (abs(lep_pdgId[0]*lep_pdgId[1]) == 169 || abs(llm-91.)>15. ) ; Disable=True
+anyflavor     : llm > 20. && (abs(lep_pdgId[0]*lep_pdgId[1]) == 143 || abs(llm-91.)>15. ) ; Disable=True
 
 leponZee  : abs(lep_pdgId[0]*lep_pdgId[1]) == 121               && abs(llm-91.)<15. ; Disable=True
 leponZmm  : abs(lep_pdgId[0]*lep_pdgId[1]) == 169               && abs(llm-91.)<15. ; Disable=True

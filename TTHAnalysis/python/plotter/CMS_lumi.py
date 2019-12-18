@@ -13,17 +13,17 @@ writeExtraText = True
 extraText   = "Preliminary"
 extraTextFont = 52 
 
-lumiTextSize     = 0.6
+lumiTextSize     = 0.7 #0.6
 lumiTextOffset   = 0.2
 
-cmsTextSize      = 0.75
+cmsTextSize      = 0.9 #0.75
 cmsTextOffset    = 0.1
 
 relPosX    = 0.045
 relPosY    = 0.035
 relExtraDY = 1.2
 
-extraOverCmsTextSize  = 0.76
+extraOverCmsTextSize  = 0.8 #0.76
 
 lumi_13TeV = "20.1 fb^{-1}"
 lumi_8TeV  = "19.7 fb^{-1}" 
@@ -71,7 +71,7 @@ def CMS_lumi(pad,  iPeriod,  iPosX , aLittleExtra=0.04):
         lumiText += " (7 TeV)"
     elif ( iPeriod==4 ):
         lumiText += lumi_13TeV
-        lumiText += " (5.02 TeV)"
+        lumiText += " (#sqrt{s_{NN}}=5.02 TeV)"
     elif ( iPeriod==7 ):
         if( outOfFrame ):lumiText += "#scale[0.85]{"
         lumiText += lumi_13TeV 

@@ -1,4 +1,5 @@
-llpt         : llpt                                            : 15,0.,150.   ; XTitle='p_{T}(ll) [GeV]'
+llpt         : llpt                                            : 10,0.,200.   ; XTitle='p_{T}(l^{#pm}l^{#mp}) [GeV]'
+sphericity : pt_2(lep_calpt[0],lep_phi[0],lep_calpt[1],lep_phi[1])/(lep_calpt[0]+lep_calpt[1])  : 10,0.,1.    ; XTitle='|#vec{p}_{T}(l^{#pm}l^{#mp})| / [p_{T}(l^{+})+p_{T}(l^{-})]'
 emsphericity : pt_2(lep_calpt[0],lep_phi[0],lep_calpt[1],lep_phi[1])/(lep_calpt[0]+lep_calpt[1])  : 10,0.,1.    ; XTitle='Sphericity'
 mmsphericity : pt_2(lep_calpt[0],lep_phi[0],lep_calpt[1],lep_phi[1])/(lep_calpt[0]+lep_calpt[1])  : 10,0.,1.    ; XTitle='Sphericity'
 eesphericity : pt_2(lep_calpt[0],lep_phi[0],lep_calpt[1],lep_phi[1])/(lep_calpt[0]+lep_calpt[1])  : 10,0.,1.    ; XTitle='Sphericity'
@@ -18,8 +19,9 @@ l1pt       : lep_calpt[0]                                    : 10,0.,100.   ; XT
 l2pt       : lep_calpt[1]                                    : 10,0.,100.   ; XTitle='p_{T}^{l2}'
 l1eta      : lep_eta[0]                                      : 10,-2.5,2.5  ; XTitle='#eta^{l1}'
 l2eta      : lep_eta[1]                                      : 10,-2.5,2.5  ; XTitle='#eta^{l2}'
-acoplan    : 1.-abs(dphi)/3.14195265                         : 15,0.,1.     ; XTitle='1.-|#Delta#phi(ll)|/#pi'
-mll        : llm                                             : 10,0.,200.   ; XTitle='m(ll) [GeV]'
+acoplan    : 1.-abs(dphi)/3.14195265                         : 10,0.01,1.   ; XTitle='1 - |#Delta#phi(l^{#pm}l^{#mp})|/#pi'
+mll        : llm                                             : 10,20.,250.  ; XTitle='m(l^{#pm}l^{#mp}) [GeV]'
+mllz       : llm                                             : 15,76.,106.  ; XTitle='m(l^{#pm}l^{#mp}) [GeV]'
 mtll       : mt_2(lep_pt[0],lep_phi[0],lep_pt[1],lep_phi[1]) : 10,0.,150.   ; XTitle='m_{T} (ll)'
 l1d0       : abs(lep_d0[0])                                  : 10,0.,0.025  ; XTitle='d_{0} (l1)'
 l2d0       : abs(lep_d0[1])                                  : 10,0.,0.025  ; XTitle='d_{0} (l2)'
@@ -29,15 +31,21 @@ l1sip2d    : abs(lep_d0[0])/lep_d0err[0]                     : 10,-0.1,10.  ; XT
 l2sip2d    : abs(lep_d0[1])/lep_d0err[1]                     : 10,-0.1,10.  ; XTitle='d_{0}/#sigma(d_{0}) (l2)'
 njets      : nbjet                                           : 20,-0.5,19.5 ; XTitle='n_{jets}'
 jetpt      : bjet_pt                                         : 16,20.,100.  ; XTitle='p_{T}^{jets}'
-jetpt1      : bjet_pt[0]                                         : 16,20.,100.  ; XTitle='p_{T}^{jet1}'
-jetpt2      : bjet_pt[1]                                         : 16,20.,100.  ; XTitle='p_{T}^{jet2}'
+jetpt1      : bjet_pt[0]                                     : 16,20.,100.  ; XTitle='p_{T}^{jet1}'
+jetpt2      : bjet_pt[1]                                     : 16,20.,100.  ; XTitle='p_{T}^{jet2}'
 jeteta     : bjet_eta                                        : 10,-2.5,2.5  ; XTitle='#eta_{T}^{jets}'
 jetbtag    : bjet_csvv2                                      : 10,0.,1.     ; XTitle='CSVv2'
+
+j1genpt   : bjet_genpt[0]                                    : 10,30.,200.  ; XTitle='Generator level p_{T} [GeV]', YTitle='PDF', IncludeOverflows=False, YMin=0, YMax=0.7
+j2genpt   : bjet_genpt[1]                                    : 10,30.,200.  ; XTitle='Generator level p_{T} [GeV]', YTitle='PDF', IncludeOverflows=False, YMin=0, YMax=0.7
+j1csv    : bjet_csvv2[0]                                    : 10,0.,1.     ; XTitle='b-tag disciminator', YTitle='PDF', IncludeOverflows=False, YMin=0, YMax=0.6
+j2csv    : bjet_csvv2[1]                                    : 10,0.,1.     ; XTitle='b-tag disciminator', YTitle='PDF', IncludeOverflows=False, YMin=0, YMax=0.3
+
 jetmass    : bjet_mass                                       : 10,0.,50.    ; XTitle='m_{jets}'
 jetflavor  : convertFlavor(bjet_flavor)                      :  7,-1.5,5.5  ; XTitle='jet flavor'
-jetflavorpt30  : convertFlavor(bjet_flavor,bjet_pt,30.)                      :  8,-2.5,5.5  ; XTitle='jet flavor of jets > 30 GeV'
-jet1flavorpt30  : convertFlavor(bjet_flavor[0],bjet_pt[0],30.)                      :  8,-2.5,5.5  ; XTitle='jet1 flavor (pt > 30 GeV)'
-jet2flavorpt30  : convertFlavor(bjet_flavor[1],bjet_pt[1],30.)                      :  8,-2.5,5.5  ; XTitle='jet2 flavor (pt > 30 GeV)'
+jetflavorpt30  : convertFlavor(bjet_flavor,bjet_pt,30.)      :  8,-2.5,5.5  ; XTitle='jet flavor of jets > 30 GeV'
+jet1flavorpt30  : convertFlavor(bjet_flavor[0],bjet_pt[0],30.)  :  8,-2.5,5.5  ; XTitle='jet1 flavor (pt > 30 GeV)'
+jet2flavorpt30  : convertFlavor(bjet_flavor[1],bjet_pt[1],30.)  :  8,-2.5,5.5  ; XTitle='jet2 flavor (pt > 30 GeV)'
 jetflavor1 : convertFlavor(bjet_flavor[0])                      :  7,-1.5,5.5  ; XTitle='flavor jet1'
 jetflavor2 : convertFlavor(bjet_flavor[1])                      :  7,-1.5,5.5  ; XTitle='flavor jet2'
 
@@ -52,7 +60,7 @@ ptvsjetflavor2 : bjet_pt[1]\:convertFlavor(bjet_flavor[1])  :  6,-0.5,5.5,8,20.,
 ptvscsvjet1 : bjet_pt[0]\:bjet_csvv2[0]                     :  6,0.,1.,8,20.,100.    ; XTitle='jet csvv2 jet1', YTitle='jet1 pt'
 ptvscsvjet2 : bjet_pt[1]\:bjet_csvv2[1]                     :  6,0.,1.,8,20.,100.    ; XTitle='jet csvv2 jet2', YTitle='jet2 pt'
 
-centrality : cenbin                                          : 10,0.,100.   ; XTitle='centrality'
+centrality : cenbin                                          : 10,0.,100.   ; XTitle='Centrality (%)'
 bdt        : bdt                                             : 10,-1.,1.    ; XTitle='bdt'
 bdtrarity  : bdtrarity                                       : 10,0.,1.     ; XTitle='bdt rarity'
 j1btag     : bjet_csvv2[0]                                   : 10,0.,1.     ; XTitle='CSVv2_{jet1}'
@@ -60,7 +68,10 @@ j2btag     : bjet_csvv2[1]                                   : 10,0.,1.     ; XT
 j1flav     : convertFlavor(bjet_flavor[0])         : 6,-0.5,5.5   ; XTitle='Jet 1 flavor'
 j2flav     : convertFlavor(bjet_flavor[1])         : 6,-0.5,5.5  ; XTitle='Jet 2 flavor'
 
-minmlb  : min(mass_2(lep_pt[0],lep_eta[0],lep_phi[0],0.,bjet_pt[0],bjet_eta[0],bjet_phi[0],bjet_mass[0]),min(mass_2(lep_pt[1],lep_eta[1],lep_phi[1],0.,bjet_pt[1],bjet_eta[1],bjet_phi[1],bjet_mass[1]),min(mass_2(lep_pt[0],lep_eta[0],lep_phi[0],0.,bjet_pt[1],bjet_eta[1],bjet_phi[1],bjet_mass[1]),mass_2(lep_pt[1],lep_eta[1],lep_phi[1],0.,bjet_pt[0],bjet_eta[0],bjet_phi[0],bjet_mass[0])))) : 15,0.,150. ; XTitle='min m(lb) [GeV]'
+minmlb  : (nbjet_sel>0)*(min(mass_2(lep_pt[0],lep_eta[0],lep_phi[0],0.,bjet_pt[0],bjet_eta[0],bjet_phi[0],bjet_mass[0]),mass_2(lep_pt[1],lep_eta[1],lep_phi[1],0.,bjet_pt[0],bjet_eta[0],bjet_phi[0],bjet_mass[0]))) : 10,20.,220. ; XTitle='min m(lb_{1}) [GeV]', IncludeOverflows=False
+minmlb2  : (nbjet_sel>1)*(min(mass_2(lep_pt[0],lep_eta[0],lep_phi[0],0.,bjet_pt[1],bjet_eta[1],bjet_phi[1],bjet_mass[1]),mass_2(lep_pt[1],lep_eta[1],lep_phi[1],0.,bjet_pt[1],bjet_eta[1],bjet_phi[1],bjet_mass[1]))) : 10,20.,220. ; XTitle='min m(lb_{2}) [GeV]', IncludeOverflows=False
+
+#minmlb  : min(mass_2(lep_pt[0],lep_eta[0],lep_phi[0],0.,bjet_pt[0],bjet_eta[0],bjet_phi[0],bjet_mass[0]),min(mass_2(lep_pt[1],lep_eta[1],lep_phi[1],0.,bjet_pt[1],bjet_eta[1],bjet_phi[1],bjet_mass[1]),min(mass_2(lep_pt[0],lep_eta[0],lep_phi[0],0.,bjet_pt[1],bjet_eta[1],bjet_phi[1],bjet_mass[1]),mass_2(lep_pt[1],lep_eta[1],lep_phi[1],0.,bjet_pt[0],bjet_eta[0],bjet_phi[0],bjet_mass[0])))) : 10,0.,120. ; XTitle='min m(lb) [GeV]'
 notminmlb  : min(mass_2(lep_pt[0],lep_eta[0],lep_phi[0],0.,bjet_pt[0],bjet_eta[0],bjet_phi[0],bjet_mass[0]),mass_2(lep_pt[1],lep_eta[1],lep_phi[1],0.,bjet_pt[1],bjet_eta[1],bjet_phi[1],bjet_mass[1])) : 20,0.,200. ; XTitle='m_{lb}^{whatever}'
 mlbl1b1 : mass_2(lep_pt[0],lep_eta[0],lep_phi[0],0.,bjet_pt[0],bjet_eta[0],bjet_phi[0],bjet_mass[0]) : 10,0.,200. ; XTitle='m_{l1b1}'
 mlbl1b2 : mass_2(lep_pt[0],lep_eta[0],lep_phi[0],0.,bjet_pt[1],bjet_eta[1],bjet_phi[1],bjet_mass[1]) : 10,0.,200. ; XTitle='m_{l1b2}'

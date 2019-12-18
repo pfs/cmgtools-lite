@@ -69,7 +69,7 @@ class PlotFile:
 
 def getDataPoissonErrors(h, drawZeroBins=False, drawXbars=False):
     xaxis = h.GetXaxis()
-    q=(1-0.6827)/2.;
+    q=(1-0.6827)/2.;1
     points = []
     errors = []
     for i in xrange(h.GetNbinsX()):
@@ -131,7 +131,7 @@ def doSpam(text,x1,y1,x2,y2,align=12,fill=False,textSize=0.033,_noDelete={}):
     _noDelete[text] = cmsprel; ## so it doesn't get deleted by PyROOT
     return cmsprel
 
-def doTinyCmsPrelim(textLeft="_default_",textRight="_default_",hasExpo=False,textSize=0.033,lumi=None, xoffs=0, options=None, doWide=False):
+def doTinyCmsPrelim(textLeft="_default_",textRight="_default_",hasExpo=False,textSize=0.04,lumi=None, xoffs=0, options=None, doWide=False):
     if textLeft  == "_default_": textLeft  = options.lspam
     if textRight == "_default_": textRight = options.rspam
     if lumi      == None       : lumi      = options.lumi
@@ -141,7 +141,7 @@ def doTinyCmsPrelim(textLeft="_default_",textRight="_default_",hasExpo=False,tex
     elif lumi > 3.54e-2: lumitext = "%.0f pb^{-1}" % (lumi*1000)
     elif lumi > 3.54e-3: lumitext = "%.1f pb^{-1}" % (lumi*1000)
     else               : lumitext = "%.2f pb^{-1}" % (lumi*1000)
-    lumitext = "%.1f #mub^{-1}" % lumi*1e9
+    lumitext = "%.1f nb^{-1}" % ROOT.TMath.Floor(lumi*1e6)
     textLeft = textLeft.replace("%(lumi)",lumitext)
     textRight = textRight.replace("%(lumi)",lumitext)
     if textLeft not in ['', None]:
@@ -367,7 +367,7 @@ def doNormFit(pspec,pmap,mca,saveScales=False):
     ROOT.RooMsgService.instance().setGlobalKillBelow(gKill)
     return postfit
 
-def doRatioHists(pspec,pmap,total,maxRange,fixRange=False,fitRatio=None,errorsOnRef=True,ratioNums="signal",ratioDen="background",ylabel="Data/pred.",yndiv=505,doWide=False,showStatTotLegend=False,textSize=0.035):
+def doRatioHists(pspec,pmap,total,maxRange,fixRange=False,fitRatio=None,errorsOnRef=True,ratioNums="signal",ratioDen="background",ylabel="Data/Pred.",yndiv=505,doWide=False,showStatTotLegend=False,textSize=0.035):
     numkeys = [ "data" ]
     if "data" not in pmap: 
         if len(pmap) >= 2 and ratioDen in pmap:
@@ -507,7 +507,7 @@ def doRatioHists(pspec,pmap,total,maxRange,fixRange=False,fitRatio=None,errorsOn
     line.SetLineColor(58);
     line.Draw("L")
     for ratio in ratios:
-        ratio.Draw("E SAME" if ratio.ClassName() != "TGraphAsymmErrors" else "PZ SAME");
+        ratio.Draw("X0 E SAME" if ratio.ClassName() != "TGraphAsymmErrors" else "PZ SAME");
     leg0 = ROOT.TLegend(0.12 if doWide else 0.2, 0.84, 0.25 if doWide else 0.45, 0.94)
     leg0.SetFillColor(0)
     leg0.SetShadowColor(0)
@@ -591,7 +591,7 @@ def doLegend(pmap,mca,corner="TR",textSize=0.035,cutoff=1e-6,cutoffSignals=True,
             legWidth *= columns
         (x1,y1,x2,y2) = (0.97-legWidth if doWide else .85-legWidth, .9 - height, .90, .91)
         if corner == "TR":
-            (x1,y1,x2,y2) = (0.97-legWidth if doWide else .85-legWidth, .9 - height, .90, .91)
+            (x1,y1,x2,y2) = (0.97-legWidth if doWide else .97-legWidth, .9 - height, .90, .91)
         elif corner == "TC":
             (x1,y1,x2,y2) = (.5, .9 - height, .55+legWidth, .91)
         elif corner == "TL":
@@ -616,7 +616,7 @@ def doLegend(pmap,mca,corner="TR",textSize=0.035,cutoff=1e-6,cutoffSignals=True,
         leg.SetNColumns(columns)
         entries = []
         if 'data' in pmap: 
-            entries.append((pmap['data'].raw(), mca.getProcessOption('data','Label','Data', noThrow=True), 'LPE'))
+            entries.append((pmap['data'].raw(), mca.getProcessOption('data','Label','Data', noThrow=True), 'PE'))
         for (plot,label,style) in sigEntries: entries.append((plot.raw(),label,style))
         for (plot,label,style) in  bgEntries: entries.append((plot.raw(),label,style))
         if totalError:  entries.append((totalError,"Total unc.","F"))
@@ -887,6 +887,7 @@ class PlotMaker:
                 total.GetXaxis().SetTitle(pspec.getOption('XTitle',outputName))
                 total.GetXaxis().SetNdivisions(pspec.getOption('XNDiv',510))
                 if outputDir: outputDir.WriteTObject(stack)
+
                 # 
                 if not makeCanvas and not self._options.printPlots: return
                 doRatio = self._options.showRatio and ('data' in pmap or (plotmode != "stack")) and ("TH2" not in total.ClassName())
@@ -943,11 +944,12 @@ class PlotMaker:
                 is2D = total.InheritsFrom("TH2")
                 if 'data' in pmap: 
                     if options.poisson and not is2D:
-                        pdata = getDataPoissonErrors(pmap['data'], True, True)
+                        pdata = getDataPoissonErrors(pmap['data'], True, False)
+                        pdata.SetLineWidth(2)
                         pdata.Draw("PZ SAME")
                         pmap['data'].poissonGraph = pdata ## attach it so it doesn't get deleted
                     else:
-                        pmap['data'].Draw("E SAME")
+                        pmap['data'].Draw("X0 E SAME")
                     reMax(total,pmap['data'],islog,doWide=doWide)
                     if xblind[0] < xblind[1]:
                         blindbox = ROOT.TBox(xblind[0],total.GetYaxis().GetXmin(),xblind[1],total.GetMaximum())
@@ -984,7 +986,7 @@ class PlotMaker:
                                   header=self._options.legendHeader if self._options.legendHeader else pspec.getOption("LegendHeader", ""),
                                   doWide=doWide, totalError=totalError, columns = pspec.getOption('LegendColumns',options.legendColumns))
                 if self._options.doOfficialCMS:
-                    CMS_lumi.lumi_13TeV = "{a:.1f} #mub^{{-1}}".format(a=self._options.lumi*1000000000.)
+                    CMS_lumi.lumi_13TeV = "{a:.1f} nb^{{-1}}".format(a=float(ROOT.TMath.Floor(self._options.lumi*10000000.))/10.)
                     CMS_lumi.extraText  = self._options.cmsprel
                     CMS_lumi.lumi_sqrtS = self._options.cmssqrtS
                     CMS_lumi.CMS_lumi(ROOT.gPad, 4, 0, -0.005 if doWide and doRatio else 0.01 if doWide else 0.05)
@@ -1132,6 +1134,8 @@ class PlotMaker:
                             else:
                                 c1.Print("%s/%s.%s" % (fdir, outputName, ext))
                             ROOT.gErrorIgnoreLevel = savErrorLevel;
+
+                #if outputDir: outputDir.WriteTObject(c1)
                 c1.Close()
 
 ## not needed anymore, leave for future development
@@ -1145,8 +1149,8 @@ def addPlotMakerOptions(parser, addAlsoMCAnalysis=True):
     if addAlsoMCAnalysis: addMCAnalysisOptions(parser)
     parser.add_option("--ss",  "--scale-signal", dest="signalPlotScale", default=1.0, type="float", help="scale the signal in the plots by this amount");
     #parser.add_option("--lspam", dest="lspam",   type="string", default="CMS Simulation", help="Spam text on the right hand side");
-    parser.add_option("--lspam", dest="lspam",   type="string", default="#bf{CMS} #it{Preliminary}", help="Spam text on the right hand side");
-    parser.add_option("--rspam", dest="rspam",   type="string", default="%(lumi) (5.02 TeV)", help="Spam text on the right hand side");
+    parser.add_option("--lspam", dest="lspam",   type="string", default="#bf{CMS}  #it{Simulation Preliminary}", help="Spam text on the left hand side");
+    parser.add_option("--rspam", dest="rspam",   type="string", default="%(lumi) (#sqrt{s_{NN}}=5.02 TeV)", help="Spam text on the right hand side");
     parser.add_option("--addspam", dest="addspam", type = "string", default=None, help="Additional spam text on the top left side, in the frame");
     parser.add_option("--topSpamSize", dest="topSpamSize",   type="float", default=1.2, help="Zoom factor for the top spam");
     parser.add_option("--print", dest="printPlots", type="string", default="png,pdf,txt", help="print out plots in this format or formats (e.g. 'png,pdf,txt')");
@@ -1161,7 +1165,7 @@ def addPlotMakerOptions(parser, addAlsoMCAnalysis=True):
     parser.add_option("--showRatio", dest="showRatio", action="store_true", default=False, help="Add a data/sim ratio plot at the bottom")
     parser.add_option("--ratioDen", dest="ratioDen", type="string", default="background", help="Denominator of the ratio, when comparing MCs")
     parser.add_option("--ratioNums", dest="ratioNums", type="string", default="signal", help="Numerator(s) of the ratio, when comparing MCs (comma separated list of regexps)")
-    parser.add_option("--ratioYLabel", dest="ratioYLabel", type="string", default="Data/pred.", help="Y axis label of the ratio histogram.")
+    parser.add_option("--ratioYLabel", dest="ratioYLabel", type="string", default="Data/Pred.", help="Y axis label of the ratio histogram.")
     parser.add_option("--ratioYNDiv", dest="ratioYNDiv", type="int", default=505, help="Y axis divisions in the ratio histogram.")
     parser.add_option("--noErrorBandOnRatio", dest="errorBandOnRatio", action="store_false", default=True, help="Do not show the error band on the reference in the ratio plots")
     parser.add_option("--noStatTotLegendOnRatio", dest="showStatTotLegend", action="store_false", default=True, help="Do not show the legend in the ratio plots")
@@ -1199,7 +1203,7 @@ def addPlotMakerOptions(parser, addAlsoMCAnalysis=True):
     parser.add_option("--ratioOffset", dest="ratioOffset", type="float", default=0.0, help="Put an offset between ratio and main pad")
     parser.add_option("--noCms", dest="doOfficialCMS", action="store_false", default=True, help="Use official tool to write CMS spam")
     parser.add_option("--cmsprel", dest="cmsprel", type="string", default="Preliminary", help="Additional text (Simulation, Preliminary, Internal)")
-    parser.add_option("--cmssqrtS", dest="cmssqrtS", type="string", default="5.02 TeV", help="Sqrt of s to be written in the official CMS text.")
+    parser.add_option("--cmssqrtS", dest="cmssqrtS", type="string", default="#sqrt{s_{NN}}=5.02 TeV", help="Sqrt of s to be written in the official CMS text.")
     parser.add_option("--printBin", dest="printBinning", type="string", default=None, help="Write 'Events/xx' instead of 'Events' on the y axis")
 
 if __name__ == "__main__":

@@ -505,7 +505,7 @@ def compareSignals():
 
         extraopts = ' --maxRatioRange 0. 2. --fixRatioRange --legendColumns 2  --plotmode=nostack --ratioDen ttbar --ratioNums ttbar,ttPowheg,ttnCTEQ,ttpdf1 '
         extraopts += ' -W {sfs} '.format(sfs=sf)
-
+        
         makeplots = ['bdtrarity', 'sphericity']
         showratio = True
         runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
@@ -1071,7 +1071,7 @@ def jetFlavor():
     fplots        = 'hin-ttbar/analysisSetup/plots_results.txt'
     fsysts        = 'hin-ttbar/analysisSetup/systs.txt'
 
-    makeplots = ['jetptflavor999', 'jetcsvflavor999']#'jet1flavorpt30', 'jet2flavorpt30']#, 'jetpt', 'jetpt1', 'jetpt2', 'jetflavorpt30', 'jetflavor1', 'jetflavor2', 'jeteta', 'jetflavor', 'centrality']#'ptjet1vsptjet2', 'ptvsjetflavor1', 'ptvsjetflavor2', 'ptvscsvjet1', 'ptvscsvjet2']
+    makeplots = ['j1genpt','j2genpt','j1csv','j2csv'] #'jetptflavor999', 'jetcsvflavor999']#'jet1flavorpt30', 'jet2flavorpt30']#, 'jetpt', 'jetpt1', 'jetpt2', 'jetflavorpt30', 'jetflavor1', 'jetflavor2', 'jeteta', 'jetflavor', 'centrality']#'ptjet1vsptjet2', 'ptvsjetflavor1', 'ptvsjetflavor2', 'ptvscsvjet1', 'ptvscsvjet2']
 
     sf = 'ncollWgt*trigSF[0]*lepSF[0]*lepSF[1]*lepIsoSF[0]*lepIsoSF[1]'
 
@@ -1088,8 +1088,11 @@ def jetFlavor():
         fittodata = []
         scalethem = {}
 
-        extraopts = ' --legendColumns 2 --plotmode=norm '#--preFitData bdt '
+        #extraopts = ' --legendColumns 2 --plotmode=norm '#--preFitData bdt '
+        extraopts = ' --plotmode=norm '#--preFitData bdt '
         extraopts += ' -W {eff} '.format(eff=sf)
+        extraopts += ' --lspam \"#bf{CMS}  #it{Simulation Preliminary}\"'
+        extraopts += ' --rspam \"(#sqrt{s_{NN}}=5.02 TeV)\"'
         showratio = False
         runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)
 
@@ -1106,23 +1109,24 @@ def simplePlot():
     fplots        = 'hin-ttbar/analysisSetup/plots_results.txt'
     fsysts        = 'hin-ttbar/analysisSetup/systs.txt'
 
-    makeplots = ['llpt','acoplan', 'minmlb', 'mlbl1b1', 'mlbl1b2', 'mlbl2b1', 'mlbl2b2']#'centrality']#'llpt', 'l1pt', 'l2pt', 'l1eta', 'l2eta', 'acoplan', 'mll', #'mtll',  'l1d0', 'l2d0', 
+    makeplots = ['mll', 'mllz', 'llpt', 'sphericity', 'acoplan', 'minmlb', 'minmlb2', 'centrality'] #'centrality']#'llpt', 'l1pt', 'l2pt', 'l1eta', 'l2eta', 'acoplan', 'mll', #'mtll',  'l1d0', 'l2d0', 
                  #'l1dz', 'l2dz', 'l1sip2d', 'l2sip2d', 'njets', #'jetpt', 'jeteta', 'jetbtag', 
                  #'jetmass', 'centrality', 'bdt', 'bdtrarity', 'j1btag', 'j2btag']
 
     sf = 'ncollWgt*trigSF[0]*lepSF[0]*lepSF[1]*lepIsoSF[0]*lepIsoSF[1]'
 
-    for iflav,flav in enumerate(['anyflavor','leponZll']) : #em', 'sf','leponZll']): # 'ee', 'mm']):
-        makeplots=['j1flav','j2flav'] #'j1btag','j2btag']
+    for iflav,flav in enumerate(['em','sf','leponZee','leponZmm','anyflavor']) : #em', 'sf','leponZll']): # 'ee', 'mm']):
         targetdir = basedir+'/simple_plots/{date}{pf}-{flav}/'.format(date=date, pf=('-'+postfix if postfix else ''), flav=flav )
 
-        enable    = [flav, 'highBDT']
+        enable    = [flav]
+        if flav=='anyflavor' :
+            enable += 'highBDT'
         disable   = []
         processes = []
         fittodata = []
         scalethem = {}
 
-        extraopts = ' --maxRatioRange 0. 2. --fixRatioRange --legendColumns 2 --showIndivSigs ' #--plotmode=norm '#--preFitData bdt '
+        extraopts = '--maxRatioRange 0. 2. --fixRatioRange --legendColumns 2 --showIndivSigs --noStatTotLegendOnRatio' #--plotmode=norm '#--preFitData bdt '
         extraopts += ' -W {eff} '.format(eff=sf)
         showratio = True
         runplots(trees, friends, targetdir, fmca, fcut, fplots, enable, disable, processes, scalethem, fittodata, makeplots, showratio, extraopts)

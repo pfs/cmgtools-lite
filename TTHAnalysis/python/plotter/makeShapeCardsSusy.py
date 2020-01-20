@@ -323,7 +323,7 @@ for name in systsEnv.keys():
                 
                 normalizationProcess = report[morefields[-1]]
                 nominal  .Scale(normalizationProcess.Integral()/nominal.Integral())
-                alternate.Scale(SCALETO OTHER PROCESS HERE)
+                #alternate.Scale(SCALETO OTHER PROCESS HERE) #pfs commented this otherwise it doesn't compile
             mirror = nominal.Clone("%s_%sDown" % (nominal.GetName(),name))
             for b in xrange(1,nominal.GetNbinsX()+1):
                 y0 = nominal.GetBinContent(b)

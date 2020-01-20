@@ -1,0 +1,32 @@
+# vim: syntax=sh
+* ; TreeName="treeProducerHIN"
+
+zgtt     : DYJetsToLL_M-10to50_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8          : 1506*(208**2) : lep_charge[0]*lep_charge[1]<0 && decayId==32 ;   FillColor=633 , NormSystematic=0.2, Label="Z/\#gamma\#rightarrow\#tau\#tau"
+zgtt     : DYJetsToLL_MLL-50_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8             : 2010*(208**2) : lep_charge[0]*lep_charge[1]<0 && decayId==32;  FillColor=633 , NormSystematic=0.2, Label="Z/\#gamma\#rightarrow\#tau\#tau"
+
+
+zgll     : DYJetsToLL_M-10to50_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8          : 1506*(208**2) : lep_charge[0]*lep_charge[1]<0 && decayId!=32;   FillColor=ROOT.kAzure+6 , NormSystematic=0.2, Label="Z/\#gamma\#rightarrowll"
+zgll     : DYJetsToLL_MLL-50_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8             : 2010*(208**2) : lep_charge[0]*lep_charge[1]<0 && decayId!=32;  FillColor=ROOT.kAzure+6 , NormSystematic=0.2, Label="Z/\#gamma\#rightarrowll"
+
+#wjets  : WJetsToLNu_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8_Electrons           : 21159*(208**2) : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kAzure+1, NormSystematic=0.5, Label="W"
+#wjets  : WJetsToLNu_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8_Muons               : 21159*(208**2) : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kAzure+1, NormSystematic=0.5, Label="W"
+
+top : TTJets_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8                           : 73.05*(208**2)   : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kTeal+9,  NormSystematic=0.25, Label="Top"
+top : ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5_HydjetDrumMB_5p02TeV-powheg-pythia8 : 3.04*(208**2) : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kTeal+9,     NormSystematic=0.3, Label="Top"
+top : ST_tW_top_5f_NoFullyHadronicDecays_TuneCP5_HydjetDrumMB_5p02TeV-powheg-pythia8     : 3.04*(208**2) : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kTeal+9,     NormSystematic=0.3, Label="Top"
+
+VV     : WWTo2L2Nu_NNPDF31_TuneCP5_HydjetDrumMB_5p02TeV-powheg-pythia8                   : 1.21*(208**2)  : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kAzure-5, NormSystematic=0.3, Label="VV"
+#VV     : WZTo3LNU_NNPDF30_TuneCP5_HydjetDrumMB_5p02TeV-powheg                            : 1.77*(208**2)  : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kAzure-5, NormSystematic=0.3, Label="VV"
+#VV     : ZZTo2L2Nu_HydjetDrumMB_5p02TeV_powheg_pythia8                                   : 0.441*(208**2) : lep_charge[0]*lep_charge[1]<0 ; FillColor=ROOT.kAzure-5, NormSystematic=0.3, Label="VV"
+
+#data_comb     : Combinatorial_Electrons+Combinatorial_Muons      : (lep_charge[0]*lep_charge[1]<0)&&mixrank==0 ; FillColor=ROOT.kOrange  , Label="non-prompt", NormSystematic=0.3, AddWeight="weightMixed(lep_pdgId[0]\,lep_pdgId[1]\,mixrank\,nbjet_sel)"
+
+data : SkimElectrons_04Apr2019-v1_JSON_CSAndPUAndJECFix_v2+SkimMuons_04Apr2019-v1_JSON_CSAndPUAndJECFix_v4 : lep_charge[0]*lep_charge[1]<0
+
+## these samples are also here
+## QCD_Pt-20to30_EMEnriched_TuneCP5_HydjetDrumMB_5p02TeV_pythia8
+## QCD_Pt-30to50_EMEnriched_TuneCP5_HydjetDrumMB_5p02TeV_pythia8
+## QCD_Pt-50to80_EMEnriched_TuneCP5_HydjetDrumMB_5p02TeV_pythia8
+## QCD_Pt-80to120_EMEnriched_TuneCP5_HydjetDrumMB_5p02TeV_pythia8
+## QCD_Pt_80to170_bcToE_TuneCP5_HydjetDrumMB_5p02TeV_pythia8
+## ZZTo2L2Nu_HydjetDrumMB_5p02TeV_powheg_pythia8

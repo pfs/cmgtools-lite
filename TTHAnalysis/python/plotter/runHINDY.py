@@ -55,10 +55,9 @@ def simplePlot():
     fcut          = 'hin-dy/analysisSetup/cuts.txt'
     fplots        = 'hin-dy/analysisSetup/plots.txt'
 
-    makeplots  = ['mll','llpt','acoplan','sphericity']
-    makeplots += ['l1pt','l1eta','l1sip2d']
-    makeplots += ['l2pt','l2eta','l2sip2d']
-    makeplots += ['maxleta','minleta']
+    makeplots  = ['mll','llpt','acoplan','sphericity','st','maxleta','minleta','centrality']
+    makeplots += ['l1pt','l1eta','l1sip2d','l1d0','l1dz','l1iso02']
+    makeplots += ['l2pt','l2eta','l2sip2d','l2d0','l2dz','l2iso02']
 
     sf = 'ncollWgt*trigSF[0]*lepSF[0]*lepSF[1]'
 

@@ -1,4 +1,5 @@
 llpt       : llpt                             : 15,0.,150.   ; XTitle='p_{T}(ll) [GeV]'
+st         : lep_calpt[0]+lep_calpt[1]        : 15,0.,150.   ; XTitle='S_{T} [GeV]'
 l1pt       : lep_calpt[0]                     : 40,15.,215.  ; XTitle='Leading lepton p_{T} [GeV]'
 l2pt       : lep_calpt[1]                     : 40,15.,215.  ; XTitle='Sub-leading lepton p_{T} [GeV]'
 l1eta      : lep_eta[0]                       : 20,-2.5,2.5  ; XTitle='Leading lepton pseudo-rapidity'
@@ -14,3 +15,6 @@ sphericity : pt_2(lep_calpt[0],lep_phi[0],lep_calpt[1],lep_phi[1])/(lep_calpt[0]
 mll        : mass_2(lep_calpt[0],lep_eta[0],lep_phi[0],0.,lep_calpt[1],lep_eta[1],lep_phi[1],0.): 30,10.,210. ; XTitle='m(ll) [GeV]'
 maxleta    : max(fabs(lep_eta[0]),fabs(lep_eta[1]))                                             : 20,0,2.5    ; XTitle='Most forward lepton pseudo-rapidity'
 minleta    : min(fabs(lep_eta[0]),fabs(lep_eta[1]))                                             : 20,0,2.5    ; XTitle='Most central lepton pseudo-rapidity'
+centrality : cenbin                                                    : 10,0.,100.  ; XTitle='Centrality'
+l1iso02    : iso02(lep_pdgId[0],lep_pt[0],lep_isofull20[0],lep_rho[0]) : 25,-1.5,1.5 ; XTitle='Leading lepton isolation'
+l2iso02    : iso02(lep_pdgId[1],lep_pt[1],lep_isofull20[1],lep_rho[1]) : 25,-1.5,1.5 ; XTitle='Sub-leading lepton isolation'
